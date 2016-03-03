@@ -56,7 +56,6 @@ import com.gemstone.gemfire.test.dunit.VM;
 /**
  * Dunit Test to validate OnRegion function execution with REST APIs
  * 
- * @author Nilkanth Patel
  * @since 8.0
  */
 

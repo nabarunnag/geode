@@ -222,7 +222,6 @@ import com.gemstone.gemfire.i18n.StringId;
  * non-distributed region. The subclass DistributedRegion adds distribution
  * behavior.
  *
- * @author Eric Zoerner
  */
 @SuppressWarnings("deprecation")
 public class LocalRegion extends AbstractRegion 
@@ -233,7 +232,6 @@ public class LocalRegion extends AbstractRegion
   
   /**
    * Internal interface used to simulate failures when performing entry operations
-   * @author Mitch Thomas
    * @since 5.7
    */
   public interface TestCallable {
@@ -475,7 +473,6 @@ public class LocalRegion extends AbstractRegion
    * There seem to be cases where a region can be created and yet the
    * distributed system is not yet in place...
    *
-   * @author jpenney
    *
    */
   protected class Stopper extends CancelCriterion {
@@ -8585,7 +8582,6 @@ public class LocalRegion extends AbstractRegion
   
   /**
    * Used to create a cheap Region.Entry that can be passed to the CustomExpiry callback
-   * @author dschneider
    *
    */
   private static class ExpiryRegionEntry implements Region.Entry {
@@ -9652,7 +9648,6 @@ public class LocalRegion extends AbstractRegion
    * Methods for java.util.Map compliance
    *
    * @since 5.0
-   * @author mbid
    */
 
   /**

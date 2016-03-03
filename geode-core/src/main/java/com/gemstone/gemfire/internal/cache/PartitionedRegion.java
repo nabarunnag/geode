@@ -6427,7 +6427,6 @@ public class PartitionedRegion extends LocalRegion implements
    * performs individual getEntry() operations using the keys
    * 
    * @since 5.1
-   * @author bruce
    */
   protected class PREntriesSet extends KeysSet {
 
@@ -6669,7 +6668,6 @@ public class PartitionedRegion extends LocalRegion implements
    * individual get() operations using the keys
    * 
    * @since 5.1
-   * @author bruce
    */
   protected class ValuesSet extends KeysSet  {
 
@@ -7254,7 +7252,6 @@ public class PartitionedRegion extends LocalRegion implements
    * created the lock, typically used for locking buckets, but not restricted to
    * that usage.
    * 
-   * @author mthomas
    * @since 5.0
    */
   static class BucketLock {
@@ -8785,7 +8782,6 @@ public class PartitionedRegion extends LocalRegion implements
    * A Simple class used to track retry time for Region operations Does not
    * provide any synchronization or concurrent safety
    * 
-   * @author Mitch Thomas
    */
   public final static class RetryTimeKeeper {
     private int totalTimeInRetry;
@@ -8999,7 +8995,6 @@ public class PartitionedRegion extends LocalRegion implements
    * from queries like getKeysWithRegEx. The implementor creates a method,
    * receiveSet, that consumes the chunks.
    * 
-   * @author bruce
    * @since 5.1
    */
   public static interface SetCollector {

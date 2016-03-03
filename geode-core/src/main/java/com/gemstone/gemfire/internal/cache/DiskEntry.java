@@ -71,7 +71,6 @@ import com.gemstone.gemfire.internal.util.BlobHelper;
  *
  * @see DiskRegion
  *
- * @author David Whitlock
  *
  * @since 3.2
  */

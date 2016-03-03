@@ -30,7 +30,6 @@ import junit.framework.TestCase;
 
 /**
  * Tests fill pattern validation for the {@link SimpleMemoryAllocatorImpl}.
- * @author rholmes
  */
 @Category(UnitTest.class)
 public class SimpleMemoryAllocatorFillPatternJUnitTest {

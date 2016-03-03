@@ -1307,7 +1307,6 @@ public class EntryEventImpl
   /**
    * Implement this interface if you want to call {@link #exportNewValue}.
    * 
-   * @author darrel
    *
    */
   public interface NewValueImporter {
@@ -1396,7 +1395,6 @@ public class EntryEventImpl
   /**
    * Implement this interface if you want to call {@link #exportOldValue}.
    * 
-   * @author darrel
    *
    */
   public interface OldValueImporter {

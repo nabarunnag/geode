@@ -49,7 +49,6 @@ import com.gemstone.gemfire.test.dunit.VM;
 
 /**
  * 
- * @author Nilkanth Patel
  */
 
 public class RestAPIsOnMembersFunctionExecutionDUnitTest extends CacheTestCase { 

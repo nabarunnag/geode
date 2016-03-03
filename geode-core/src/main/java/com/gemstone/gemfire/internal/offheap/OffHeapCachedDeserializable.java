@@ -27,7 +27,6 @@ import com.gemstone.gemfire.internal.offheap.annotations.Unretained;
  * This abstract class is intended to be used by {@link MemoryChunk} implementations that also want
  * to be a CachedDeserializable.
  * 
- * @author darrel
  * @since 9.0
  */
 public abstract class OffHeapCachedDeserializable extends AbstractStoredObject implements MemoryChunkWithRefCount {
