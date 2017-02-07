@@ -235,4 +235,8 @@ public class LuceneIndexStats {
   public Statistics getStats() {
     return this.stats;
   }
+
+  public void decrementNumberOfQueriesExecuted() {
+    stats.incInt(queryExecutionsId, -1);
+  }
 }
