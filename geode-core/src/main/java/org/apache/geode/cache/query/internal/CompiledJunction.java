@@ -40,6 +40,7 @@ import org.apache.geode.cache.query.internal.index.IndexProtocol;
 import org.apache.geode.cache.query.internal.parse.OQLLexerTokenTypes;
 import org.apache.geode.cache.query.internal.types.StructTypeImpl;
 import org.apache.geode.cache.query.types.ObjectType;
+import org.apache.geode.cache.query.types.StructType;
 import org.apache.geode.internal.Assert;
 import org.apache.geode.internal.i18n.LocalizedStrings;
 
@@ -373,8 +374,11 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
           observer.afterIterationEvaluation(result);
         }
         if (result instanceof Boolean) {
-          if (((Boolean) result).booleanValue())
+          if (((Boolean) result).booleanValue()) {
+            StructType structType = QueryUtils.createStructTypeForRuntimeIterators(currentIters);
+            ((StructImpl) tuple).setType((StructTypeImpl) structType);
             resultSet.add(tuple);
+          }
         } else if (result != null && result != QueryService.UNDEFINED)
           throw new TypeMismatchException(
               LocalizedStrings.CompiledJunction_ANDOR_OPERANDS_MUST_BE_OF_TYPE_BOOLEAN_NOT_TYPE_0

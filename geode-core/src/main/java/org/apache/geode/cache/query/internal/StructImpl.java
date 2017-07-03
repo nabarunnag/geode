@@ -88,6 +88,10 @@ public class StructImpl implements Struct, DataSerializableFixedID, Serializable
     return this.values;
   }
 
+  public void setType(StructTypeImpl type) {
+    this.type = type;
+  }
+
   /**
    * Helper method, Returns field values, in case of PdxInstance gets the domain objects.
    */

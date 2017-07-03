@@ -818,6 +818,7 @@ public class QueryUtils {
     while (itr.hasNext()) {
       RuntimeIterator iter = (RuntimeIterator) itr.next();
       fieldNames[i] = iter.getInternalId();
+      // fieldNames[i] = iter.getName();
       indexAlternativeFieldNames[i] = iter.getIndexInternalID();
       fieldTypes[i++] = iter.getElementType();
     }
