@@ -63,10 +63,30 @@ public class JoinQueriesIntegrationTest {
 
 
   private static Object[] getQueryStrings() {
-    return new Object[] {new Object[] {
-        "<trace>select STA.id as STACID, STA.pkid as STAacctNum, STC.id as STCCID, STC.pkid as STCacctNum from /region1 STA, /region2 STC where STA.pkid = 1 AND STA.joinId = STC.joinId AND STA.id = STC.id",
-        20},};
+    return new Object[] {
+        new Object[] {
+            "<trace>select STA.id as STACID, STA.pkid as STAacctNum, STC.id as STCCID, STC.pkid as STCacctNum from /region1 STA, /region2 STC where STA.pkid = 1 AND STA.joinId = STC.joinId AND STA.id = STC.id",
+            20},
+        new Object[] {
+            "<trace>select STA.id as STACID, STA.pkid as STAacctNum, STC.id as STCCID, STC.pkid as STCacctNum from /region1 STA, /region2 STC where STA.pkid = 1 AND STA.joinId = STC.joinId and STC.pkid = 1",
+            20},
+        new Object[] {
+            "<trace>select STA.id as STACID, STA.pkid as STAacctNum, STC.id as STCCID, STC.pkid as STCacctNum from /region1 STA, /region2 STC where STA.pkid = 1 AND  STC.pkid = 1 AND STA.joinId = STC.joinId",
+            20},
+        new Object[] {
+            "<trace>select STA.id as STACID, STA.pkid as STAacctNum, STC.id as STCCID, STC.pkid as STCacctNum from /region1 STA, /region2 STC where STA.pkid = 1 AND (STC.pkid = 0 or STC.pkid = 1) AND STA.joinId = STC.joinId",
+            20},
+        new Object[] {
+            "<trace>select STA.id as STACID, STA.pkid as STAacctNum, STC.id as STCCID, STC.pkid as STCacctNum from /region1 STA, /region2 STC where STA.pkid = 1 AND (STC.pkid = 1) AND STA.joinId = STC.joinId",
+            20},
+        new Object[] {
+            "<trace>select STA.id as STACID, STA.pkid as STAacctNum, STC.id as STCCID, STC.pkid as STCacctNum from /region1 STA, /region2 STC where STA.pkid = 1 AND STA.joinId = STC.joinId and STC.pkid = 1 and STC.name='name1'",
+            20}
+
+    };
   }
+
+
 
   @Test
   @Parameters(method = "getQueryStrings")
@@ -78,7 +98,7 @@ public class JoinQueriesIntegrationTest {
       Region region2 =
           cache.createRegionFactory().setDataPolicy(DataPolicy.REPLICATE).create("region2");
 
-      populateRegionWithData(region1, region2);
+      populateRegionWithData(region1, region2, 11);
 
       QueryService queryService = cache.getQueryService();
 
@@ -105,7 +125,40 @@ public class JoinQueriesIntegrationTest {
 
   }
 
-  private void populateRegionWithData(Region region1, Region region2) {
+  @Test
+  @Parameters(method = "getQueryStrings")
+  public void testJoinTwoRegionsLargeDataSet(String queryString, int exp) throws Exception {
+    Cache cache = CacheUtils.getCache();
+    try {
+      Region region1 =
+          cache.createRegionFactory().setDataPolicy(DataPolicy.REPLICATE).create("region1");
+      Region region2 =
+          cache.createRegionFactory().setDataPolicy(DataPolicy.REPLICATE).create("region2");
+
+      populateRegionWithData(region1, region2, 1000);
+
+      QueryService queryService = cache.getQueryService();
+
+      queryService.createIndex("pkidregion1", "p.pkid", "/region1 p");
+      queryService.createIndex("pkidregion2", "p.pkid", "/region2 p");
+      queryService.createIndex("indexIDRegion2", "p.id", "/region2 p");
+      queryService.createIndex("indexIDRegion1", "p.id", "/region1 p");
+      queryService.createIndex("joinIdregion1", "p.joinId", "/region1 p");
+      queryService.createIndex("joinIdregion2", "p.joinId", "/region2 p");
+      queryService.createIndex("nameIndex", "p.name", "/region2 p");
+
+      SelectResults results = (SelectResults) queryService.newQuery(queryString).execute();
+      int resultsSizeWithIndex = results.size();
+      // assertEquals(expectedResultSize, resultsWithoutIndex);
+    } finally {
+      cache.getRegion("region1").destroyRegion();
+      cache.getRegion("region2").destroyRegion();
+    }
+
+  }
+
+
+  private void populateRegionWithData(Region region1, Region region2, int entryCount) {
     for (int i = 1; i < 11; i++) {
       if (i == 1 || i == 3 || i == 8 || i == 2 || i == 5) {
         region1.put(i, new Customer(1, 1, 1));
