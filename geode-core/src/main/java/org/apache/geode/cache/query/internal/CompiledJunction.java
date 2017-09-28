@@ -295,7 +295,12 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
             // Abort further intersection , the remaining filter operands will be
             // transferred for
             // iter evaluation
-            break;
+
+            // Junctions cannot be iter evaluated. For an join optimization we can have a junction
+            // at this point (avoiding AllGroupJunction at all costs)
+            if (!junctionsRemaining(sortedConditionsList)) {
+              break;
+            }
           }
         }
       } else {
@@ -314,6 +319,15 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
       this.unevaluatedFilterOperands = sortedConditionsList;
     }
     return intermediateResults;
+  }
+
+  private boolean junctionsRemaining(List sortedConditions) {
+    for (Object condition : sortedConditions) {
+      if (condition instanceof AbstractGroupOrRangeJunction) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /** invariant: the operand is known to be evaluated by iteration */
@@ -464,7 +478,8 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
     // value , the set containing independent RuntimeIterators ( which will
     // necessarily be two )
     Map compositeFilterOpsMap = new LinkedHashMap();
-    Map iterToOperands = new HashMap();
+    Map<RuntimeIterator, List<CompiledValue>> iterToOperands = new HashMap<>();
+    Map<RuntimeIterator, Boolean> iterToHasAtLeastOneIndex = new HashMap<>();
     CompiledValue operand = null;
     boolean isJunctionNeeded = false;
     boolean indexExistsOnNonJoinOp = false;
@@ -540,14 +555,75 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
               operandsList = new ArrayList();
               iterToOperands.put(rIter, operandsList);
             }
+            operandsList.add(expndOperand);
             if (operandEvalAsFilter && _operator == LITERAL_and) {
               indexExistsOnNonJoinOp = true;
             }
-            operandsList.add(expndOperand);
+            if (iterToHasAtLeastOneIndex.containsKey(rIter)) {
+              iterToHasAtLeastOneIndex.put(rIter,
+                  iterToHasAtLeastOneIndex.get(rIter) || operandEvalAsFilter);
+            } else {
+              iterToHasAtLeastOneIndex.put(rIter, operandEvalAsFilter);
+            }
           }
         }
       }
     }
+
+    if (IndexManager.JOIN_OPTIMIZATION) {
+      // if there is a join op, we can try to force it to use one index and only do the join at the
+      // end...
+      if (iterToOperands.size() > 1 && compositeFilterOpsMap.size() > 0) {
+        List keysToRemove = new ArrayList();
+        // Do some iterToOperands magic. move iterToOperands into evalOperands if there is at least
+        // one remaining that uses an index
+        RuntimeIterator iteratorValuesToKeep =
+            getRuntimeIteratorWithAtLeastOneIndex(iterToHasAtLeastOneIndex);
+        if (iteratorValuesToKeep != null) {
+          Iterator<RuntimeIterator> keys = iterToOperands.keySet().iterator();
+          while (keys.hasNext()) {
+            RuntimeIterator key = keys.next();
+            boolean remove = true;
+            if (key != iteratorValuesToKeep && iterToHasAtLeastOneIndex.get(key)) {
+              List<CompiledValue> reenlistOperands = iterToOperands.get(key);
+              Iterator<CompiledValue> reenlistIterator = reenlistOperands.iterator();
+              while (reenlistIterator.hasNext()) {
+                CompiledValue reenlist = reenlistIterator.next();
+                if (reenlist.getPlanInfo(context).evalAsFilter) {
+                  evalOperands.add(indexCount++, reenlist);
+                  reenlistIterator.remove();
+                } else {
+                  remove = false;
+                }
+              }
+              if (remove) {
+                keysToRemove.add(key);
+              }
+            } else {
+              List<CompiledValue> reenlistOperands = iterToOperands.get(key);
+              boolean oneAlreadySaved = false;
+              Iterator<CompiledValue> reenlistIterator = reenlistOperands.iterator();
+              while (reenlistIterator.hasNext()) {
+                CompiledValue reenlist = reenlistIterator.next();
+                if (reenlist.getPlanInfo(context).evalAsFilter) {
+                  if (oneAlreadySaved) {
+                    evalOperands.add(indexCount++, reenlist);
+                    reenlistIterator.remove();
+                  } else {
+                    oneAlreadySaved = true;
+                  }
+                } else {
+                }
+              }
+            }
+          }
+        }
+        keysToRemove.forEach((i) -> {
+          iterToOperands.remove(i);
+        });
+      }
+    }
+
     /*
      * Asif : If there exists a SingleGroupJunction & no other Filter operand , then all remaining
      * eval operands ( even if they are CompiledJunction which are not evaluable as Filter) &
@@ -612,6 +688,16 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
     result.filterOperand = filterOperands;
     result.iterateOperand = iterateOperands;
     return result;
+  }
+
+  private RuntimeIterator getRuntimeIteratorWithAtLeastOneIndex(
+      Map<RuntimeIterator, Boolean> iteratorBooleanMap) {
+    for (Map.Entry<RuntimeIterator, Boolean> entry : iteratorBooleanMap.entrySet()) {
+      if (entry.getValue() == true) {
+        return entry.getKey();
+      }
+    }
+    return null;
   }
 
   /**
