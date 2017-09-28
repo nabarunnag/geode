@@ -636,7 +636,8 @@ public class QueryUtils {
           derivedInfo.computeDerivedJoinResults(theFilteringIndex, context, iterOps);
         }
         doNestedIterationsForIndex(expansionListIterator.hasNext(), returnSet, finalItrs,
-            expansionListIterator, context, iterOps, limit, derivedInfo.derivedResults);
+            expansionListIterator, context, iterOps, limit,
+            derivedInfo == null ? Collections.EMPTY_MAP : derivedInfo.derivedResults);
         if (limit != -1 && returnSet.size() >= limit) {
           break;
         }

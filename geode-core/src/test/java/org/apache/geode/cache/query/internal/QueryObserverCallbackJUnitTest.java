@@ -114,43 +114,6 @@ public class QueryObserverCallbackJUnitTest {
   }
 
   @Test
-  public void testBeforeAndAfterCartesianOfCompositeGroupJunctionsInAnAllGroupJunctionOfType_AND() {
-    try {
-      Region r3 = CacheUtils.createRegion("employees", Employee.class);
-      Set add1 = new HashSet();
-      add1.add(new Address("411045", "Baner"));
-      add1.add(new Address("411001", "DholePatilRd"));
-      for (int i = 0; i < 4; i++) {
-        r3.put(i + "", new Employee("empName", (20 + i), i, "Mr.", (5000 + i), add1));
-      }
-      Region r4 = CacheUtils.createRegion("portfolio1", Portfolio.class);
-      for (int i = 0; i < 4; i++) {
-        r4.put(i + "", new Portfolio(i));
-      }
-      Query query = qs.newQuery(
-          "select distinct * from /portfolio p, p.positions,/employees e, /portfolio1 p1 where p.ID =p1.ID   and e.empId = 1 and p1.status = 'active' and p.status='active' ");
-      qs.createIndex("statusIndex1", IndexType.FUNCTIONAL, "status", "/portfolio");
-      qs.createIndex("statusIndex2", IndexType.FUNCTIONAL, "status", "/portfolio1");
-      qs.createIndex("idIndex", IndexType.FUNCTIONAL, "ID", "/portfolio");
-      qs.createIndex("idIndex1", IndexType.FUNCTIONAL, "ID", "/portfolio1");
-      qs.createIndex("empidIndex", IndexType.FUNCTIONAL, "empId", "/employees");
-      MyQueryObserverImpl inst = new MyQueryObserverImpl();
-      QueryObserverHolder.setInstance(inst);
-      query.execute();
-      assertTrue(
-          "beforeCartesianOfCompositeGroupJunctionsInAnAllGroupJunctionOfType_AND callbak not received",
-          inst.bfrCartesianOfGroupJunctionsInCompositeGroupJunctionOfType_AND);
-      assertTrue(
-          "afterCartesianOfCompositeGroupJunctionsInAnAllGroupJunctionOfType_AND callbak not received",
-          inst.aftCartesianOfGroupJunctionsInCompositeGroupJunctionOfType_AND);
-
-    } catch (Exception e) {
-      e.printStackTrace();
-      fail(e.toString());
-    }
-  }
-
-  @Test
   public void testBeforeAndAfterCutDownAndExpansionOfSingleIndexResult() {
     try {
       Query query =
