@@ -479,7 +479,7 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
     // necessarily be two )
     Map compositeFilterOpsMap = new LinkedHashMap();
     Map<RuntimeIterator, List<CompiledValue>> iterToOperands = new HashMap<>();
-    Map<RuntimeIterator, Boolean> iterToHasAtLeastOneIndex = new HashMap<>();
+    Map<RuntimeIterator, OperandAndIndexCount> iterToHasAtLeastOneIndex = new HashMap<>();
     CompiledValue operand = null;
     boolean isJunctionNeeded = false;
     boolean indexExistsOnNonJoinOp = false;
@@ -559,70 +559,35 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
             if (operandEvalAsFilter && _operator == LITERAL_and) {
               indexExistsOnNonJoinOp = true;
             }
-            if (iterToHasAtLeastOneIndex.containsKey(rIter)) {
-              iterToHasAtLeastOneIndex.put(rIter,
-                  iterToHasAtLeastOneIndex.get(rIter) || operandEvalAsFilter);
-            } else {
-              iterToHasAtLeastOneIndex.put(rIter, operandEvalAsFilter);
-            }
+            iterToHasAtLeastOneIndex.compute(rIter, (key, value) -> {
+              if (value == null) {
+                value = new OperandAndIndexCount();
+              }
+              value.incrementOperandCount();
+              if (operandEvalAsFilter) {
+                value.incrementIndexCount();
+              }
+              return value;
+            });
           }
         }
       }
     }
 
-    if (IndexManager.JOIN_OPTIMIZATION) {
-      // if there is a join op, we can try to force it to use one index and only do the join at the
-      // end...
-      if (iterToOperands.size() > 1 && compositeFilterOpsMap.size() > 0) {
-        List keysToRemove = new ArrayList();
-        // Do some iterToOperands magic. move iterToOperands into evalOperands if there is at least
-        // one remaining that uses an index
-        RuntimeIterator iteratorValuesToKeep =
-            getRuntimeIteratorWithAtLeastOneIndex(iterToHasAtLeastOneIndex);
-        if (iteratorValuesToKeep != null) {
-          Iterator<RuntimeIterator> keys = iterToOperands.keySet().iterator();
-          while (keys.hasNext()) {
-            RuntimeIterator key = keys.next();
-            boolean remove = true;
-            if (key != iteratorValuesToKeep && iterToHasAtLeastOneIndex.get(key)) {
-              List<CompiledValue> reenlistOperands = iterToOperands.get(key);
-              Iterator<CompiledValue> reenlistIterator = reenlistOperands.iterator();
-              while (reenlistIterator.hasNext()) {
-                CompiledValue reenlist = reenlistIterator.next();
-                if (reenlist.getPlanInfo(context).evalAsFilter) {
-                  evalOperands.add(indexCount++, reenlist);
-                  reenlistIterator.remove();
-                } else {
-                  remove = false;
-                }
-              }
-              if (remove) {
-                keysToRemove.add(key);
-              }
-            } else {
-              List<CompiledValue> reenlistOperands = iterToOperands.get(key);
-              boolean oneAlreadySaved = false;
-              Iterator<CompiledValue> reenlistIterator = reenlistOperands.iterator();
-              while (reenlistIterator.hasNext()) {
-                CompiledValue reenlist = reenlistIterator.next();
-                if (reenlist.getPlanInfo(context).evalAsFilter) {
-                  if (oneAlreadySaved) {
-                    evalOperands.add(indexCount++, reenlist);
-                    reenlistIterator.remove();
-                  } else {
-                    oneAlreadySaved = true;
-                  }
-                } else {
-                }
-              }
-            }
-          }
-        }
-        keysToRemove.forEach((i) -> {
-          iterToOperands.remove(i);
-        });
-      }
+    // if there is a join op, we can try to force it to use one index and only do the join at the
+    // end... iterToOperands need to all be true. If 1 is false, that means iterToOperands cannot be
+    // reduced below 2 (so our original join optimization doesn't kick in)
+    if (IndexManager.JOIN_OPTIMIZATION && iterToOperands.size() > 1
+        && compositeFilterOpsMap.size() > 0
+        && iterToOperandsIsSquashable(iterToHasAtLeastOneIndex)) {
+      ManipulatedOperands returnedOperands = manipulateTreeToOptimizeForJoin(context, evalOperands,
+          indexCount, iterToOperands, iterToHasAtLeastOneIndex);
+
+      indexCount = returnedOperands.indexCount;
+      evalOperands = returnedOperands.evalOperands;
+      iterToOperands = returnedOperands.iterToOperands;
     }
+
 
     /*
      * Asif : If there exists a SingleGroupJunction & no other Filter operand , then all remaining
@@ -690,14 +655,137 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
     return result;
   }
 
-  private RuntimeIterator getRuntimeIteratorWithAtLeastOneIndex(
-      Map<RuntimeIterator, Boolean> iteratorBooleanMap) {
-    for (Map.Entry<RuntimeIterator, Boolean> entry : iteratorBooleanMap.entrySet()) {
-      if (entry.getValue() == true) {
-        return entry.getKey();
+  private boolean iterToOperandsIsSquashable(
+      Map<RuntimeIterator, OperandAndIndexCount> iterToHasAtLeastOneIndex) {
+    int numIteratorsThatCannotBeSquashed = 0;
+    for (OperandAndIndexCount counts : iterToHasAtLeastOneIndex.values()) {
+      if (!counts.doAllOperandsHaveIndexes()) {
+        numIteratorsThatCannotBeSquashed++;
       }
     }
-    return null;
+    // 1.) due to our join optimization, we cannot manipulate a query if there are more than one
+    // iter operand
+    // 2.) we can only remap all operands for a runtime iterator if they all operands for that
+    // runtime iterator use an index
+    // we should not attempt to manipulate the query if there are 2 or more runtime iterators that
+    // cannot be remapped
+    return numIteratorsThatCannotBeSquashed <= 1;
+  }
+
+  private ManipulatedOperands manipulateTreeToOptimizeForJoin(ExecutionContext context,
+      List originalEvalOperands, int originalIndexCount,
+      Map<RuntimeIterator, List<CompiledValue>> originalIterToOperands,
+      Map<RuntimeIterator, OperandAndIndexCount> iterToHasAtLeastOneIndex)
+      throws FunctionDomainException, TypeMismatchException, NameResolutionException,
+      QueryInvocationTargetException {
+    int indexCount = originalIndexCount;
+    List evalOperands = new ArrayList(originalEvalOperands);
+    Map<RuntimeIterator, List<CompiledValue>> iterToOperands =
+        new HashMap<>(originalIterToOperands);
+
+    List keysToRemove = new ArrayList();
+    // Do some iterToOperands magic. move iterToOperands into evalOperands if there is at least
+    // one remaining that uses an index
+    RuntimeIterator iteratorValuesToKeep =
+        getRuntimeIteratorThatCannotBeRemapped(iterToHasAtLeastOneIndex);
+    if (iteratorValuesToKeep != null) {
+      Iterator<RuntimeIterator> keys = iterToOperands.keySet().iterator();
+      // iterToOperands.keySet().stream().filter(k -> k != iteratorValuesToKeep).forEach();
+      while (keys.hasNext()) {
+        RuntimeIterator key = keys.next();
+        if (key != iteratorValuesToKeep) {
+          // This is B, iterator with index but not A
+          List<CompiledValue> reenlistOperands = iterToOperands.get(key);
+          Iterator<CompiledValue> reenlistIterator = reenlistOperands.iterator();
+          while (reenlistIterator.hasNext()) {
+            CompiledValue reenlist = reenlistIterator.next();
+            if (reenlist.getPlanInfo(context).evalAsFilter) {
+              evalOperands.add(indexCount++, reenlist);
+            } else {
+              return new ManipulatedOperands(originalEvalOperands, originalIndexCount,
+                  originalIterToOperands);
+            }
+          }
+          keysToRemove.add(key);
+        }
+      }
+    }
+    keysToRemove.forEach((i) -> {
+      iterToOperands.remove(i);
+    });
+
+    // Now remove all but one operand from iterValuesToKeep
+    // Either the iterator we want to keep or iterator with no indexes (A)
+    List<CompiledValue> reenlistOperands = iterToOperands.get(iteratorValuesToKeep);
+    boolean oneAlreadySaved = false;
+    Iterator<CompiledValue> reenlistIterator = reenlistOperands.iterator();
+    while (reenlistIterator.hasNext()) {
+      CompiledValue reenlist = reenlistIterator.next();
+      if (reenlist.getPlanInfo(context).evalAsFilter) {
+        if (oneAlreadySaved) {
+          evalOperands.add(indexCount++, reenlist);
+          reenlistIterator.remove();
+        } else {
+          oneAlreadySaved = true;
+        }
+      }
+    }
+    return new ManipulatedOperands(evalOperands, indexCount, iterToOperands);
+  }
+
+  private static class ManipulatedOperands {
+    List evalOperands;
+    int indexCount;
+    Map<RuntimeIterator, List<CompiledValue>> iterToOperands;
+
+    public ManipulatedOperands(List evalOperands, int indexCount,
+        Map<RuntimeIterator, List<CompiledValue>> iterToOperands) {
+      this.evalOperands = evalOperands;
+      this.indexCount = indexCount;
+      this.iterToOperands = iterToOperands;
+    }
+  }
+
+  private static class OperandAndIndexCount {
+    int numIndexesOnIter = 0;
+    int numOperandsOnIter = 0;
+
+    public void incrementOperandCount() {
+      numOperandsOnIter++;
+    }
+
+    public void incrementIndexCount() {
+      numIndexesOnIter++;
+    }
+
+    public boolean doAllOperandsHaveIndexes() {
+      return numIndexesOnIter == numOperandsOnIter;
+    }
+  }
+
+  // We've already done checks to make sure there is at most 1 runtime iterator that has one operand
+  // that does not have an index
+  // In the case where all runtime iterators have all operands that use indexes, we will just choose
+  // the iterator that has the most indexes
+  // We also know the caller of this method has already checked that iterToOperands has at least 1
+  // value, if not this method should not be called and will get an NPE
+  private RuntimeIterator getRuntimeIteratorThatCannotBeRemapped(
+      Map<RuntimeIterator, OperandAndIndexCount> iteratorBooleanMap) {
+    Map.Entry<RuntimeIterator, OperandAndIndexCount> bestIteratorToKeep = null;
+    for (Map.Entry<RuntimeIterator, OperandAndIndexCount> entry : iteratorBooleanMap.entrySet()) {
+      if (entry.getValue().doAllOperandsHaveIndexes() == false) {
+        return entry.getKey();
+      }
+      entry.getValue();
+      if (bestIteratorToKeep == null) {
+        bestIteratorToKeep = entry;
+      } else {
+        bestIteratorToKeep =
+            entry.getValue().numIndexesOnIter > bestIteratorToKeep.getValue().numIndexesOnIter
+                ? entry : bestIteratorToKeep;
+      }
+    }
+    return bestIteratorToKeep.getKey();
   }
 
   /**
