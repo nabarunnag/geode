@@ -716,20 +716,20 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
 
     // Now remove all but one operand from iterValuesToKeep
     // Either the iterator we want to keep or iterator with no indexes (A)
-    List<CompiledValue> reenlistOperands = iterToOperands.get(iteratorValuesToKeep);
-    boolean oneAlreadySaved = false;
-    Iterator<CompiledValue> reenlistIterator = reenlistOperands.iterator();
-    while (reenlistIterator.hasNext()) {
-      CompiledValue reenlist = reenlistIterator.next();
-      if (reenlist.getPlanInfo(context).evalAsFilter) {
-        if (oneAlreadySaved) {
-          evalOperands.add(indexCount++, reenlist);
-          reenlistIterator.remove();
-        } else {
-          oneAlreadySaved = true;
-        }
-      }
-    }
+    // List<CompiledValue> reenlistOperands = iterToOperands.get(iteratorValuesToKeep);
+    // boolean oneAlreadySaved = false;
+    // Iterator<CompiledValue> reenlistIterator = reenlistOperands.iterator();
+    // while (reenlistIterator.hasNext()) {
+    // CompiledValue reenlist = reenlistIterator.next();
+    // if (reenlist.getPlanInfo(context).evalAsFilter) {
+    // if (oneAlreadySaved) {
+    // evalOperands.add(indexCount++, reenlist);
+    // reenlistIterator.remove();
+    // } else {
+    // oneAlreadySaved = true;
+    // }
+    // }
+    // }
     return new ManipulatedOperands(evalOperands, indexCount, iterToOperands);
   }
 
