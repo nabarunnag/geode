@@ -479,7 +479,7 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
     // necessarily be two )
     Map compositeFilterOpsMap = new LinkedHashMap();
     Map<RuntimeIterator, List<CompiledValue>> iterToOperands = new HashMap<>();
-    Map<RuntimeIterator, OperandAndIndexCount> iterToHasAtLeastOneIndex = new HashMap<>();
+    Map<RuntimeIterator, OperandAndIndexCount> iterToOperandAndIndexCount = new HashMap<>();
     CompiledValue operand = null;
     boolean isJunctionNeeded = false;
     boolean indexExistsOnNonJoinOp = false;
@@ -559,7 +559,7 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
             if (operandEvalAsFilter && _operator == LITERAL_and) {
               indexExistsOnNonJoinOp = true;
             }
-            iterToHasAtLeastOneIndex.compute(rIter, (key, value) -> {
+            iterToOperandAndIndexCount.compute(rIter, (key, value) -> {
               if (value == null) {
                 value = new OperandAndIndexCount();
               }
@@ -579,9 +579,9 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
     // reduced below 2 (so our original join optimization doesn't kick in)
     if (IndexManager.JOIN_OPTIMIZATION && iterToOperands.size() > 1
         && compositeFilterOpsMap.size() > 0
-        && iterToOperandsIsSquashable(iterToHasAtLeastOneIndex)) {
+        && iterToOperandsIsSquashable(iterToOperandAndIndexCount)) {
       ManipulatedOperands returnedOperands = manipulateTreeToOptimizeForJoin(context, evalOperands,
-          indexCount, iterToOperands, iterToHasAtLeastOneIndex);
+          indexCount, iterToOperands, iterToOperandAndIndexCount);
 
       indexCount = returnedOperands.indexCount;
       evalOperands = returnedOperands.evalOperands;
@@ -656,10 +656,10 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
   }
 
   private boolean iterToOperandsIsSquashable(
-      Map<RuntimeIterator, OperandAndIndexCount> iterToHasAtLeastOneIndex) {
+      Map<RuntimeIterator, OperandAndIndexCount> iterToOperandAndIndexCount) {
     int numIteratorsThatCannotBeSquashed = 0;
-    for (OperandAndIndexCount counts : iterToHasAtLeastOneIndex.values()) {
-      if (!counts.doAllOperandsHaveIndexes()) {
+    for (OperandAndIndexCount count : iterToOperandAndIndexCount.values()) {
+      if (!count.doAllOperandsHaveIndexes()) {
         numIteratorsThatCannotBeSquashed++;
       }
     }
@@ -675,7 +675,7 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
   private ManipulatedOperands manipulateTreeToOptimizeForJoin(ExecutionContext context,
       List originalEvalOperands, int originalIndexCount,
       Map<RuntimeIterator, List<CompiledValue>> originalIterToOperands,
-      Map<RuntimeIterator, OperandAndIndexCount> iterToHasAtLeastOneIndex)
+      Map<RuntimeIterator, OperandAndIndexCount> iterToOperandAndIndexCount)
       throws FunctionDomainException, TypeMismatchException, NameResolutionException,
       QueryInvocationTargetException {
     int indexCount = originalIndexCount;
@@ -687,7 +687,7 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
     // Do some iterToOperands magic. move iterToOperands into evalOperands if there is at least
     // one remaining that uses an index
     RuntimeIterator iteratorValuesToKeep =
-        getRuntimeIteratorThatCannotBeRemapped(iterToHasAtLeastOneIndex);
+        getRuntimeIteratorThatWillNotBeRemapped(iterToOperandAndIndexCount);
     if (iteratorValuesToKeep != null) {
       Iterator<RuntimeIterator> keys = iterToOperands.keySet().iterator();
       // iterToOperands.keySet().stream().filter(k -> k != iteratorValuesToKeep).forEach();
@@ -769,20 +769,18 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
   // the iterator that has the most indexes
   // We also know the caller of this method has already checked that iterToOperands has at least 1
   // value, if not this method should not be called and will get an NPE
-  private RuntimeIterator getRuntimeIteratorThatCannotBeRemapped(
+  private RuntimeIterator getRuntimeIteratorThatWillNotBeRemapped(
       Map<RuntimeIterator, OperandAndIndexCount> iteratorBooleanMap) {
     Map.Entry<RuntimeIterator, OperandAndIndexCount> bestIteratorToKeep = null;
     for (Map.Entry<RuntimeIterator, OperandAndIndexCount> entry : iteratorBooleanMap.entrySet()) {
-      if (entry.getValue().doAllOperandsHaveIndexes() == false) {
-        return entry.getKey();
-      }
-      entry.getValue();
-      if (bestIteratorToKeep == null) {
-        bestIteratorToKeep = entry;
-      } else {
-        bestIteratorToKeep =
-            entry.getValue().numIndexesOnIter > bestIteratorToKeep.getValue().numIndexesOnIter
-                ? entry : bestIteratorToKeep;
+      if (entry.getValue().doAllOperandsHaveIndexes() == true) {
+        if (bestIteratorToKeep == null) {
+          bestIteratorToKeep = entry;
+        } else {
+          bestIteratorToKeep =
+              entry.getValue().numIndexesOnIter > bestIteratorToKeep.getValue().numIndexesOnIter
+                  ? entry : bestIteratorToKeep;
+        }
       }
     }
     return bestIteratorToKeep.getKey();
