@@ -86,6 +86,8 @@ public class JoinQueriesIntegrationTest {
     };
   }
 
+
+
   @Test
   @Parameters(method = "getQueryStrings")
   public void testJoinTwoRegions(String queryString, int expectedResultSize) throws Exception {
