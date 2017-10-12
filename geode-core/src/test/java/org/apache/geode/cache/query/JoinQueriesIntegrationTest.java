@@ -135,7 +135,7 @@ public class JoinQueriesIntegrationTest {
       Region region2 =
           cache.createRegionFactory().setDataPolicy(DataPolicy.REPLICATE).create("region2");
 
-      populateRegionWithData(region1, region2, 1000);
+      populateRegionWithDataWithMoreJoinCollision(region1, region2, 10000);
 
       QueryService queryService = cache.getQueryService();
 
@@ -158,8 +158,17 @@ public class JoinQueriesIntegrationTest {
   }
 
 
+  private void populateRegionWithDataWithMoreJoinCollision(Region region1, Region region2,
+      int entryCount) {
+    for (int i = 1; i < entryCount; i++) {
+      region1.put(i, new Customer(i % 2, i, i % 2));
+      region2.put(i, new Customer(i % 3, i, i % 3));
+    }
+  }
+
+
   private void populateRegionWithData(Region region1, Region region2, int entryCount) {
-    for (int i = 1; i < 11; i++) {
+    for (int i = 1; i < entryCount; i++) {
       if (i == 1 || i == 3 || i == 8 || i == 2 || i == 5) {
         region1.put(i, new Customer(1, 1, 1));
       } else {
