@@ -14,12 +14,14 @@
  */
 package org.apache.geode.internal.cache.wan.parallel;
 
+import org.apache.logging.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.test.dunit.cache.internal.JUnit4CacheTestCase;
 import org.apache.geode.test.dunit.internal.JUnit4DistributedTestCase;
 import org.apache.geode.test.junit.categories.DistributedTest;
@@ -45,6 +47,7 @@ import org.apache.geode.test.dunit.SerializableRunnableIF;
 public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTestBase {
 
   private static final long serialVersionUID = 1L;
+  private static final Logger logger = LogService.getLogger();
 
   public ParallelWANPersistenceEnabledGatewaySenderDUnitTest() {
     super();
@@ -132,7 +135,6 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
   /**
    * Enable persistence for the GatewaySender but not the region
    */
-  @Category(FlakyTest.class) // GEODE-1670
   @Test
   public void testPartitionedRegionWithPersistentGatewaySender() {
     Integer lnPort = (Integer) vm0.invoke(() -> WANTestBase.createFirstLocatorWithDSId(1));
@@ -141,28 +143,28 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     createCacheInVMs(nyPort, vm2, vm3);
     createReceiverInVMs(vm2, vm3);
 
-    LogWriterUtils.getLogWriter().info("Created remote receivers");
+    logger.info("Created remote receivers");
     createCacheInVMs(lnPort, vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Created local site cache");
+    logger.info("Created local site cache");
 
     vm4.invoke(() -> WANTestBase.createSender("ln", 2, true, 100, 10, false, true, null, true));
     vm5.invoke(() -> WANTestBase.createSender("ln", 2, true, 100, 10, false, true, null, true));
     vm6.invoke(() -> WANTestBase.createSender("ln", 2, true, 100, 10, false, true, null, true));
     vm7.invoke(() -> WANTestBase.createSender("ln", 2, true, 100, 10, false, true, null, true));
 
-    LogWriterUtils.getLogWriter().info("Created local site senders");
+    logger.info("Created local site senders");
 
     vm4.invoke(createPartitionedRegionRunnable());
     vm5.invoke(createPartitionedRegionRunnable());
     vm6.invoke(createPartitionedRegionRunnable());
     vm7.invoke(createPartitionedRegionRunnable());
 
-    LogWriterUtils.getLogWriter().info("Created local site persistent PR");
+    logger.info("Created local site persistent PR");
 
     startSenderInVMs("ln", vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Started the senders");
+    logger.info("Started the senders");
 
     vm2.invoke(
         () -> WANTestBase.createPartitionedRegion(getTestMethodName(), null, 1, 100, isOffHeap()));
@@ -212,7 +214,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     String diskStore4 = (String) vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2,
         true, 100, 10, false, true, null, null, true));
 
-    LogWriterUtils.getLogWriter()
+    logger
         .info("The DS are: " + diskStore1 + "," + diskStore2 + "," + diskStore3 + "," + diskStore4);
 
     // create PR on remote site
@@ -244,7 +246,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
 
     // start puts in region on local site
     vm4.invoke(() -> WANTestBase.doPuts(getTestMethodName(), 3000));
-    LogWriterUtils.getLogWriter().info("Completed puts in the region");
+    logger.info("Completed puts in the region");
 
     // --------------------close and rebuild local site
     // -------------------------------------------------
@@ -254,12 +256,12 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(killSenderRunnable());
     vm7.invoke(killSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("Killed all the senders.");
+    logger.info("Killed all the senders.");
 
     // restart the vm
     createCacheInVMs(lnPort, vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Created back the cache");
+    logger.info("Created back the cache");
 
     // create senders with disk store
     vm4.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
@@ -271,7 +273,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
         null, diskStore4, true));
 
-    LogWriterUtils.getLogWriter().info("Created the senders back from the disk store.");
+    logger.info("Created the senders back from the disk store.");
     // create PR on local site
     AsyncInvocation inv1 = vm4.invokeAsync(createPartitionedRegionRunnable());
     AsyncInvocation inv2 = vm5.invokeAsync(createPartitionedRegionRunnable());
@@ -288,20 +290,20 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
       fail();
     }
 
-    LogWriterUtils.getLogWriter().info("Created back the partitioned regions");
+    logger.info("Created back the partitioned regions");
 
     // start the senders in async mode. This will ensure that the
     // node of shadow PR that went down last will come up first
     startSenderInVMsAsync("ln", vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Waiting for senders running.");
+    logger.info("Waiting for senders running.");
     // wait for senders running
     vm4.invoke(waitForSenderRunnable());
     vm5.invoke(waitForSenderRunnable());
     vm6.invoke(waitForSenderRunnable());
     vm7.invoke(waitForSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("All the senders are now running...");
+    logger.info("All the senders are now running...");
 
     // ----------------------------------------------------------------------------------------------------
 
@@ -351,7 +353,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     String diskStore4 = (String) vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2,
         true, 100, 10, false, true, null, null, true));
 
-    LogWriterUtils.getLogWriter()
+    logger
         .info("The DS are: " + diskStore1 + "," + diskStore2 + "," + diskStore3 + "," + diskStore4);
 
     // create PR on remote site
@@ -387,7 +389,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
 
     // start puts in region on local site
     vm4.invoke(() -> WANTestBase.doPuts(getTestMethodName(), 3000));
-    LogWriterUtils.getLogWriter().info("Completed puts in the region");
+    logger.info("Completed puts in the region");
 
     // --------------------close and rebuild local site
     // -------------------------------------------------
@@ -397,12 +399,12 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(killSenderRunnable());
     vm7.invoke(killSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("Killed all the senders.");
+    logger.info("Killed all the senders.");
 
     // restart the vm
     createCacheInVMs(lnPort, vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Created back the cache");
+    logger.info("Created back the cache");
 
     // create senders with disk store
     vm4.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
@@ -414,7 +416,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
         null, diskStore4, true));
 
-    LogWriterUtils.getLogWriter().info("Created the senders back from the disk store.");
+    logger.info("Created the senders back from the disk store.");
     // create PR on local site
     AsyncInvocation inv1 = vm4.invokeAsync(() -> WANTestBase
         .createPersistentPartitionedRegion(getTestMethodName(), "ln", 1, 100, isOffHeap()));
@@ -435,20 +437,20 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
       fail();
     }
 
-    LogWriterUtils.getLogWriter().info("Created back the partitioned regions");
+    logger.info("Created back the partitioned regions");
 
     // start the senders in async mode. This will ensure that the
     // node of shadow PR that went down last will come up first
     startSenderInVMsAsync("ln", vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Waiting for senders running.");
+    logger.info("Waiting for senders running.");
     // wait for senders running
     vm4.invoke(waitForSenderRunnable());
     vm5.invoke(waitForSenderRunnable());
     vm6.invoke(waitForSenderRunnable());
     vm7.invoke(waitForSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("All the senders are now running...");
+    logger.info("All the senders are now running...");
 
     // ----------------------------------------------------------------------------------------------------
 
@@ -482,7 +484,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     String diskStore4 = (String) vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2,
         true, 100, 10, false, true, null, null, false));
 
-    LogWriterUtils.getLogWriter()
+    logger
         .info("The DS are: " + diskStore1 + "," + diskStore2 + "," + diskStore3 + "," + diskStore4);
 
     // create PR on local site
@@ -512,7 +514,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
 
     // start puts in region on local site
     vm4.invoke(() -> WANTestBase.doPuts(getTestMethodName(), 300));
-    LogWriterUtils.getLogWriter().info("Completed puts in the region");
+    logger.info("Completed puts in the region");
 
     // --------------------close and rebuild local site
     // -------------------------------------------------
@@ -522,12 +524,12 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(killSenderRunnable());
     vm7.invoke(killSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("Killed all the senders.");
+    logger.info("Killed all the senders.");
 
     // restart the vm
     createCacheInVMs(lnPort, vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Created back the cache");
+    logger.info("Created back the cache");
 
     // create senders with disk store
     vm4.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
@@ -539,7 +541,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
         null, diskStore4, true));
 
-    LogWriterUtils.getLogWriter().info("Created the senders back from the disk store.");
+    logger.info("Created the senders back from the disk store.");
 
     // create PR on local site
     AsyncInvocation inv1 = vm4.invokeAsync(() -> WANTestBase
@@ -561,13 +563,13 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
       fail();
     }
 
-    LogWriterUtils.getLogWriter().info("Created back the partitioned regions");
+    logger.info("Created back the partitioned regions");
 
     // start the senders in async mode. This will ensure that the
     // node of shadow PR that went down last will come up first
     startSenderInVMsAsync("ln", vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Waiting for senders running.");
+    logger.info("Waiting for senders running.");
     // wait for senders running
     vm4.invoke(waitForSenderRunnable());
     vm5.invoke(waitForSenderRunnable());
@@ -575,12 +577,12 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm7.invoke(waitForSenderRunnable());
 
 
-    LogWriterUtils.getLogWriter().info("Creating the receiver.");
+    logger.info("Creating the receiver.");
     // create receiver on remote site
     createCacheInVMs(nyPort, vm2, vm3);
     // create PR on remote site
 
-    LogWriterUtils.getLogWriter().info("Creating the partitioned region at receiver. ");
+    logger.info("Creating the partitioned region at receiver. ");
     vm2.invoke(() -> WANTestBase.createPersistentPartitionedRegion(getTestMethodName(), null, 1,
         100, isOffHeap()));
     vm3.invoke(() -> WANTestBase.createPersistentPartitionedRegion(getTestMethodName(), null, 1,
@@ -592,7 +594,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(pauseSenderRunnable());
     vm7.invoke(pauseSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("Doing some extra puts. ");
+    logger.info("Doing some extra puts. ");
     // start puts in region on local site
     vm4.invoke(() -> WANTestBase.doPutsAfter300(getTestMethodName(), 1000));
     // ----------------------------------------------------------------------------------------------------
@@ -601,7 +603,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(() -> WANTestBase.resumeSender("ln"));
     vm7.invoke(() -> WANTestBase.resumeSender("ln"));
 
-    LogWriterUtils.getLogWriter().info("Validating the region size at the receiver end. ");
+    logger.info("Validating the region size at the receiver end. ");
     vm2.invoke(() -> WANTestBase.validateRegionSize(getTestMethodName(), 1000));
     vm3.invoke(() -> WANTestBase.validateRegionSize(getTestMethodName(), 1000));
   }
@@ -636,7 +638,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     String diskStore4 = (String) vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2,
         true, 100, 10, false, true, null, null, true));
 
-    LogWriterUtils.getLogWriter()
+    logger
         .info("The DS are: " + diskStore1 + "," + diskStore2 + "," + diskStore3 + "," + diskStore4);
 
     // create PR on remote site
@@ -672,7 +674,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
 
     // start puts in region on local site
     vm4.invoke(() -> WANTestBase.doPuts(getTestMethodName(), 3000));
-    LogWriterUtils.getLogWriter().info("Completed puts in the region");
+    logger.info("Completed puts in the region");
 
     // --------------------close and rebuild local site
     // -------------------------------------------------
@@ -682,12 +684,12 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(killSenderRunnable());
     vm7.invoke(killSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("Killed all the senders.");
+    logger.info("Killed all the senders.");
 
     // restart the vm
     createCacheInVMs(lnPort, vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Created back the cache");
+    logger.info("Created back the cache");
 
     // create senders with disk store
     vm4.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
@@ -699,7 +701,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
         null, diskStore4, true));
 
-    LogWriterUtils.getLogWriter().info("Created the senders back from the disk store.");
+    logger.info("Created the senders back from the disk store.");
 
     // create PR on local site
     AsyncInvocation inv1 = vm4.invokeAsync(() -> WANTestBase
@@ -721,20 +723,20 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
       fail();
     }
 
-    LogWriterUtils.getLogWriter().info("Created back the partitioned regions");
+    logger.info("Created back the partitioned regions");
 
     // start the senders in async mode. This will ensure that the
     // node of shadow PR that went down last will come up first
     startSenderInVMsAsync("ln", vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Waiting for senders running.");
+    logger.info("Waiting for senders running.");
     // wait for senders running
     vm4.invoke(waitForSenderRunnable());
     vm5.invoke(waitForSenderRunnable());
     vm6.invoke(waitForSenderRunnable());
     vm7.invoke(waitForSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("All the senders are now running...");
+    logger.info("All the senders are now running...");
 
     // ----------------------------------------------------------------------------------------------------
 
@@ -779,7 +781,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     String diskStore4 = (String) vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2,
         true, 100, 10, false, true, null, null, true));
 
-    LogWriterUtils.getLogWriter()
+    logger
         .info("The DS are: " + diskStore1 + "," + diskStore2 + "," + diskStore3 + "," + diskStore4);
 
     // create PR on remote site
@@ -815,7 +817,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
 
     // start puts in region on local site
     vm4.invoke(() -> WANTestBase.doPutsWithKeyAsString(getTestMethodName(), 1000));
-    LogWriterUtils.getLogWriter().info("Completed puts in the region");
+    logger.info("Completed puts in the region");
 
     // --------------------close and rebuild local site
     // -------------------------------------------------
@@ -825,12 +827,12 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(killSenderRunnable());
     vm7.invoke(killSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("Killed all the senders.");
+    logger.info("Killed all the senders.");
 
     // restart the vm
     createCacheInVMs(lnPort, vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Created back the cache");
+    logger.info("Created back the cache");
 
     // create senders with disk store
     vm4.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
@@ -842,7 +844,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
         null, diskStore4, true));
 
-    LogWriterUtils.getLogWriter().info("Created the senders back from the disk store.");
+    logger.info("Created the senders back from the disk store.");
 
     // create PR on local site
     AsyncInvocation inv1 = vm4.invokeAsync(() -> WANTestBase
@@ -864,20 +866,20 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
       fail();
     }
 
-    LogWriterUtils.getLogWriter().info("Created back the partitioned regions");
+    logger.info("Created back the partitioned regions");
 
     // start the senders in async mode. This will ensure that the
     // node of shadow PR that went down last will come up first
     startSenderInVMsAsync("ln", vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Waiting for senders running.");
+    logger.info("Waiting for senders running.");
     // wait for senders running
     vm4.invoke(waitForSenderRunnable());
     vm5.invoke(waitForSenderRunnable());
     vm6.invoke(waitForSenderRunnable());
     vm7.invoke(waitForSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("All the senders are now running...");
+    logger.info("All the senders are now running...");
 
     // ----------------------------------------------------------------------------------------------------
 
@@ -913,7 +915,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     String diskStore4 = (String) vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2,
         true, 100, 10, false, true, null, null, true));
 
-    LogWriterUtils.getLogWriter()
+    logger
         .info("The DS are: " + diskStore1 + "," + diskStore2 + "," + diskStore3 + "," + diskStore4);
 
     // create PR on remote site
@@ -949,7 +951,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
 
     // start puts in region on local site
     vm4.invoke(() -> WANTestBase.doPutsWithKeyAsString(getTestMethodName(), 1000));
-    LogWriterUtils.getLogWriter().info("Completed puts in the region");
+    logger.info("Completed puts in the region");
 
     // --------------------close and rebuild local site
     // -------------------------------------------------
@@ -959,12 +961,12 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(killSenderRunnable());
     vm7.invoke(killSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("Killed all the senders.");
+    logger.info("Killed all the senders.");
 
     // restart the vm
     createCacheInVMs(lnPort, vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Created back the cache");
+    logger.info("Created back the cache");
 
     // create senders with disk store
     vm4.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
@@ -976,7 +978,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
         null, diskStore4, true));
 
-    LogWriterUtils.getLogWriter().info("Created the senders back from the disk store.");
+    logger.info("Created the senders back from the disk store.");
 
     // create PR on local site
     vm4.invoke(() -> WANTestBase.createPersistentPartitionedRegion(getTestMethodName(), "ln", 1,
@@ -988,20 +990,20 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm7.invoke(() -> WANTestBase.createPersistentPartitionedRegion(getTestMethodName(), "ln", 1,
         100, isOffHeap()));
 
-    LogWriterUtils.getLogWriter().info("Created back the partitioned regions");
+    logger.info("Created back the partitioned regions");
 
     // start the senders in async mode. This will ensure that the
     // node of shadow PR that went down last will come up first
     startSenderInVMsAsync("ln", vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Waiting for senders running.");
+    logger.info("Waiting for senders running.");
     // wait for senders running
     vm4.invoke(waitForSenderRunnable());
     vm5.invoke(waitForSenderRunnable());
     vm6.invoke(waitForSenderRunnable());
     vm7.invoke(waitForSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("All the senders are now running...");
+    logger.info("All the senders are now running...");
 
     // ----------------------------------------------------------------------------------------------------
 
@@ -1015,7 +1017,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
 
     // do some extra puts in region on local site
     vm4.invoke(() -> WANTestBase.doPutsWithKeyAsString(getTestMethodName(), 10000));
-    LogWriterUtils.getLogWriter().info("Completed puts in the region");
+    logger.info("Completed puts in the region");
 
 
     vm2.invoke(() -> WANTestBase.validateRegionSize(getTestMethodName(), 10000));
@@ -1042,7 +1044,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
 
     // start puts in region on local site
     vm4.invoke(() -> WANTestBase.doPutsWithKeyAsString(getTestMethodName(), 1000));
-    LogWriterUtils.getLogWriter().info("Completed puts in the region");
+    logger.info("Completed puts in the region");
 
     // --------------------close and rebuild local site
     // -------------------------------------------------
@@ -1052,12 +1054,12 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(killSenderRunnable());
     vm7.invoke(killSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("Killed all the senders.");
+    logger.info("Killed all the senders.");
 
     // restart the vm
     createCacheInVMs(lnPort, vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Created back the cache");
+    logger.info("Created back the cache");
 
     // // create PR on local site
     // vm4.invoke(WANTestBase.class, "createPersistentPartitionedRegion",
@@ -1089,7 +1091,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
       fail();
     }
 
-    LogWriterUtils.getLogWriter().info("Created back the partitioned regions");
+    logger.info("Created back the partitioned regions");
 
     vm4.invoke(() -> WANTestBase.validateRegionSize(getTestMethodName(), 1000));
     vm5.invoke(() -> WANTestBase.validateRegionSize(getTestMethodName(), 1000));
@@ -1128,7 +1130,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     String diskStore4 = (String) vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2,
         true, 100, 10, false, true, null, null, true));
 
-    LogWriterUtils.getLogWriter()
+    logger
         .info("The DS are: " + diskStore1 + "," + diskStore2 + "," + diskStore3 + "," + diskStore4);
 
     // create PR on remote site
@@ -1164,7 +1166,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
 
     // start puts in region on local site
     vm4.invoke(() -> WANTestBase.doPuts(getTestMethodName(), 1000));
-    LogWriterUtils.getLogWriter().info("Completed puts in the region");
+    logger.info("Completed puts in the region");
 
     // --------------------close and rebuild local site
     // -------------------------------------------------
@@ -1174,12 +1176,12 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(killSenderRunnable());
     vm7.invoke(killSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("Killed all the senders.");
+    logger.info("Killed all the senders.");
 
     // restart the vm
     createCacheInVMs(lnPort, vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Created back the cache");
+    logger.info("Created back the cache");
 
 
     // create senders from disk store
@@ -1192,22 +1194,22 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
         null, diskStore4, true));
 
-    LogWriterUtils.getLogWriter().info("Created the senders back from the disk store.");
+    logger.info("Created the senders back from the disk store.");
 
 
     // start the senders. NOTE that the senders are not associated with partitioned region
     startSenderInVMs("ln", vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Started the senders.");
+    logger.info("Started the senders.");
 
-    LogWriterUtils.getLogWriter().info("Waiting for senders running.");
+    logger.info("Waiting for senders running.");
     // wait for senders running
     vm4.invoke(waitForSenderRunnable());
     vm5.invoke(waitForSenderRunnable());
     vm6.invoke(waitForSenderRunnable());
     vm7.invoke(waitForSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("All the senders are now running...");
+    logger.info("All the senders are now running...");
 
     // ----------------------------------------------------------------------------------------------------
 
@@ -1246,7 +1248,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     String diskStore4 = (String) vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2,
         true, 100, 10, false, true, null, null, true));
 
-    LogWriterUtils.getLogWriter()
+    logger
         .info("The DS are: " + diskStore1 + "," + diskStore2 + "," + diskStore3 + "," + diskStore4);
 
     // create PR on remote site
@@ -1278,7 +1280,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
 
     // start puts in region on local site
     vm4.invoke(() -> WANTestBase.doPuts(getTestMethodName(), 1000));
-    LogWriterUtils.getLogWriter().info("Completed puts in the region");
+    logger.info("Completed puts in the region");
 
     // kill the senders
     vm4.invoke(killSenderRunnable());
@@ -1286,13 +1288,12 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(killSenderRunnable());
     vm7.invoke(killSenderRunnable());
 
-    LogWriterUtils.getLogWriter()
-        .info("Killed all the senders. The local site has been brought down.");
+    logger.info("Killed all the senders. The local site has been brought down.");
 
     // restart the vm
     createCacheInVMs(lnPort, vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Created back the cache");
+    logger.info("Created back the cache");
 
     // create senders with disk store
     vm4.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
@@ -1304,7 +1305,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm7.invoke(() -> WANTestBase.createSenderWithDiskStore("ln", 2, true, 100, 10, false, true,
         null, diskStore4, true));
 
-    LogWriterUtils.getLogWriter().info("Created the senders back from the disk store.");
+    logger.info("Created the senders back from the disk store.");
 
     // create PR on local site
     vm4.invoke(createPartitionedRegionRunnable());
@@ -1312,21 +1313,21 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(createPartitionedRegionRunnable());
     vm7.invoke(createPartitionedRegionRunnable());
 
-    LogWriterUtils.getLogWriter().info("Created back the partitioned regions");
+    logger.info("Created back the partitioned regions");
 
     // start the senders
     startSenderInVMs("ln", vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Started the senders.");
+    logger.info("Started the senders.");
 
-    LogWriterUtils.getLogWriter().info("Waiting for senders running.");
+    logger.info("Waiting for senders running.");
     // wait for senders running
     vm4.invoke(waitForSenderRunnable());
     vm5.invoke(waitForSenderRunnable());
     vm6.invoke(waitForSenderRunnable());
     vm7.invoke(waitForSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("All the senders are now running...");
+    logger.info("All the senders are now running...");
 
     vm2.invoke(() -> WANTestBase.validateRegionSize(getTestMethodName(), 1000));
     vm3.invoke(() -> WANTestBase.validateRegionSize(getTestMethodName(), 1000));
@@ -1395,7 +1396,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
 
     // start puts in region on local site
     vm4.invoke(() -> WANTestBase.doPuts(getTestMethodName(), 3000));
-    LogWriterUtils.getLogWriter().info("Completed puts in the region");
+    logger.info("Completed puts in the region");
 
     // ----------------- Close and rebuild local site -------------------------------------
     // kill the senders
@@ -1404,12 +1405,12 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(killSenderRunnable());
     vm7.invoke(killSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("Killed all the senders.");
+    logger.info("Killed all the senders.");
 
     // restart the vm
     createCacheInVMs(lnPort, vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Created back the cache");
+    logger.info("Created back the cache");
 
     // create back the senders
     vm4.invoke(() -> WANTestBase.createSender("ln", 2, true, 100, 10, false, false, null, true));
@@ -1417,14 +1418,14 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(() -> WANTestBase.createSender("ln", 2, true, 100, 10, false, false, null, true));
     vm7.invoke(() -> WANTestBase.createSender("ln", 2, true, 100, 10, false, false, null, true));
 
-    LogWriterUtils.getLogWriter().info("Created the senders again");
+    logger.info("Created the senders again");
 
     // start the senders
     startSenderInVMsAsync("ln", vm4, vm5, vm6, vm7);
 
-    LogWriterUtils.getLogWriter().info("Started the senders.");
+    logger.info("Started the senders.");
 
-    LogWriterUtils.getLogWriter().info("Waiting for senders running.");
+    logger.info("Waiting for senders running.");
 
     // wait for senders running
     vm4.invoke(waitForSenderRunnable());
@@ -1432,7 +1433,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
     vm6.invoke(waitForSenderRunnable());
     vm7.invoke(waitForSenderRunnable());
 
-    LogWriterUtils.getLogWriter().info("All the senders are now running...");
+    logger.info("All the senders are now running...");
 
     // create PR on local site
     AsyncInvocation inv1 = vm4.invokeAsync(() -> WANTestBase
@@ -1454,13 +1455,13 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
       fail();
     }
 
-    LogWriterUtils.getLogWriter().info("Created back the partitioned regions");
+    logger.info("Created back the partitioned regions");
 
     // -------------------------------------------------------------------------------------------
 
     // start puts in region on local site
     vm4.invoke(() -> WANTestBase.doPuts(getTestMethodName(), 3000));
-    LogWriterUtils.getLogWriter().info("Completed puts in the region");
+    logger.info("Completed puts in the region");
 
     vm2.invoke(() -> WANTestBase.validateRegionSize(getTestMethodName(), 3000));
     vm3.invoke(() -> WANTestBase.validateRegionSize(getTestMethodName(), 3000));
@@ -1509,7 +1510,7 @@ public class ParallelWANPersistenceEnabledGatewaySenderDUnitTest extends WANTest
 
     // start puts in region on local site
     vm4.invoke(() -> WANTestBase.doPuts(getTestMethodName() + "_PR", 1000));
-    LogWriterUtils.getLogWriter().info("Completed puts in the region");
+    logger.info("Completed puts in the region");
 
     vm2.invoke(() -> WANTestBase.validateRegionSize(getTestMethodName() + "_PR", 1000));
     vm3.invoke(() -> WANTestBase.validateRegionSize(getTestMethodName() + "_PR", 1000));
