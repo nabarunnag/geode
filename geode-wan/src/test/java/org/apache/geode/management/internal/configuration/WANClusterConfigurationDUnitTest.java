@@ -58,6 +58,47 @@ public class WANClusterConfigurationDUnitTest {
   }
 
   @Test
+  public void whenAlteringNoncolocatedRegionsWithTheSameSenderIdThenFailure() throws Exception{
+    addIgnoredException("could not get remote locator");
+//    Properties props = new Properties();
+//    props.setProperty(LOG_LEVEL, "error");
+    MemberVM locator = clusterStartupRule.startLocatorVM(0/*, props*/);
+    MemberVM server1 = clusterStartupRule.startServerVM(1, /*props,*/ locator.getPort());
+    MemberVM server2 = clusterStartupRule.startServerVM(2, /*props,*/ locator.getPort());
+
+    // Connect Gfsh to locator.
+    gfsh.connectAndVerify(locator);
+
+    CommandStringBuilder cbs = new CommandStringBuilder(CliStrings.CREATE_GATEWAYSENDER);
+    cbs.addOption(CliStrings.CREATE_GATEWAYSENDER__ID,"ny");
+    cbs.addOption(CliStrings.CREATE_GATEWAYSENDER__REMOTEDISTRIBUTEDSYSTEMID,"2");
+    gfsh.executeAndAssertThat(cbs.toString()).statusIsSuccess();
+
+    cbs = new CommandStringBuilder(CliStrings.CREATE_REGION);
+    cbs.addOption(CliStrings.CREATE_REGION__REGION,"test1");
+    cbs.addOption(CliStrings.CREATE_REGION__REGIONSHORTCUT,"PARTITION_REDUNDANT");
+    gfsh.executeAndAssertThat(cbs.toString()).statusIsSuccess();
+
+    cbs = new CommandStringBuilder(CliStrings.CREATE_REGION);
+    cbs.addOption(CliStrings.CREATE_REGION__REGION,"test2");
+    cbs.addOption(CliStrings.CREATE_REGION__REGIONSHORTCUT,"PARTITION_REDUNDANT");
+    gfsh.executeAndAssertThat(cbs.toString()).statusIsSuccess();
+
+    cbs = new CommandStringBuilder(CliStrings.ALTER_REGION);
+    cbs.addOption(CliStrings.ALTER_REGION__REGION,"test1");
+    cbs.addOption(CliStrings.ALTER_REGION__GATEWAYSENDERID,"ny");
+    gfsh.executeAndAssertThat(cbs.toString()).statusIsSuccess();
+
+    cbs = new CommandStringBuilder(CliStrings.ALTER_REGION);
+    cbs.addOption(CliStrings.ALTER_REGION__REGION,"test2");
+    cbs.addOption(CliStrings.ALTER_REGION__GATEWAYSENDERID,"ny");
+    gfsh.executeAndAssertThat(cbs.toString()).statusIsError();
+
+
+
+  }
+
+  @Test
   public void testCreateGatewaySenderReceiver() throws Exception {
     addIgnoredException("could not get remote locator");
 

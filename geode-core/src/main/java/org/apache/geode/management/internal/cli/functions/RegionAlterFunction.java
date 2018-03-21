@@ -31,7 +31,9 @@ import org.apache.geode.cache.execute.FunctionContext;
 import org.apache.geode.cache.execute.ResultSender;
 import org.apache.geode.internal.ClassPathLoader;
 import org.apache.geode.internal.cache.AbstractRegion;
+import org.apache.geode.internal.cache.PartitionedRegion;
 import org.apache.geode.internal.cache.execute.InternalFunction;
+import org.apache.geode.internal.cache.partitioned.PRLocallyDestroyedException;
 import org.apache.geode.internal.cache.xmlcache.CacheXml;
 import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.management.internal.cli.CliUtil;
@@ -184,6 +186,20 @@ public class RegionAlterFunction implements InternalFunction {
     // Alter Gateway Sender Ids
     final Set<String> newGatewaySenderIds = regionAlterArgs.getGatewaySenderIds();
     if (newGatewaySenderIds != null) {
+      System.out.println("NABA ::: here in altering" + newGatewaySenderIds);
+      // Check if this is a partitioned region and it is colocated
+      // to the regions to which that the senders are attached to
+      if (region instanceof PartitionedRegion) {
+        System.out.println("NABA :: instance of PartitionedRegion");
+        try {
+          ((PartitionedRegion) region).validateParallelGatewaySenderIds(newGatewaySenderIds);
+        } catch (PRLocallyDestroyedException e) {
+          throw new IllegalStateException("Partitioned Region not found registered", e);
+        }catch (Exception ex){
+          System.out.println("NABA :: exception thrown");
+          throw ex;
+        }
+      }
 
       // Remove old gateway sender ids that aren't in the new list
       Set<String> oldGatewaySenderIds = region.getGatewaySenderIds();

@@ -1347,7 +1347,7 @@ public class PartitionedRegion extends LocalRegion
       prConfig = this.prRoot.get(getRegionIdentifier());
 
       if (prConfig == null) {
-        validateParalleGatewaySenderIds();
+        validateParallelGatewaySenderIds();
         this.partitionedRegionId = generatePRId(getSystem());
         prConfig = new PartitionRegionConfig(this.partitionedRegionId, this.getFullPath(),
             prAttribs, this.getScope(), getAttributes().getEvictionAttributes(),
@@ -1454,20 +1454,32 @@ public class PartitionedRegion extends LocalRegion
     }
   }
 
-  public void validateParalleGatewaySenderIds() throws PRLocallyDestroyedException {
-    for (String senderId : this.getParallelGatewaySenderIds()) {
+  public void validateParallelGatewaySenderIds() throws PRLocallyDestroyedException {
+    validateParallelGatewaySenderIds(this.getParallelGatewaySenderIds());
+  }
+
+  public void validateParallelGatewaySenderIds(Set<String> parallelGatewaySenderIds)
+      throws PRLocallyDestroyedException {
+    System.out.println("NABA ::: here in validating" + this.prRoot.values());
+    for (String senderId : parallelGatewaySenderIds) {
       for (PartitionRegionConfig config : this.prRoot.values()) {
+        System.out.println("NABA ::: here in validating 2" + config.getGatewaySenderIds());
         if (config.getGatewaySenderIds().contains(senderId)) {
           Map<String, PartitionedRegion> colocationMap =
               ColocationHelper.getAllColocationRegions(this);
+          System.out.println("NABA ::: colocation map" + colocationMap);
           if (!colocationMap.isEmpty()) {
+            System.out.println("NABA ::: colacation map not empty");
             if (colocationMap.containsKey(config.getFullPath())) {
+              System.out.println("NABA :: about to hit continue");
               continue;
             } else {
+              System.out.println("NABA ::: here in validating 3");
               int prID = config.getPRId();
               PartitionedRegion colocatedPR = PartitionedRegion.getPRFromId(prID);
               PartitionedRegion leader = ColocationHelper.getLeaderRegion(colocatedPR);
               if (colocationMap.containsValue(leader)) {
+                System.out.println("NABA ::: here in validating 4");
                 continue;
               } else {
                 throw new IllegalStateException(
