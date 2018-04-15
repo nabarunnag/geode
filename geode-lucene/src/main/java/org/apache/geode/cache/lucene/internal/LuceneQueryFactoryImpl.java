@@ -20,6 +20,9 @@ import org.apache.geode.cache.Region;
 import org.apache.geode.cache.lucene.LuceneQuery;
 import org.apache.geode.cache.lucene.LuceneQueryFactory;
 import org.apache.geode.cache.lucene.LuceneQueryProvider;
+import org.apache.geode.cache.lucene.LuceneService;
+import org.apache.geode.cache.lucene.LuceneServiceProvider;
+import org.apache.geode.internal.cache.PartitionedRegion;
 
 public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
   private int limit = DEFAULT_LIMIT;
@@ -60,8 +63,25 @@ public class LuceneQueryFactoryImpl implements LuceneQueryFactory {
   public <K, V> LuceneQuery<K, V> create(String indexName, String regionName,
       LuceneQueryProvider provider) {
     Region<K, V> region = cache.getRegion(regionName);
+
+
     if (region == null) {
       throw new IllegalArgumentException("Region not found: " + regionName);
+    }
+
+    // get to know if the region is an accessor
+    if (region instanceof PartitionedRegion) {
+      if (region.getAttributes().getPartitionAttributes().getLocalMaxMemory() == 0) {// it is an
+                                                                                     // accessor
+        LuceneService luceneService = LuceneServiceProvider.get(cache);
+        LuceneIndexForPartitionedRegion luceneIndex =
+            (LuceneIndexForPartitionedRegion) luceneService.getIndex(indexName,
+                region.getFullPath());
+        if (luceneIndex == null) {
+          throw new IllegalArgumentException(
+              "Lucene Index not found in the accessor : " + indexName);
+        }
+      }
     }
     LuceneQueryImpl<K, V> luceneQuery =
         new LuceneQueryImpl<K, V>(indexName, region, provider, limit, pageSize);

@@ -92,6 +92,52 @@ public class LuceneQueriesReindexDUnitTest extends LuceneQueriesAccessorBase {
 
   @Test
   @Parameters(method = "getListOfRegionTestTypes")
+  public void asynchronousLuceneIndexCreationWithDifferentFieldsMustFail(
+      RegionTestableType regionTestType) throws Exception {
+    if (regionTestType == RegionTestableType.PARTITION_PERSISTENT) {
+      return;
+    }
+    SerializableRunnableIF createIndex = () -> {
+      LuceneService luceneService = LuceneServiceProvider.get(getCache());
+      luceneService.createIndexFactory().addField("text").create(INDEX_NAME, REGION_NAME);
+    };
+    dataStore1.invoke(() -> initDataStore(createIndex, regionTestType));
+    dataStore2.invoke(() -> initDataStore(createIndex, regionTestType));
+    accessor.invoke(() -> initAccessor(createIndex, regionTestType));
+
+    putDataInRegion(accessor);
+    assertTrue(waitForFlushBeforeExecuteTextSearch(accessor, 60000));
+    assertTrue(waitForFlushBeforeExecuteTextSearch(dataStore1, 60000));
+    // executeTextSearch(accessor);
+
+    dataStore1.invoke(() -> destroyIndex());
+
+    // re-index stored data
+    AsyncInvocation ai1 = dataStore1.invokeAsync(() -> {
+      recreateIndex();
+    });
+    AsyncInvocation aia = accessor.invokeAsync(() -> {
+      recreateIndex();
+    });
+
+    dataStore2.invoke(() -> closeCache());
+    ai1.join();
+    aia.join();
+    assertTrue(waitForFlushBeforeExecuteTextSearch(dataStore1, 60000));
+
+    ai1.checkException();
+
+    putDataInRegion(accessor);
+    System.out.println("NABA :: waiting for flush");
+    // assertTrue(waitForFlushBeforeExecuteTextSearch(accessor, 60000));
+    // assertTrue(waitForFlushBeforeExecuteTextSearch(dataStore1, 60000));
+    System.out.println("NABA :: executing query");
+    executeTextSearch(dataStore1);
+  }
+
+
+  @Test
+  @Parameters(method = "getListOfRegionTestTypes")
   public void reindexThenQuery(RegionTestableType regionTestType) throws Exception {
     SerializableRunnableIF createIndex = () -> {
       LuceneService luceneService = LuceneServiceProvider.get(getCache());

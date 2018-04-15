@@ -86,12 +86,16 @@ public class LuceneQueriesAccessorBase extends LuceneDUnitTest {
     vm.invoke(() -> {
       Cache cache = getCache();
       Region<Object, Object> region = cache.getRegion(REGION_NAME);
-
+      System.out.println("NABA::::1");
       LuceneService service = LuceneServiceProvider.get(cache);
+      System.out.println("NABA::::2");
       LuceneQuery<Integer, TestObject> query;
+      System.out.println("NABA::::3");
       query = service.createLuceneQueryFactory().create(INDEX_NAME, REGION_NAME, "text:world",
           DEFAULT_FIELD);
+      System.out.println("NABA::::4");
       PageableLuceneQueryResults<Integer, TestObject> results = query.findPages();
+      System.out.println("NABA::::5");
       assertEquals(3, results.size());
       List<LuceneResultStruct<Integer, TestObject>> page = results.next();
 
