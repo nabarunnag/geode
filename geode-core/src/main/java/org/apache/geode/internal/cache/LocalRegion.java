@@ -10307,7 +10307,7 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
   /**
    * filterProfile holds CQ and registerInterest information for clients having this region
    */
-  FilterProfile filterProfile;
+  public FilterProfile filterProfile;
 
   /**
    *
@@ -10366,6 +10366,10 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
     return this.isUsedForParallelGatewaySenderQueue;
   }
 
+  public void removeCacheServiceProfile(String profileID) {
+    this.cacheServiceProfiles.remove(profileID);
+  }
+
   public AbstractGatewaySender getSerialGatewaySender() {
     return this.serialGatewaySender;
   }
@@ -10418,7 +10422,7 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
         || isUsedForPartitionedRegionBucket();
   }
 
-  Map<String, CacheServiceProfile> getCacheServiceProfiles() {
+  public Map<String, CacheServiceProfile> getCacheServiceProfiles() {
     return this.cacheServiceProfiles.getSnapshot();
   }
 

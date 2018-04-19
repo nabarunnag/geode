@@ -244,9 +244,18 @@ public class LuceneServiceImpl implements InternalLuceneService {
       LuceneSerializer serializer) {
     validateRegionAttributes(region.getAttributes());
 
-    region.addCacheServiceProfile(new LuceneIndexCreationProfile(indexName, regionPath, fields,
-        analyzer, fieldAnalyzers, serializer));
+    LuceneIndexCreationProfile luceneIndexCreationProfile = new LuceneIndexCreationProfile(indexName, regionPath,
+        fields, analyzer, fieldAnalyzers, serializer);
 
+    region.addCacheServiceProfile(luceneIndexCreationProfile);
+
+    // get the cache profiles from the remote guys
+    try {
+      new CreateRegionProcessorForLucene(region).initializeRegion();
+    } catch (Exception e) {
+      region.removeCacheServiceProfile(luceneIndexCreationProfile.getId());
+      throw new UnsupportedOperationException("Lucene indexes cannot be created", e);
+    }
     String aeqId = LuceneServiceImpl.getUniqueIndexName(indexName, regionPath);
     region.updatePRConfigWithNewGatewaySender(aeqId);
     LuceneIndexImpl luceneIndex = beforeDataRegionCreated(indexName, regionPath,

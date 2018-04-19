@@ -56,6 +56,7 @@ import org.apache.geode.distributed.internal.DirectReplyProcessor;
 import org.apache.geode.distributed.internal.DistributionAdvisor.Profile;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.distributed.internal.DistributionStats;
+import org.apache.geode.distributed.internal.ReplyProcessor21;
 import org.apache.geode.distributed.internal.membership.InternalDistributedMember;
 import org.apache.geode.internal.Assert;
 import org.apache.geode.internal.HeapDataOutputStream;
@@ -307,8 +308,8 @@ public class BucketRegion extends DistributedRegion implements Bucket {
   }
 
   @Override
-  public void registerCreateRegionReplyProcessor(CreateRegionReplyProcessor processor) {
-    this.createRegionReplyProcessor = processor;
+  public void registerCreateRegionReplyProcessor(ReplyProcessor21 processor) {
+    this.createRegionReplyProcessor = (CreateRegionReplyProcessor) processor;
   }
 
   @Override

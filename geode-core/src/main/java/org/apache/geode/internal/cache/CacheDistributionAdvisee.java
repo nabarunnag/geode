@@ -16,6 +16,7 @@ package org.apache.geode.internal.cache;
 
 import org.apache.geode.cache.RegionAttributes;
 import org.apache.geode.distributed.internal.DistributionAdvisee;
+import org.apache.geode.distributed.internal.ReplyProcessor21;
 import org.apache.geode.internal.cache.CacheDistributionAdvisor.CacheProfile;
 import org.apache.geode.internal.cache.CreateRegionProcessor.CreateRegionReplyProcessor;
 
@@ -61,5 +62,5 @@ public interface CacheDistributionAdvisee extends DistributionAdvisee {
    *
    * @param processor the CreateRegionReplyProcessor that is creating the advisee
    */
-  default void registerCreateRegionReplyProcessor(CreateRegionReplyProcessor processor) {}
+  default void registerCreateRegionReplyProcessor(ReplyProcessor21 processor) {}
 }

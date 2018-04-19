@@ -504,7 +504,7 @@ public class CreateRegionProcessor implements ProfileExchangeProcessor {
     protected String checkCompatibility(CacheDistributionAdvisee rgn, CacheProfile profile) {
       Scope otherScope = rgn.getAttributes().getScope();
       String result = null;
-
+      System.out.println("NABA : in the parent ");
       // Verify both VMs are gateway-enabled or neither are. Note that since
       // this string is sent back to the caller, the 'other' and the 'my'
       // below are from the caller's point of view.
