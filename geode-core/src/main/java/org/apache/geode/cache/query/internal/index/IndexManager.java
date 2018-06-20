@@ -925,7 +925,7 @@ public class IndexManager {
               logger.debug("Adding to index :{}{} value :{}", index.getName(),
                   this.region.getFullPath(), entry.getKey());
             }
-            long start = ((AbstractIndex) index).updateIndexUpdateStats();
+            //long start = ((AbstractIndex) index).updateIndexUpdateStats();
             try {
               index.addIndexMapping(entry);
             } catch (IMQException e) {
@@ -937,7 +937,7 @@ public class IndexManager {
               indexSetIterator.remove();
               throwException = true;
             }
-            ((AbstractIndex) index).updateIndexUpdateStats(start);
+            //((AbstractIndex) index).updateIndexUpdateStats(start);
           }
         }
       }

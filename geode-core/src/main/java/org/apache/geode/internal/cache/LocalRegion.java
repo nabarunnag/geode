@@ -2436,7 +2436,7 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
             // load entries during initialization only for non overflow regions
             indexes.add(this.indexManager.createIndex(icd.getIndexName(), icd.getIndexType(),
                 icd.getIndexExpression(), icd.getIndexFromClause(), icd.getIndexImportString(),
-                externalContext, icd.getPartitionedIndex(), !isOverflowToDisk));
+                externalContext, icd.getPartitionedIndex(), false));
             prIndexes.add(icd.getPartitionedIndex());
           } else {
             if (logger.isDebugEnabled()) {
@@ -2449,7 +2449,7 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
             // load entries during initialization only for non overflow regions
             indexes.add(
                 qs.createIndex(icd.getIndexName(), icd.getIndexType(), icd.getIndexExpression(),
-                    fromClause, icd.getIndexImportString(), !isOverflowToDisk));
+                    fromClause, icd.getIndexImportString(), false));
           }
 
         } catch (Exception ex) {
@@ -2463,19 +2463,19 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
       LocalRegion.setThreadInitLevelRequirement(initLevel);
     }
     // Load data into OQL indexes in case of disk recovery and disk overflow
-    if (isOverflowToDisk) {
-      if (recoverFromDisk) {
+//    if (isOverflowToDisk) {
+//      if (recoverFromDisk) {
         populateOQLIndexes(indexes);
-      } else {
-        // Empty indexes are created for overflow regions but not populated at this stage
-        // since this is not recovery.
-        // Setting the populate flag to true so that the indexes can apply updates.
-        this.indexManager.setPopulateFlagForIndexes(indexes);
-      }
+//      } else {
+//        // Empty indexes are created for overflow regions but not populated at this stage
+//        // since this is not recovery.
+//        // Setting the populate flag to true so that the indexes can apply updates.
+//        this.indexManager.setPopulateFlagForIndexes(indexes);
+//      }
       // due to bug #52096, the pr index populate flags were not being set
       // we should revisit and clean up the index creation code paths
-      this.indexManager.setPopulateFlagForIndexes(prIndexes);
-    }
+//      this.indexManager.setPopulateFlagForIndexes(prIndexes);
+//    }
     getCachePerfStats().endIndexInitialization(start);
   }
 

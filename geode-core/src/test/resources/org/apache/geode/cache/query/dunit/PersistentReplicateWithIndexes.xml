@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE cache PUBLIC
+        "-//GemStone Systems, Inc.//GemFire Declarative Caching 8.0//EN"
+        "http://www.gemstone.com/dtd/cache8_0.dtd">
+<cache>
+    <cache-server port="40409"></cache-server>
+
+    <disk-store name="diskStore">
+        <disk-dirs>
+            <disk-dir>diskDir2-PersistentPartitionWithIndexDiskStore</disk-dir>
+        </disk-dirs>
+    </disk-store>
+
+    <pdx read-serialized="true"
+         persistent="true" disk-store-name="diskStore">
+    </pdx>
+
+    <region name="region1">
+        <region-attributes refid="REPLICATE_PERSISTENT" disk-store-name="diskStore" >
+            <!--<eviction-attributes>-->
+    <!--<lru-entry-count maximum="10000" action="overflow-to-disk"/>-->
+  <!--</eviction-attributes>-->
+        </region-attributes>
+        <index name="index1" from-clause="/region1" expression="field1" type="range"/>
+        <index name="index2" from-clause="/region1" expression="field2" type="range"/>
+        <index name="index3" from-clause="/region1" expression="field3" type="range"/>
+        <index name="index4" from-clause="/region1 e" expression="e.map1.name" type="range"/>
+        <!--<index name="index6" from-clause="/region1 e, e.map1.entries t" expression="t.name" type="range"/>-->
+        <!--<index name="index7" from-clause="/region1 e, e.map1.entries t" expression="t.address" type="range"/>-->
+    </region>
+
+    <!--<region name="region2">-->
+        <!--<region-attributes refid="REPLICATE_PERSISTENT" disk-store-name="diskStore" >-->
+            <!--&lt;!&ndash;<eviction-attributes>-->
+<!--<lru-entry-count maximum="10000" action="overflow-to-disk"/>-->
+<!--</eviction-attributes>&ndash;&gt;-->
+        <!--</region-attributes>-->
+        <!--<index name="index1" from-clause="/region2" expression="field1" type="range"/>-->
+        <!--<index name="index2" from-clause="/region2" expression="field2" type="range"/>-->
+        <!--<index name="index3" from-clause="/region2" expression="field3" type="range"/>-->
+        <!--<index name="index4" from-clause="/region2 e" expression="e.map1.name" type="range"/>-->
+        <!--<index name="index6" from-clause="/region2 e, e.map1.entries t" expression="t.name" type="range"/>-->
+    <!--</region>-->
+</cache>

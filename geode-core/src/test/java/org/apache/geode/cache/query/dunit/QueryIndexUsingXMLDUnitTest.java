@@ -27,8 +27,11 @@ import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
@@ -47,14 +50,19 @@ import org.apache.geode.cache.query.Query;
 import org.apache.geode.cache.query.QueryService;
 import org.apache.geode.cache.query.SelectResults;
 import org.apache.geode.cache.query.data.Portfolio;
+import org.apache.geode.cache.query.data.PositionPdx;
 import org.apache.geode.cache.query.functional.StructSetOrResultsSet;
 import org.apache.geode.cache.query.internal.QueryObserverAdapter;
 import org.apache.geode.cache.query.internal.QueryObserverHolder;
 import org.apache.geode.cache.query.internal.index.IndexManager;
 import org.apache.geode.cache.query.internal.index.PartitionedIndex;
 import org.apache.geode.cache30.CacheSerializableRunnable;
+import org.apache.geode.internal.cache.GemFireCacheImpl;
 import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.cache.PartitionedRegion;
+import org.apache.geode.pdx.PdxReader;
+import org.apache.geode.pdx.PdxSerializable;
+import org.apache.geode.pdx.PdxWriter;
 import org.apache.geode.test.dunit.AsyncInvocation;
 import org.apache.geode.test.dunit.Host;
 import org.apache.geode.test.dunit.VM;
@@ -103,9 +111,10 @@ public class QueryIndexUsingXMLDUnitTest extends JUnit4CacheTestCase {
 
   private static final String PERSISTENT_OVER_FLOW_REG_NAME = "PersistentOverflowPortfolios";
 
-  private static final String CACHE_XML_FILE_NAME = "IndexCreation.xml";
+  private static final String CACHE_XML_FILE_NAME = "PersistentReplicateWithIndexes.xml";
 
   private File cacheXmlFile;
+  private File cacheXmlFile2;
 
   @Rule
   public SerializableTemporaryFolder temporaryFolder = new SerializableTemporaryFolder();
@@ -120,6 +129,11 @@ public class QueryIndexUsingXMLDUnitTest extends JUnit4CacheTestCase {
     this.cacheXmlFile = this.temporaryFolder.newFile(CACHE_XML_FILE_NAME);
     FileUtils.copyURLToFile(url, this.cacheXmlFile);
     assertThat(this.cacheXmlFile).exists(); // precondition
+
+
+    URL url2 = getClass().getResource("PersistentReplicateWithIndexes2.xml");
+    this.cacheXmlFile2 = this.temporaryFolder.newFile("PersistentReplicateWithIndexes2.xml");
+    FileUtils.copyURLToFile(url2, this.cacheXmlFile2);
   }
 
   @After
@@ -600,6 +614,21 @@ public class QueryIndexUsingXMLDUnitTest extends JUnit4CacheTestCase {
     };
   }
 
+  private CacheSerializableRunnable createIndexThroughXML2(final String regionName) {
+    return new CacheSerializableRunnable("RegionCreator") {
+      @Override
+      public void run2() {
+        Properties properties = new Properties();
+        properties.setProperty(CACHE_XML_FILE, cacheXmlFile2.getAbsolutePath());
+        getSystem(properties);
+        Cache cache = getCache();
+        Region region = cache.getRegion(regionName);
+
+        assertThat(region).isNotNull();
+      }
+    };
+  }
+
   private CacheSerializableRunnable prIndexCreationCheck(final String regionName,
       final String indexName, final int bucketCount) {
     return new CacheSerializableRunnable(
@@ -763,5 +792,195 @@ public class QueryIndexUsingXMLDUnitTest extends JUnit4CacheTestCase {
         this.isIndexesUsed = true;
       }
     }
+  }
+  @Test
+  public void testTimeToReinitialize() throws Exception{
+    Host host = Host.getHost(0);
+    VM vm0 = host.getVM(0);
+    VM vm1 = host.getVM(1);
+
+    getLogWriter().info("Creating index using an xml file name : " + "PersistentReplicateWithIndexes.xml");
+
+    AsyncInvocation async0 = vm0.invokeAsync(createIndexThroughXML("region1"));
+    AsyncInvocation async1 = vm1.invokeAsync(createIndexThroughXML2("region1"));
+
+    async1.join();
+    async0.join();
+
+    vm1.invoke(() -> {
+      Region region1 = getCache().getRegion("region1");
+//      Region region2 = getCache().getRegion("region2");
+      for (int i = 0; i < 200000; i++) {
+        region1.put(i,new TestObject(i, i+""));
+//        region2.put(i,new TestObject(i, i+""));
+      }
+    });
+
+    vm1.invoke(() ->{
+      getCache().close();
+    });
+
+    System.out.println("NABA restarting cache");
+    long start  = System.currentTimeMillis();
+    async1 = vm1.invokeAsync(createIndexThroughXML2("region1"));
+    async1.join();
+    long end = System.currentTimeMillis();
+    long total = end - start;
+    System.out.println("NABA done with cache creation" + (total/1000));
+  }
+
+  public static class Map1 implements PdxSerializable{
+    public String address;
+
+    public Map1(String address, String name) {
+      this.address = address;
+      this.name = name;
+    }
+
+    public String name;
+
+    @Override
+    public void toData(PdxWriter writer) {
+      writer.writeString("name", name);
+      writer.writeString("address", address);
+    }
+
+    @Override
+    public void fromData(PdxReader reader) {
+      name = reader.readString("name");
+      address = reader.readString("address");
+    }
+  }
+
+  public static class TestObject implements PdxSerializable {
+    public static LogWriter log;
+    protected String _ticker;
+    protected int _price;
+    public int id;
+    public String field1;
+    public String field2;
+    public String field3;
+    public String field4;
+    public String field5;
+    public Map map1 = new HashMap();
+    public int important;
+    public int selection;
+    public int select;
+    public static int numInstance = 0;
+    public Map idTickers = new HashMap();
+    public HashMap positions = new HashMap();
+    public PDXQueryTestBase.TestObject2 test;
+
+
+
+    public TestObject() {
+      if (log != null) {
+        log.info("TestObject ctor stack trace", new Exception());
+      }
+      numInstance++;
+    }
+
+    public TestObject(int id, String ticker) {
+      if (log != null) {
+        log.info("TestObject ctor stack trace", new Exception());
+      }
+      this.id = id;
+      this._ticker = ticker;
+      this._price = id;
+      this.important = id;
+      this.selection = id;
+      this.select = id;
+      numInstance++;
+      idTickers.put(id + "", ticker);
+      this.test = new PDXQueryTestBase.TestObject2(id);
+      field1 = UUID.randomUUID().toString();
+      field2 = id + ticker;
+      field3 = UUID.randomUUID().toString();
+      field4 = id + ticker;
+      field5 = id + ticker;
+
+      map1.put(1, new Map1(id+"", ticker));
+    }
+
+    public TestObject(int id, String ticker, int numPositions) {
+      this(id, ticker);
+      for (int i = 0; i < numPositions; i++) {
+        positions.put(id + i, new PositionPdx(ticker + ":" + id + ":" + i, (id + 100)));
+      }
+    }
+
+    public int getIdValue() {
+      return this.id;
+    }
+
+    public String getTicker() {
+      return this._ticker;
+    }
+
+    public int getPriceValue() {
+      return this._price;
+    }
+
+    public HashMap getPositions(String id) {
+      return this.positions;
+    }
+
+    public String getStatus() {
+      return (id % 2 == 0) ? "active" : "inactive";
+    }
+
+    public void toData(PdxWriter out) {
+      out.writeInt("id", this.id);
+      out.writeString("ticker", this._ticker);
+      out.writeInt("price", this._price);
+      out.writeObject("idTickers", this.idTickers);
+      out.writeObject("positions", this.positions);
+      out.writeObject("test", this.test);
+      out.writeString("field1", field1);
+      out.writeString("field2", field2);
+      out.writeString("field3", field3);
+      out.writeString("field4", field4);
+      out.writeString("field5", field5);
+      out.writeObject("map1", map1);
+    }
+
+    public void fromData(PdxReader in) {
+      this.id = in.readInt("id");
+      this._ticker = in.readString("ticker");
+      this._price = in.readInt("price");
+      this.idTickers = (Map) in.readObject("idTickers");
+      this.positions = (HashMap) in.readObject("positions");
+      this.test = (PDXQueryTestBase.TestObject2) in.readObject("test");
+      this.field1 = in.readString("field1");
+      this.field2 = in.readString("field2");
+      this.field3 = in.readString("field3");
+      this.field4 = in.readString("field4");
+      this.field5 = in.readString("field5");
+      this.map1 = (HashMap)in.readObject("map1");
+    }
+
+    public String toString() {
+      StringBuffer buffer = new StringBuffer();
+      buffer.append("TestObject [").append("id=").append(this.id).append("; ticker=")
+          .append(this._ticker).append("; price=").append(this._price).append("]");
+      return buffer.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      PDXQueryTestBase.TestObject other = (PDXQueryTestBase.TestObject) o;
+      if ((id == other.id) && (_ticker.equals(other._ticker))) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    @Override
+    public int hashCode() {
+      GemFireCacheImpl.getInstance().getLoggerI18n().fine("In TestObject.hashCode() : " + this.id);
+      return this.id;
+    }
+
   }
 }
