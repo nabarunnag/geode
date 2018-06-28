@@ -2405,12 +2405,17 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
     List oqlIndexes = internalRegionArgs.getIndexes();
 
     if (!(this instanceof PartitionedRegion)) {
+      int initLevel = LocalRegion.setThreadInitLevelRequirement(ANY_INIT);
       QueryService queryService = cache.getQueryService();
       try {
-        for (Object oqlIndex : oqlIndexes) {
-          IndexCreationData icd = (IndexCreationData) oqlIndex;
-          queryService.defineIndex(icd.getIndexName(), icd.getIndexExpression(),
-              icd.getIndexFromClause());
+        try {
+          for (Object oqlIndex : oqlIndexes) {
+            IndexCreationData icd = (IndexCreationData) oqlIndex;
+            queryService.defineIndex(icd.getIndexName(), icd.getIndexExpression(),
+                icd.getIndexFromClause());
+          }
+        } finally {
+          LocalRegion.setThreadInitLevelRequirement(initLevel);
         }
         queryService.createDefinedIndexes();
       } catch (RegionNotFoundException e) {
@@ -2419,8 +2424,6 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
       } catch (MultiIndexCreationException e) {
         logger.info("Failed to create defined indexes on region {} with exception: {}",
             this.getFullPath(), e);
-      }finally {
-
       }
     } else {
       if (internalRegionArgs == null || internalRegionArgs.getIndexes() == null
