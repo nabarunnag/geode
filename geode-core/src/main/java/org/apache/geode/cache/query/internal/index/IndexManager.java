@@ -49,6 +49,7 @@ import org.apache.geode.cache.query.IndexType;
 import org.apache.geode.cache.query.MultiIndexCreationException;
 import org.apache.geode.cache.query.NameResolutionException;
 import org.apache.geode.cache.query.QueryException;
+import org.apache.geode.cache.query.QueryService;
 import org.apache.geode.cache.query.TypeMismatchException;
 import org.apache.geode.cache.query.internal.CompiledPath;
 import org.apache.geode.cache.query.internal.CompiledValue;
@@ -1224,6 +1225,7 @@ public class IndexManager {
     try {
       // opCode is ignored for this operation
       Iterator iter = this.indexes.values().iterator();
+      QueryService queryService = cache.getQueryService();
       while (iter.hasNext()) {
         Object ind = iter.next();
         // Check if the value is instance of FutureTask, this means
@@ -1235,11 +1237,14 @@ public class IndexManager {
         if (index.getType() == IndexType.FUNCTIONAL || index.getType() == IndexType.HASH) {
           AbstractIndex aIndex = ((AbstractIndex) index);
           start = ((AbstractIndex) index).updateIndexUpdateStats();
-          ((AbstractIndex) index).recreateIndexData();
+          // ((AbstractIndex) index).recreateIndexData();
+          queryService.defineIndex(index.getName(), ((AbstractIndex) index).indexedExpression,
+              ((AbstractIndex) index).fromClause);
           ((AbstractIndex) index).updateIndexUpdateStats(start);
 
         }
       }
+      queryService.createDefinedIndexes();
     } catch (Exception e) {
       throw new IndexInvalidException(e);
     } finally {

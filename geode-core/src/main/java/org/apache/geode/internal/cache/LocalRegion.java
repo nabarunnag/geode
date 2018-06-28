@@ -132,6 +132,7 @@ import org.apache.geode.cache.query.QueryException;
 import org.apache.geode.cache.query.QueryInvalidException;
 import org.apache.geode.cache.query.QueryInvocationTargetException;
 import org.apache.geode.cache.query.QueryService;
+import org.apache.geode.cache.query.RegionNotFoundException;
 import org.apache.geode.cache.query.SelectResults;
 import org.apache.geode.cache.query.TypeMismatchException;
 import org.apache.geode.cache.query.internal.DefaultQuery;
@@ -2387,20 +2388,6 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
   }
 
   void createOQLIndexes(InternalRegionArguments internalRegionArgs, boolean recoverFromDisk) {
-
-    if (internalRegionArgs == null || internalRegionArgs.getIndexes() == null
-        || internalRegionArgs.getIndexes().isEmpty()) {
-      return;
-    }
-    if (logger.isDebugEnabled()) {
-      logger.debug("LocalRegion.createOQLIndexes on region {}", this.getFullPath());
-    }
-    long start = getCachePerfStats().startIndexInitialization();
-    List oqlIndexes = internalRegionArgs.getIndexes();
-
-    if (this.indexManager == null) {
-      this.indexManager = IndexUtils.getIndexManager(cache, this, true);
-    }
     DiskRegion dr = this.getDiskRegion();
     boolean isOverflowToDisk = false;
     if (dr != null) {
@@ -2414,69 +2401,106 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
         dr.waitForAsyncRecovery();
       }
     }
-    Set<Index> indexes = new HashSet<Index>();
-    Set<Index> prIndexes = new HashSet<>();
-    int initLevel = 0;
-    try {
-      // Release the initialization latch for index creation.
-      initLevel = LocalRegion.setThreadInitLevelRequirement(ANY_INIT);
-      for (Object o : oqlIndexes) {
-        IndexCreationData icd = (IndexCreationData) o;
-        try {
-          if (icd.getPartitionedIndex() != null) {
-            ExecutionContext externalContext = new ExecutionContext(null, this.cache);
-            if (internalRegionArgs.getPartitionedRegion() != null) {
-              externalContext.setBucketRegion(internalRegionArgs.getPartitionedRegion(),
-                  (BucketRegion) this);
-            }
-            if (logger.isDebugEnabled()) {
-              logger.debug("IndexManager Index creation process for {}", icd.getIndexName());
-            }
 
-            // load entries during initialization only for non overflow regions
-            indexes.add(this.indexManager.createIndex(icd.getIndexName(), icd.getIndexType(),
-                icd.getIndexExpression(), icd.getIndexFromClause(), icd.getIndexImportString(),
-                externalContext, icd.getPartitionedIndex(), !isOverflowToDisk));
-            prIndexes.add(icd.getPartitionedIndex());
-          } else {
-            if (logger.isDebugEnabled()) {
-              logger.debug("QueryService Index creation process for {}" + icd.getIndexName());
-            }
-            DefaultQueryService qs = (DefaultQueryService) getGemFireCache().getLocalQueryService();
-            String fromClause =
-                icd.getIndexType() == IndexType.FUNCTIONAL || icd.getIndexType() == IndexType.HASH
-                    ? icd.getIndexFromClause() : this.getFullPath();
-            // load entries during initialization only for non overflow regions
-            indexes.add(
-                qs.createIndex(icd.getIndexName(), icd.getIndexType(), icd.getIndexExpression(),
-                    fromClause, icd.getIndexImportString(), !isOverflowToDisk));
-          }
+    List oqlIndexes = internalRegionArgs.getIndexes();
 
-        } catch (Exception ex) {
-          logger.info("Failed to create index {} on region {} with exception: {}",
-              icd.getIndexName(), this.getFullPath(), ex);
-
+    if (!(this instanceof PartitionedRegion)) {
+      QueryService queryService = cache.getQueryService();
+      try {
+        for (Object oqlIndex : oqlIndexes) {
+          IndexCreationData icd = (IndexCreationData) oqlIndex;
+          queryService.defineIndex(icd.getIndexName(), icd.getIndexExpression(),
+              icd.getIndexFromClause());
         }
+        queryService.createDefinedIndexes();
+      } catch (RegionNotFoundException e) {
+        logger.info("Failed to define indexes on region {} with exception: {}", this.getFullPath(),
+            e);
+      } catch (MultiIndexCreationException e) {
+        logger.info("Failed to create defined indexes on region {} with exception: {}",
+            this.getFullPath(), e);
+      }finally {
+
       }
-    } finally {
-      // Reset the initialization lock.
-      LocalRegion.setThreadInitLevelRequirement(initLevel);
-    }
-    // Load data into OQL indexes in case of disk recovery and disk overflow
-    if (isOverflowToDisk) {
-      if (recoverFromDisk) {
-        populateOQLIndexes(indexes);
-      } else {
-        // Empty indexes are created for overflow regions but not populated at this stage
-        // since this is not recovery.
-        // Setting the populate flag to true so that the indexes can apply updates.
-        this.indexManager.setPopulateFlagForIndexes(indexes);
+    } else {
+      if (internalRegionArgs == null || internalRegionArgs.getIndexes() == null
+          || internalRegionArgs.getIndexes().isEmpty()) {
+        return;
       }
-      // due to bug #52096, the pr index populate flags were not being set
-      // we should revisit and clean up the index creation code paths
-      this.indexManager.setPopulateFlagForIndexes(prIndexes);
+      if (logger.isDebugEnabled()) {
+        logger.debug("LocalRegion.createOQLIndexes on region {}", this.getFullPath());
+      }
+      long start = getCachePerfStats().startIndexInitialization();
+
+      if (this.indexManager == null) {
+        this.indexManager = IndexUtils.getIndexManager(cache, this, true);
+      }
+
+      Set<Index> indexes = new HashSet<Index>();
+      Set<Index> prIndexes = new HashSet<>();
+      int initLevel = 0;
+      try {
+        // Release the initialization latch for index creation.
+        initLevel = LocalRegion.setThreadInitLevelRequirement(ANY_INIT);
+        for (Object o : oqlIndexes) {
+          IndexCreationData icd = (IndexCreationData) o;
+          try {
+            if (icd.getPartitionedIndex() != null) {
+              ExecutionContext externalContext = new ExecutionContext(null, this.cache);
+              if (internalRegionArgs.getPartitionedRegion() != null) {
+                externalContext.setBucketRegion(internalRegionArgs.getPartitionedRegion(),
+                    (BucketRegion) this);
+              }
+              if (logger.isDebugEnabled()) {
+                logger.debug("IndexManager Index creation process for {}", icd.getIndexName());
+              }
+
+              // load entries during initialization only for non overflow regions
+              indexes.add(this.indexManager.createIndex(icd.getIndexName(), icd.getIndexType(),
+                  icd.getIndexExpression(), icd.getIndexFromClause(), icd.getIndexImportString(),
+                  externalContext, icd.getPartitionedIndex(), !isOverflowToDisk));
+              prIndexes.add(icd.getPartitionedIndex());
+            } else {
+              if (logger.isDebugEnabled()) {
+                logger.debug("QueryService Index creation process for {}" + icd.getIndexName());
+              }
+              DefaultQueryService qs =
+                  (DefaultQueryService) getGemFireCache().getLocalQueryService();
+              String fromClause =
+                  icd.getIndexType() == IndexType.FUNCTIONAL || icd.getIndexType() == IndexType.HASH
+                      ? icd.getIndexFromClause() : this.getFullPath();
+              // load entries during initialization only for non overflow regions
+              indexes.add(
+                  qs.createIndex(icd.getIndexName(), icd.getIndexType(), icd.getIndexExpression(),
+                      fromClause, icd.getIndexImportString(), !isOverflowToDisk));
+            }
+
+          } catch (Exception ex) {
+            logger.info("Failed to create index {} on region {} with exception: {}",
+                icd.getIndexName(), this.getFullPath(), ex);
+
+          }
+        }
+      } finally {
+        // Reset the initialization lock.
+        LocalRegion.setThreadInitLevelRequirement(initLevel);
+      }
+      // Load data into OQL indexes in case of disk recovery and disk overflow
+      if (isOverflowToDisk) {
+        if (recoverFromDisk) {
+          populateOQLIndexes(indexes);
+        } else {
+          // Empty indexes are created for overflow regions but not populated at this stage
+          // since this is not recovery.
+          // Setting the populate flag to true so that the indexes can apply updates.
+          this.indexManager.setPopulateFlagForIndexes(indexes);
+        }
+        // due to bug #52096, the pr index populate flags were not being set
+        // we should revisit and clean up the index creation code paths
+        this.indexManager.setPopulateFlagForIndexes(prIndexes);
+      }
+      getCachePerfStats().endIndexInitialization(start);
     }
-    getCachePerfStats().endIndexInitialization(start);
   }
 
   /**
