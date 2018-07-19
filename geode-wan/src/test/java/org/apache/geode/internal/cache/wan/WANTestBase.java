@@ -14,8 +14,10 @@
  */
 package org.apache.geode.internal.cache.wan;
 
+import static org.apache.geode.distributed.ConfigurationProperties.CACHE_XML_FILE;
 import static org.apache.geode.distributed.ConfigurationProperties.CONSERVE_SOCKETS;
 import static org.apache.geode.distributed.ConfigurationProperties.DISTRIBUTED_SYSTEM_ID;
+import static org.apache.geode.distributed.ConfigurationProperties.ENABLE_CLUSTER_CONFIGURATION;
 import static org.apache.geode.distributed.ConfigurationProperties.GATEWAY_SSL_CIPHERS;
 import static org.apache.geode.distributed.ConfigurationProperties.GATEWAY_SSL_ENABLED;
 import static org.apache.geode.distributed.ConfigurationProperties.GATEWAY_SSL_KEYSTORE;
@@ -291,6 +293,7 @@ public class WANTestBase extends DistributedTestCase {
     Properties props = getDistributedSystemProperties();
     props.setProperty(MCAST_PORT, "0");
     props.setProperty(DISTRIBUTED_SYSTEM_ID, "" + dsId);
+    props.setProperty(ENABLE_CLUSTER_CONFIGURATION, "true");
     props.setProperty(LOCATORS, "localhost[" + locatorPort + "]");
     props.setProperty(START_LOCATOR, "localhost[" + startLocatorPort + "],server="
         + startServerLocator + ",peer=true,hostname-for-clients=localhost");
@@ -314,6 +317,7 @@ public class WANTestBase extends DistributedTestCase {
     stopOldLocator();
     WANTestBase test = new WANTestBase();
     int port = AvailablePortHelper.getRandomAvailablePortForDUnitSite();
+    port = 10334;
     test.startLocator(dsId, port, port, -1, true);
     return port;
   }
@@ -923,6 +927,8 @@ public class WANTestBase extends DistributedTestCase {
     Properties props = test.getDistributedSystemProperties();
     props.setProperty(MCAST_PORT, "0");
     props.setProperty(LOCATORS, "localhost[" + locPort + "]");
+    props.setProperty(CACHE_XML_FILE,
+        "/Users/nnag/Development/devEnv3/gemfire/open/geode-core/src/test/resources/org/apache/geode/internal/cache/CustomerIssueServer1.xml");
     props.setProperty(CONSERVE_SOCKETS, conserveSockets.toString());
     InternalDistributedSystem ds = test.getSystem(props);
     cache = CacheFactory.create(ds);

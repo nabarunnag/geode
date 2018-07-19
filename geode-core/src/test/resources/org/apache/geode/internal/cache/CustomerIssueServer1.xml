@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://schema.pivotal.io/gemfire/cache"
+       xsi:schemaLocation="http://schema.pivotal.io/gemfire/cache http://schema.pivotal.io/gemfire/cache/cache-8.1.xsd"
+       version="8.1" lock-lease="120" lock-timeout="60" search-timeout="300"
+       is-server="true" copy-on-read="true">
+    <cache-server port="20500" max-threads="50" maximum-message-count="100000" load-poll-interval="2000"/>
+    <pdx persistent="true">
+        <pdx-serializer>
+            <class-name>
+                org.apache.geode.pdx.ReflectionBasedAutoSerializer
+            </class-name>
+            <parameter name="classes">
+                <string>org.apache.geode.cache.query.data.*</string>
+            </parameter>
+        </pdx-serializer>
+    </pdx>
+
+    <region-attributes id="assetClassificationRegionAttributes" concurrency-level="10" data-policy="persistent-replicate" scope="distributed-no-ack"
+                       enable-subscription-conflation="true" ignore-jta="true" index-update-type="asynchronous"
+                       initial-capacity="30" load-factor="0.85">
+        <cache-loader>
+            <class-name>org.apache.geode.cache.query.data.AdHocCacheLoaderMsrdAssetClassificationActive</class-name>
+            <parameter name="driverClassName">
+                <string>oracle.jdbc.driver.OracleDriver</string>
+            </parameter>
+            <parameter name="url">
+                <string>url</string>
+            </parameter>
+            <parameter name="username">
+                <string>userName</string>
+            </parameter>
+            <parameter name="password">
+                <string>password</string>
+            </parameter>
+            <parameter name="passwordFile">
+                <string>file</string>
+            </parameter>
+        </cache-loader>
+    </region-attributes>
+
+
+    <region name="msrd">
+        <region name="assetClassification" refid="assetClassificationRegionAttributes">
+            <index name="idPKIndex" key-index="true">
+                <primary-key field="id" />
+            </index>
+            <index name="jpmcSecurityTypeIndex">
+                <functional from-clause="/msrd/assetClassification" expression="jpmcSecurityType" />
+            </index>
+            <index name="jpmcSubSecurityTypeIndex">
+                <functional from-clause="/msrd/assetClassification" expression="jpmcSubSecurityType" />
+            </index>
+            <index name="jpmcAssetGroupIndex">
+                <functional from-clause="/msrd/assetClassification" expression="jpmcAssetGroup" />
+            </index>
+            <index name="jpmcCategoryTypeIndex">
+                <functional from-clause="/msrd/assetClassification" expression="jpmcCategoryType" />
+            </index>
+            <index name="countryIndex">
+                <functional from-clause="/msrd/assetClassification" expression="country" />
+            </index>
+            <index name="lobIndex">
+                <functional from-clause="/msrd/assetClassification ac, ac.productMappings.toArray pma" expression="pma.lob" />
+            </index>
+            <index name="processIndex">
+                <functional from-clause="/msrd/assetClassification ac, ac.productMappings.toArray pma" expression="pma.process" />
+            </index>
+        </region>
+    </region>
+
+
+
+
+
+</cache>

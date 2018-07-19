@@ -15,30 +15,16 @@
 package org.apache.geode.internal.cache.wan.serial;
 
 import static org.apache.geode.distributed.ConfigurationProperties.CACHE_XML_FILE;
-import static org.apache.geode.distributed.ConfigurationProperties.JMX_MANAGER;
-import static org.apache.geode.distributed.ConfigurationProperties.JMX_MANAGER_HTTP_PORT;
-import static org.apache.geode.distributed.ConfigurationProperties.JMX_MANAGER_PORT;
-import static org.apache.geode.distributed.ConfigurationProperties.JMX_MANAGER_START;
 import static org.apache.geode.distributed.ConfigurationProperties.LOCATORS;
 import static org.apache.geode.distributed.ConfigurationProperties.LOG_LEVEL;
 import static org.apache.geode.distributed.ConfigurationProperties.MCAST_PORT;
-import static org.apache.geode.distributed.ConfigurationProperties.SERIALIZABLE_OBJECT_FILTER;
-import static org.apache.geode.distributed.ConfigurationProperties.USE_CLUSTER_CONFIGURATION;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 
-import org.awaitility.Awaitility;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -47,19 +33,13 @@ import org.apache.geode.cache.CacheException;
 import org.apache.geode.cache.CacheFactory;
 import org.apache.geode.cache.DataPolicy;
 import org.apache.geode.cache.EntryExistsException;
-import org.apache.geode.cache.Region;
 import org.apache.geode.cache.Scope;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ServerOperationException;
-import org.apache.geode.cache.query.Query;
-import org.apache.geode.cache.query.SelectResults;
-import org.apache.geode.cache.query.data.Asset;
-import org.apache.geode.cache.query.data.CacheProductMapping;
 import org.apache.geode.cache30.CacheSerializableRunnable;
 import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.distributed.internal.InternalDistributedSystem;
-import org.apache.geode.distributed.internal.InternalLocator;
 import org.apache.geode.internal.cache.wan.BatchException70;
 import org.apache.geode.internal.cache.wan.WANTestBase;
 import org.apache.geode.test.dunit.AsyncInvocation;
@@ -67,10 +47,9 @@ import org.apache.geode.test.dunit.IgnoredException;
 import org.apache.geode.test.dunit.LogWriterUtils;
 import org.apache.geode.test.dunit.SerializableRunnableIF;
 import org.apache.geode.test.dunit.Wait;
-import org.apache.geode.test.junit.categories.DistributedTest;
 import org.apache.geode.test.junit.categories.WanTest;
 
-@Category({DistributedTest.class, WanTest.class})
+@Category({WanTest.class})
 public class SerialWANPropagationDUnitTest extends WANTestBase {
 
   @Override
@@ -129,149 +108,27 @@ public class SerialWANPropagationDUnitTest extends WANTestBase {
 
   @Test
   public void testCustomerIssue() {
-    Integer lnPort = (Integer) vm3.invoke(() -> WANTestBase.createFirstLocatorWithDSId(1));
-    vm3.invoke(
-        () -> Awaitility.await().atMost(65, TimeUnit.SECONDS).pollInterval(1, TimeUnit.SECONDS)
-            .until(() -> assertTrue(
-                !InternalLocator.getLocator().getConfig().getEnableClusterConfiguration()
-                    || InternalLocator.getLocator().isSharedConfigurationRunning())));
+    Integer lnPort = (Integer) vm0.invoke(() -> WANTestBase.createFirstLocatorWithDSId(1));
     vm0.invoke(() -> createCache(lnPort,
         "/Users/nnag/Development/devEnv3/gemfire/open/geode-core/src/test/resources/org/apache/geode/internal/cache/CustomerIssueServer1.xml"));
     vm1.invoke(() -> createCache(lnPort,
         "/Users/nnag/Development/devEnv3/gemfire/open/geode-core/src/test/resources/org/apache/geode/internal/cache/CustomerIssueServer2.xml"));
 
     vm2.invoke(() -> {
-      Properties properties = new Properties();
-      properties.put(SERIALIZABLE_OBJECT_FILTER,
-          "org.apache.geode.cache.query.data.*");
-      ClientCache cache = new ClientCacheFactory(properties).set("cache-xml-file",
-          "/Users/nnag/Development/devEnv3/gemfire/open/geode-core/src/test/resources/org/apache/geode/internal/cache/CustomerIssueClient.xml")
+      ClientCache cache = new ClientCacheFactory().set("cache-xml-file", "client.xml")
           .create();
-      Region<String, Asset> regionA = cache
-          .getRegion("/msrd/assetClassification");
-      populateRegion(regionA);
-      Asset asset = (Asset) regionA.get("999");
-      System.out.println("NABA ::: asset" + asset.getCountry());
     });
-
-    vm0.invoke(() -> {
-      Query query = cache.getQueryService().newQuery(
-          "select ac from /msrd/assetClassification ac, ac.productMapping.toArray pma where pma.lob='USA' and ac.jpmcAssetGroup='Fund' and ac.jpmcSecurityType='unsecured' and ac.jpmcSubSecurityType='unsecured' and ac.jpmcCategoryType='mutualFund' and pma.process='FRONTENT' and ac.country=null");
-      SelectResults results = (SelectResults) query.execute();
-      System.out
-          .println("NABA ::: result on server 1 = " + results + "\n sizes = " + results.size());
-      query = cache.getQueryService().newQuery(
-          "select ac from /msrd/assetClassification ac, ac.productMapping.toArray pma where ac.id='999'");
-      results = (SelectResults) query.execute();
-      System.out.println("NABA ::: result on server 1  for easy query = " + results + "\n sizes = "
-          + results.size());
-
-    });
-
-    vm1.invoke(() -> {
-      Query query = cache.getQueryService().newQuery(
-          "<trace>select ac from /msrd/assetClassification ac, ac.productMapping.toArray pma where pma.lob='USA' and ac.jpmcAssetGroup='Fund' and ac.jpmcSecurityType='unsecured' and ac.jpmcSubSecurityType='unsecured' and ac.jpmcCategoryType='mutualFund' and pma.process='FRONTENT' and ac.country=null");
-      SelectResults results = (SelectResults) query.execute();
-      System.out
-          .println("NABA ::: result on server 2 = " + results + "\n sizes = " + results.size());
-      query = cache.getQueryService().newQuery(
-          "<trace>select ac from /msrd/assetClassification ac, ac.productMapping.toArray pma where ac.id='999'");
-      results = (SelectResults) query.execute();
-      System.out.println("NABA ::: result on server 2  for easy query = " + results + "\n sizes = "
-          + results.size());
-      System.out
-          .println("NABA :: region size =  " + cache.getRegion("/msrd/assetClassification").size());
-      Region region = cache.getRegion("/msrd/assetClassification");
-      region.entrySet().stream().forEach(entry -> {
-        Asset asset = ((Asset) ((Region.Entry) entry).getValue());
-        System.out.println("NABA ::: ID =" + asset.getId() + "value = " + asset.getCountry());
-      });
-    });
-
-  }
-
-  private static void populateRegion(Region<String, Asset> regionA) {
-    List<Asset> dataList = getDataList();
-    int i = 0;
-    for (Iterator iterator = dataList.iterator(); iterator.hasNext();) {
-
-      Asset asset = (Asset) iterator.next();
-      regionA.put(i + "", asset);
-      i++;
-
-    }
-  }
-
-  private static List<Asset> getDataList() {
-
-    List<Asset> assetList = new ArrayList<Asset>();
-
-    for (int i = 0; i < 10; i++) {
-      Asset asset = new Asset();
-      if (i % 2 == 0) {
-        asset.setCountry("India");
-      } else {
-        asset.setCountry(null);
-      }
-      asset.setCreatedBy("cre");
-      Map<String, String> crossReferenceMap = new HashMap<String, String>();
-      crossReferenceMap.put("1", "one");
-      crossReferenceMap.put("2", "two");
-      asset.setCrossReferences(crossReferenceMap);
-      asset.setEffectiveEndDate(LocalDate.now().plusDays(100));
-      asset.setEffectiveStartDate(LocalDate.now());
-      asset.setId(i + "");
-      asset.setJpmcAssetGroup("liquid");
-      asset.setJpmcCategoryType("funds");
-      asset.setJpmcSecurityType("secured");
-      asset.setJpmcSubSecurityType("secured");
-      asset.setModifiedBy("staff");
-      asset.setProductMappings(getProductMappings(i));
-      asset.setStatus("active");
-      asset.setVersion(1);
-      assetList.add(asset);
-    }
-
-    return assetList;
-  }
-
-  private static List<CacheProductMapping> getProductMappings(int i) {
-
-    List<CacheProductMapping> mappingList = new ArrayList<CacheProductMapping>();
-    if (i % 2 == 0) {
-      CacheProductMapping mapping = new CacheProductMapping();
-      mapping.setLob("ASIA");
-      mapping.setProcess("FRONTENT");
-      mappingList.add(mapping);
-    } else {
-      CacheProductMapping mapping = new CacheProductMapping();
-      mapping.setLob("EMEA");
-      mapping.setProcess("BACKEND");
-      mappingList.add(mapping);
-
-    }
-    return mappingList;
 
   }
 
   protected static void createCache(Integer locPort, String cacheXMLPath) {
     WANTestBase test = new WANTestBase();
     Properties props = test.getDistributedSystemProperties();
-
-    if (true) {
-      props.setProperty(JMX_MANAGER, "true");
-      props.setProperty(JMX_MANAGER_START, "false");
-      props.setProperty(JMX_MANAGER_PORT, "0");
-      props.setProperty(JMX_MANAGER_HTTP_PORT, "0");
-    }
-
     props.setProperty(MCAST_PORT, "0");
     String logLevel = System.getProperty(LOG_LEVEL, "info");
     props.setProperty(LOG_LEVEL, logLevel);
     props.setProperty(CACHE_XML_FILE, cacheXMLPath);
     props.setProperty(LOCATORS, "localhost[" + locPort + "]");
-    props.put(USE_CLUSTER_CONFIGURATION, "true");
-    props.put(SERIALIZABLE_OBJECT_FILTER, "org.apache.geode.cache.query.data.*");
     InternalDistributedSystem ds = test.getSystem(props);
     cache = CacheFactory.create(ds);
   }

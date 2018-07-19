@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE client-cache PUBLIC
+        "-//GemStone Systems, Inc.//GemFire Declarative Caching 6.5//EN"
+        "http://www.gemstone.com/dtd/cache7_0.dtd">
+
+<client-cache>
+    <pool name="client" subscription-enabled="true">
+        <locator host="localhost" port="10334" />
+    </pool>
+    <pdx>
+        <pdx-serializer>
+            <class-name>
+                org.apache.geode.pdx.ReflectionBasedAutoSerializer
+            </class-name>
+            <parameter name="classes">
+                <string>org.apache.geode.cache.query.data.*</string>
+            </parameter>
+        </pdx-serializer>
+    </pdx>
+
+
+    <region name="msrd">
+        <region name="assetClassification" refid="PROXY">
+        </region>
+    </region>
+
+</client-cache>
