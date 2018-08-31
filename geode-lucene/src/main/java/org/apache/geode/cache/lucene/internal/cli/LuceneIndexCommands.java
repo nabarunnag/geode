@@ -175,8 +175,6 @@ public class LuceneIndexCommands extends InternalGfshCommand {
     // Every lucene index potentially writes to disk.
     authorize(Resource.CLUSTER, Operation.MANAGE, LucenePermission.TARGET);
 
-    final InternalCache cache = (InternalCache) getCache();
-
     // trim fields for any leading trailing spaces.
     String[] trimmedFields = Arrays.stream(fields).map(String::trim).toArray(String[]::new);
     LuceneIndexInfo indexInfo =
@@ -423,7 +421,6 @@ public class LuceneIndexCommands extends InternalGfshCommand {
 
   private List<LuceneSearchResults> getSearchResults(final LuceneQueryInfo queryInfo)
       throws Exception {
-    final String[] groups = {};
     final ResultCollector<?, ?> rc = this.executeSearch(queryInfo);
     final List<Set<LuceneSearchResults>> functionResults =
         (List<Set<LuceneSearchResults>>) rc.getResult();

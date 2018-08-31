@@ -48,7 +48,9 @@ public class RawIndexRepositoryFactory extends IndexRepositoryFactory {
           index.getRegionPath() + "_" + bucketId);
       File location = new File(index.getName(), bucketLocation);
       if (!location.exists()) {
-        location.mkdirs();
+        if(!location.mkdirs()){
+          throw new IOException("Index file " + location.getAbsolutePath() + " could not be created");
+        }
       }
       dir = new NIOFSDirectory(location.toPath());
     } else {

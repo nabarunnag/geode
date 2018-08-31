@@ -59,7 +59,6 @@ public class LuceneSearchIndexFunction<K, V> implements InternalFunction {
 
   public void execute(final FunctionContext context) {
     Set<LuceneSearchResults> result = new HashSet<>();
-    final Cache cache = context.getCache();
     final LuceneQueryInfo queryInfo = (LuceneQueryInfo) context.getArguments();
 
     LuceneService luceneService = LuceneServiceProvider.get(context.getCache());

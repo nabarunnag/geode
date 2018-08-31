@@ -111,8 +111,6 @@ public class LuceneCreateIndexFunction implements InternalFunction {
 
       context.getResultSender().lastResult(new CliFunctionResult(memberId, xmlEntity));
     } catch (Exception e) {
-      String exceptionMessage = CliStrings.format(CliStrings.EXCEPTION_CLASS_AND_MESSAGE,
-          e.getClass().getName(), e.getMessage());
       context.getResultSender().lastResult(new CliFunctionResult(memberId, e, e.getMessage()));
     }
   }

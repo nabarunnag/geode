@@ -174,6 +174,17 @@ public class LuceneIndexDetails extends LuceneFunctionSerializable
         : compare(getRegionPath(), indexDetails.getRegionPath()));
   }
 
+  @Override
+  public boolean equals(Object luceneIndexDetails) {
+    if(this == luceneIndexDetails){
+      return true;
+    }
+    if(!(luceneIndexDetails instanceof LuceneIndexDetails)){
+      return false;
+    }
+    return this.compareTo((LuceneIndexDetails) luceneIndexDetails) == 0;
+  }
+
   public String getServerName() {
     return serverName;
   }
