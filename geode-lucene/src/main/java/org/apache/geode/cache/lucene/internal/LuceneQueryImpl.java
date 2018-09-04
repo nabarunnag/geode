@@ -46,7 +46,6 @@ import org.apache.geode.internal.logging.LogService;
 public class LuceneQueryImpl<K, V> implements LuceneQuery<K, V> {
   public static final String LUCENE_QUERY_CANNOT_BE_EXECUTED_WITHIN_A_TRANSACTION =
       "Lucene Query cannot be executed within a transaction";
-  Logger logger = LogService.getLogger();
 
   private int limit = LuceneQueryFactory.DEFAULT_LIMIT;
   private int pageSize = LuceneQueryFactory.DEFAULT_PAGESIZE;
@@ -54,7 +53,6 @@ public class LuceneQueryImpl<K, V> implements LuceneQuery<K, V> {
   /* the lucene Query object to be wrapped here */
   private LuceneQueryProvider query;
   private Region<K, V> region;
-  private String defaultField;
 
   public LuceneQueryImpl(String indexName, Region<K, V> region, LuceneQueryProvider provider,
       int limit, int pageSize) {

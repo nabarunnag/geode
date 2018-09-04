@@ -47,7 +47,7 @@ public class LuceneDestroyIndexFunction implements InternalFunction {
           try {
             service.destroyIndexes(regionPath);
             destroyIndexesResult =
-                new CliFunctionResult(memberId, getXmlEntity(indexName, regionPath));
+                new CliFunctionResult(memberId, getXmlEntity(null, regionPath));
           } catch (Exception e) {
             destroyIndexesException = e;
           }

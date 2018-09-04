@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import org.apache.lucene.analysis.Analyzer;
 
@@ -172,6 +173,23 @@ public class LuceneIndexDetails extends LuceneFunctionSerializable
     int comparisonValue = compare(getIndexName(), indexDetails.getIndexName());
     return (comparisonValue != 0 ? comparisonValue
         : compare(getRegionPath(), indexDetails.getRegionPath()));
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if(this == obj){
+      return true;
+    }
+    if(!(obj instanceof LuceneIndexDetails)){
+      return false;
+    }
+
+    return this.compareTo((LuceneIndexDetails)obj) == 0;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getIndexName(), getRegionPath());
   }
 
   public String getServerName() {

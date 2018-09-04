@@ -73,7 +73,6 @@ public class LuceneXmlParser extends AbstractXmlParser {
       throw new CacheXmlException(
           "lucene <serializer> elements must occur within lucene <index> elements");
     }
-    LuceneIndexCreation creation = (LuceneIndexCreation) stack.peek();
   }
 
   private void startField(Attributes atts) {
