@@ -36,7 +36,7 @@ public class LuceneRegionListener implements RegionListener {
 
   private final LuceneServiceImpl service;
 
-  private final InternalCache cache;
+//  private final InternalCache cache;
 
   private final String indexName;
 
@@ -62,7 +62,7 @@ public class LuceneRegionListener implements RegionListener {
       String regionPath, String[] fields, Analyzer analyzer, Map<String, Analyzer> fieldAnalyzers,
       LuceneSerializer serializer) {
     this.service = service;
-    this.cache = cache;
+//    this.cache = cache;
     this.indexName = indexName;
     this.regionPath = regionPath;
     this.fields = fields;

@@ -236,19 +236,18 @@ public class LuceneIndexMetrics {
    */
   @Override
   public String toString() {
-    return new StringBuilder().append(getClass().getSimpleName()).append("[").append("regionPath=")
-        .append(this.regionPath).append("; indexName=").append(this.indexName)
-        .append("; queryExecutions=").append(this.queryExecutions).append("; queryExecutionTime=")
-        .append(this.queryExecutionTime).append("; queryRateAverageLatency=")
-        .append(this.queryRateAverageLatency).append("; queryExecutionsInProgress=")
-        .append(this.queryExecutionsInProgress).append("; queryExecutionTotalHits=")
-        .append(this.queryExecutionTotalHits).append("; updates=").append(this.updates)
-        .append("; updateTime=").append(this.updateTime).append("; updateRateAverageLatency=")
-        .append(this.updateRateAverageLatency).append("; updatesInProgress=")
-        .append(this.updatesInProgress).append("; commits=").append(this.commits)
-        .append("; commitTime=").append(this.commitTime).append("; commitRateAverageLatency=")
-        .append(this.commitRateAverageLatency).append("; commitsInProgress=")
-        .append(this.commitsInProgress).append("; documents=").append(this.documents).append("]")
-        .toString();
+    return getClass().getSimpleName() + "[" + "regionPath="
+        + this.regionPath + "; indexName=" + this.indexName
+        + "; queryExecutions=" + this.queryExecutions + "; queryExecutionTime="
+        + this.queryExecutionTime + "; queryRateAverageLatency="
+        + this.queryRateAverageLatency + "; queryExecutionsInProgress="
+        + this.queryExecutionsInProgress + "; queryExecutionTotalHits="
+        + this.queryExecutionTotalHits + "; updates=" + this.updates
+        + "; updateTime=" + this.updateTime + "; updateRateAverageLatency="
+        + this.updateRateAverageLatency + "; updatesInProgress="
+        + this.updatesInProgress + "; commits=" + this.commits
+        + "; commitTime=" + this.commitTime + "; commitRateAverageLatency="
+        + this.commitRateAverageLatency + "; commitsInProgress="
+        + this.commitsInProgress + "; documents=" + this.documents + "]";
   }
 }

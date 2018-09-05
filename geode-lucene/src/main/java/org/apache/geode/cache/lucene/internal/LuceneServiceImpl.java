@@ -186,7 +186,7 @@ public class LuceneServiceImpl implements InternalLuceneService {
     }
     Analyzer analyzer = new PerFieldAnalyzerWrapper(new StandardAnalyzer(), fieldAnalyzers);
     Set<String> fieldsSet = fieldAnalyzers.keySet();
-    String[] fields = fieldsSet.toArray(new String[fieldsSet.size()]);
+    String[] fields = fieldsSet.toArray(new String[0]);
 
     createIndex(indexName, regionPath, analyzer, fieldAnalyzers, serializer, allowOnExistingRegion,
         fields);

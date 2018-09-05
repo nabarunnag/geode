@@ -72,7 +72,7 @@ public class LuceneIndexCreation implements Extension<Region<?, ?>> {
   }
 
   public String[] getFieldNames() {
-    return fieldNames.toArray(new String[fieldNames.size()]);
+    return fieldNames.toArray(new String[0]);
   }
 
   public String getRegionPath() {

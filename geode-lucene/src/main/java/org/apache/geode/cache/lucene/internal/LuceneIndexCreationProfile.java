@@ -105,7 +105,6 @@ public class LuceneIndexCreationProfile implements CacheServiceProfile, Versione
 
   @Override
   public String checkCompatibility(String regionPath, CacheServiceProfile profile) {
-    String result = null;
     LuceneIndexCreationProfile remoteProfile = (LuceneIndexCreationProfile) profile;
 
     // Verify fields are the same
@@ -156,7 +155,7 @@ public class LuceneIndexCreationProfile implements CacheServiceProfile, Versione
               remoteProfile.getSerializerClass());
     }
 
-    return result;
+    return null;
   }
 
   @Override
@@ -197,11 +196,11 @@ public class LuceneIndexCreationProfile implements CacheServiceProfile, Versione
   }
 
   public String toString() {
-    return new StringBuilder().append(getClass().getSimpleName()).append("[").append("indexName=")
-        .append(this.indexName).append("; regionPath=").append(this.regionPath)
-        .append("; fieldNames=").append(Arrays.toString(this.fieldNames)).append("; analyzerClass=")
-        .append(this.analyzerClass).append("; fieldAnalyzers=").append(this.fieldAnalyzers)
-        .append("; serializer=").append(this.serializerClass).append("]").toString();
+    return getClass().getSimpleName() + "[" + "indexName="
+        + this.indexName + "; regionPath=" + this.regionPath
+        + "; fieldNames=" + Arrays.toString(this.fieldNames) + "; analyzerClass="
+        + this.analyzerClass + "; fieldAnalyzers=" + this.fieldAnalyzers
+        + "; serializer=" + this.serializerClass + "]";
   }
 
   public String getRegionPath() {

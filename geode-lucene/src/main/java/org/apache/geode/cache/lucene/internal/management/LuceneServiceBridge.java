@@ -64,7 +64,7 @@ public class LuceneServiceBridge {
         indexMetrics.add(getIndexMetrics(index));
       }
     }
-    return indexMetrics.toArray(new LuceneIndexMetrics[indexMetrics.size()]);
+    return indexMetrics.toArray(new LuceneIndexMetrics[0]);
   }
 
   public LuceneIndexMetrics listIndexMetrics(String regionPath, String indexName) {

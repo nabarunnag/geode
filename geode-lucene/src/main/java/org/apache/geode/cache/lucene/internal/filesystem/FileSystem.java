@@ -120,12 +120,9 @@ public class FileSystem {
     if (file.possiblyRenamed == false) {
       // TODO consider removeAll with all ChunkKeys listed.
       final ChunkKey key = new ChunkKey(file.id, 0);
-      while (true) {
+      // no more chunks
+      while (null != fileAndChunkRegion.remove(key)) {
         // TODO consider mutable ChunkKey
-        if (null == fileAndChunkRegion.remove(key)) {
-          // no more chunks
-          break;
-        }
         key.chunkId++;
       }
     }

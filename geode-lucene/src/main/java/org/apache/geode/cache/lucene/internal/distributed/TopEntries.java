@@ -126,5 +126,5 @@ public class TopEntries<K> implements DataSerializableFixedID {
   public void fromData(DataInput in) throws IOException, ClassNotFoundException {
     limit = in.readInt();
     hits = DataSerializer.readObject(in);
-  };
+  }
 }

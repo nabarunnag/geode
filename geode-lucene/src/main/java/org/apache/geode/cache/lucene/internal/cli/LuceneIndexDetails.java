@@ -146,16 +146,15 @@ public class LuceneIndexDetails extends LuceneFunctionSerializable
 
   @Override
   public String toString() {
-    final StringBuffer buffer = new StringBuffer();
-    buffer.append("{\n\tIndex Name = " + indexName);
-    buffer.append(",\tRegion Path = " + regionPath);
-    buffer.append(",\tIndexed Fields = " + getSearchableFieldNamesString());
-    buffer.append(",\tField Analyzer = " + getFieldAnalyzersString());
-    buffer.append(",\tSerializer = " + getSerializerString());
-    buffer.append(",\tStatus =\n\t" + getStatus());
-    buffer.append(",\tIndex Statistics =\n\t" + getIndexStatsString());
-    buffer.append("\n}\n");
-    return buffer.toString();
+    String buffer = ("{\n\tIndex Name = " + indexName)
+        + ",\tRegion Path = " + regionPath
+        + ",\tIndexed Fields = " + getSearchableFieldNamesString()
+        + ",\tField Analyzer = " + getFieldAnalyzersString()
+        + ",\tSerializer = " + getSerializerString()
+        + ",\tStatus =\n\t" + getStatus()
+        + ",\tIndex Statistics =\n\t" + getIndexStatsString()
+        + "\n}\n";
+    return buffer;
   }
 
   public LuceneIndexStatus getStatus() {
