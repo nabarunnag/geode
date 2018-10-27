@@ -104,7 +104,8 @@ public class GlobalTransaction {
         writer.severe(
             String.format(
                 "GlobalTransaction::Constructor::Error while trying to create Xid due to %s",
-                e, e));
+                e),
+            e);
       String exception =
           String.format(
               "GlobalTransaction::Constructor::Error while trying to create Xid due to %s",
@@ -185,7 +186,7 @@ public class GlobalTransaction {
           } catch (Exception e) {
             if (VERBOSE)
               writer.info(String.format("%s",
-                  "GlobalTransaction::commit:Exception in delisting XAResource", e));
+                  "GlobalTransaction::commit:Exception in delisting XAResource"), e);
           }
         }
       }
@@ -284,7 +285,7 @@ public class GlobalTransaction {
           } catch (Exception e) {
             if (VERBOSE)
               writer.info(String.format("%s",
-                  "GlobalTransaction::rollback:Exception in delisting XAResource", e));
+                  "GlobalTransaction::rollback:Exception in delisting XAResource"), e);
           }
         }
       }
@@ -625,7 +626,8 @@ public class GlobalTransaction {
         writer.severe(
             String.format(
                 "GlobaTransaction::expireGTX:Error occurred while removing transactional mappings %s",
-                e, e));
+                e),
+            e);
     }
   }
 

@@ -496,7 +496,7 @@ public class DefaultQuery implements Query {
       if (!this.isQueryWithFunctionContext()) {
         throw new UnsupportedOperationException(
             String.format(
-                "A query on a Partitioned Region ( %s ) may not reference any other region if query is NOT executed within a Function",
+                "A query on a Partitioned Region ( %s , %s ) may not reference any other region if query is NOT executed within a Function",
                 prs.get(0).getName(), prs.get(1).getName()));
       }
 
@@ -520,7 +520,7 @@ public class DefaultQuery implements Query {
         if (!colocated) {
           throw new UnsupportedOperationException(
               String.format(
-                  "A query on a Partitioned Region ( %s ) may not reference any other region except Co-located Partitioned Region. PR region (1) is not collocated with other PR region in the query.",
+                  "A query on a Partitioned Region ( %s ) may not reference any other region except Co-located Partitioned Region. PR region %s is not collocated with other PR region in the query.",
                   eachPR.getName(), other.getName()));
         }
 

@@ -187,27 +187,19 @@ public class PartitionRegionConfigValidator {
       final PartitionRegionConfig prconf) {
     if (!userRA.getRegionIdleTimeout().equals(prconf.getRegionIdleTimeout())) {
       throw new IllegalStateException(
-          String.format(
-              "The %s set in RegionAttributes is incompatible with %s used by other distributed members.",
-              new Object[] {" region idle timout "}));
+          "The region idle timout set in RegionAttributes is incompatible with region idle timout used by other distributed members.");
     }
     if (!userRA.getRegionTimeToLive().equals(prconf.getRegionTimeToLive())) {
       throw new IllegalStateException(
-          String.format(
-              "The %s set in RegionAttributes is incompatible with %s used by other distributed members.",
-              new Object[] {" region time to live "}));
+          "The region time to live set in RegionAttributes is incompatible with region time to live used by other distributed members.");
     }
     if (!userRA.getEntryIdleTimeout().equals(prconf.getEntryIdleTimeout())) {
       throw new IllegalStateException(
-          String.format(
-              "The %s set in RegionAttributes is incompatible with %s used by other distributed members.",
-              new Object[] {" entry idle timout "}));
+          "The entry idle timout set in RegionAttributes is incompatible with entry idle timout used by other distributed members.");
     }
     if (!userRA.getEntryTimeToLive().equals(prconf.getEntryTimeToLive())) {
       throw new IllegalStateException(
-          String.format(
-              "The %s set in RegionAttributes is incompatible with %s used by other distributed members.",
-              new Object[] {" entry time to live "}));
+          "The entry time to live set in RegionAttributes is incompatible with entry time to live used by other distributed members.");
     }
   }
 

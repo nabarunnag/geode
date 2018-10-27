@@ -304,11 +304,12 @@ public class JNDIInvoker {
       writer.warning(
           String.format(
               "JNDIInvoker::doTransactionLookup::Found WebSphere TransactionManager factory class [%s], but could not invoke its static 'getTransactionManager' method",
-              clazz.getName(), ex));
+              clazz.getName()),
+          ex);
       throw new NameNotFoundException(
           String.format(
               "JNDIInvoker::doTransactionLookup::Found WebSphere TransactionManager factory class [%s], but could not invoke its static 'getTransactionManager' method",
-              new Object[] {clazz.getName()}));
+              clazz.getName()));
     }
   }
 

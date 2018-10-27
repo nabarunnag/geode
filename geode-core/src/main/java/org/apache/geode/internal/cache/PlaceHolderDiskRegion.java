@@ -22,6 +22,7 @@ import org.apache.geode.internal.cache.eviction.EvictionController;
 import org.apache.geode.internal.cache.persistence.DiskRecoveryStore;
 import org.apache.geode.internal.cache.persistence.DiskRegionView;
 import org.apache.geode.internal.cache.persistence.DiskStoreID;
+import org.apache.geode.internal.logging.LogService;
 
 /**
  * Used to represent a recovered disk region. Once the region actually exists this instance will be
@@ -178,11 +179,9 @@ public class PlaceHolderDiskRegion extends AbstractDiskRegion
 
   @Override
   public void handleDiskAccessException(DiskAccessException dae) {
-    getDiskStore().getCache().getLogger().error(
-        String.format(
-            "A DiskAccessException has occurred while recovering values asynchronously from disk for region %s.",
-            getName(), dae));
-
+    LogService.getLogger().error(
+        "A DiskAccessException has occurred while recovering values asynchronously from disk for region {}.",
+        getName(), dae);
   }
 
   @Override

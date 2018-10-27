@@ -3306,15 +3306,16 @@ public class DiskStoreImpl implements DiskStore {
       return;
     }
 
-    // log the error
+    // log the errors occurred while writing to the disk for disk store {}.
     final String message =
-        "A DiskAccessException has occurred while writing to the disk for disk store {}. The cache will be closed.";
-    logger.error(message, DiskStoreImpl.this.getName(), dae);
-
+        String.format(
+            "A DiskAccessException has occurred while writing to the disk for disk store %s. The cache will be closed.",
+            DiskStoreImpl.this.getName());
+    logger.error(message, dae);
     Thread thread = new LoggingThread("Disk store exception handler", false, () -> {
       try {
         // now close the cache
-        getCache().close(String.format(message, DiskStoreImpl.this.getName(), dae), dae);
+        getCache().close(message, dae);
         _testHandleDiskAccessException.countDown();
       } catch (Exception e) {
         logger.error("An Exception occurred while closing the cache.", e);

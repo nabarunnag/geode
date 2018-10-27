@@ -252,7 +252,7 @@ public class ConcurrentParallelGatewaySenderEventProcessor
           }
         } catch (ExecutionException e) {
           // we don't expect any exception but if caught then eat it and log warning
-          logger.warn(String.format("GatewaySender %s caught exception while stopping: %s", sender),
+          logger.warn("GatewaySender {} caught exception while stopping:", sender,
               e.getCause());
         }
       }

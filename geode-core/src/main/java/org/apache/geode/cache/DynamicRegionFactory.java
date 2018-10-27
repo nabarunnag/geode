@@ -24,6 +24,8 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.apache.logging.log4j.Logger;
+
 import org.apache.geode.InternalGemFireError;
 import org.apache.geode.SystemFailure;
 import org.apache.geode.cache.client.Pool;
@@ -46,6 +48,7 @@ import org.apache.geode.internal.cache.InternalRegionArguments;
 import org.apache.geode.internal.cache.LocalRegion;
 import org.apache.geode.internal.cache.RegionEntry;
 import org.apache.geode.internal.cache.RegionEventImpl;
+import org.apache.geode.internal.logging.LogService;
 import org.apache.geode.security.GemFireSecurityException;
 
 /**
@@ -139,7 +142,7 @@ import org.apache.geode.security.GemFireSecurityException;
 public abstract class DynamicRegionFactory {
 
   public static final String dynamicRegionListName = "__DynamicRegions";
-
+  private static final Logger logger = LogService.getLogger();
   private Region dynamicRegionList = null;
 
   /**
@@ -406,9 +409,9 @@ public abstract class DynamicRegionFactory {
         // error condition, so you also need to check to see if the JVM
         // is still usable:
         SystemFailure.checkFailure();
-        this.cache.getLogger().warning(
-            String.format("DynamicRegionListener %s threw exception on beforeRegionCreated",
-                listener, t));
+        logger.warn(
+            "DynamicRegionListener {} threw exception on beforeRegionCreated",
+            listener, t);
       }
     }
   }
@@ -433,9 +436,9 @@ public abstract class DynamicRegionFactory {
         // error condition, so you also need to check to see if the JVM
         // is still usable:
         SystemFailure.checkFailure();
-        this.cache.getLogger().warning(
-            String.format("DynamicRegionListener %s threw exception on afterRegionCreated",
-                listener, t));
+        logger.warn(
+            "DynamicRegionListener %s threw exception on afterRegionCreated",
+            listener, t);
       }
     }
   }
@@ -465,9 +468,9 @@ public abstract class DynamicRegionFactory {
         // error condition, so you also need to check to see if the JVM
         // is still usable:
         SystemFailure.checkFailure();
-        this.cache.getLogger().warning(
-            String.format("DynamicRegionListener %s threw exception on beforeRegionDestroyed",
-                listener, t));
+        logger.warn(
+            "DynamicRegionListener {} threw exception on beforeRegionDestroyed",
+            listener, t);
       }
     }
   }
@@ -497,9 +500,9 @@ public abstract class DynamicRegionFactory {
         // error condition, so you also need to check to see if the JVM
         // is still usable:
         SystemFailure.checkFailure();
-        this.cache.getLogger().warning(
-            String.format("DynamicRegionListener %s threw exception on afterRegionDestroyed",
-                listener, t));
+        logger.warn(
+            "DynamicRegionListener {} threw exception on afterRegionDestroyed",
+            listener, t);
       }
     }
   }
@@ -575,9 +578,8 @@ public abstract class DynamicRegionFactory {
           String.format("Error -- Could not find a region named: '%s'",
               parentRegionName);
       RegionDestroyedException e = new RegionDestroyedException(errMsg, parentRegionName);
-      this.cache.getLogger().warning(
-          String.format("Error -- Could not find a region named: '%s'",
-              parentRegionName, e));
+      logger.warn("Error -- Could not find a region named: '{}'",
+          parentRegionName, e);
       throw e;
     }
 
@@ -662,9 +664,8 @@ public abstract class DynamicRegionFactory {
       }
       this.dynamicRegionList.destroy(fullRegionName);
     } catch (CacheException e) {
-      this.cache.getLogger().warning(
-          String.format("Error destroying Dynamic Region '%s'", fullRegionName,
-              e));
+      logger.warn("Error destroying Dynamic Region '{}'", fullRegionName,
+          e);
       throw e;
     }
 
@@ -826,9 +827,8 @@ public abstract class DynamicRegionFactory {
       Region region = createDynamicRegionImpl(parentRegionName, newRegionName, false);
       doAfterRegionCreated(region, true, true, event.getDistributedMember());
     } catch (Exception e) {
-      cache.getLogger().warning(
-          String.format("Error attempting to locally create Dynamic Region: %s",
-              newRegionName, e));
+      logger.warn("Error attempting to locally create Dynamic Region: %s",
+          newRegionName, e);
     }
   }
 

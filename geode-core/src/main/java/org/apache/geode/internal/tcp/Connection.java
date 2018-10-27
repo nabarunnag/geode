@@ -3708,18 +3708,16 @@ public class Connection implements Runnable {
               }
               if (this.replyCode != REPLY_CODE_OK
                   && this.replyCode != REPLY_CODE_OK_WITH_ASYNC_INFO) {
-                String err =
-                    "Unknown handshake reply code: {} nioMessageLength=%s processorType={}";
-                Object[] errArgs = new Object[] {Integer.valueOf(this.replyCode),
-                    Integer.valueOf(nioMessageLength)};
                 if (replyCode == 0 && logger.isDebugEnabled()) { // bug 37113
-                  logger.debug(
-                      String.format(err, errArgs) + " (peer probably departed ungracefully)");
+                  logger.debug("Unknown handshake reply code: {} nioMessageLength= {} {}",
+                      this.replyCode, nioMessageLength, " (peer probably departed ungracefully)");
                 } else {
-                  logger.fatal(err, errArgs);
+                  logger.fatal("Unknown handshake reply code: {} nioMessageLength= {}",
+                      this.replyCode, nioMessageLength);
                 }
                 this.readerShuttingDown = true;
-                requestClose(String.format(err, errArgs));
+                requestClose(String.format("Unknown handshake reply code: %s nioMessageLength= %s",
+                    this.replyCode, nioMessageLength));
                 return;
               }
               notifyHandshakeWaiter(true);

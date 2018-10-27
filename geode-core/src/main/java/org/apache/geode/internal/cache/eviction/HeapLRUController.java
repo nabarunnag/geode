@@ -74,7 +74,7 @@ public class HeapLRUController extends SizeLRUController {
   @Override
   public String toString() {
     return String.format(
-        "HeapLRUCapacityController with a capacity of %s% of memory and eviction action %s.",
+        "HeapLRUCapacityController with a capacity of %s of memory and eviction action %s.",
         getLimit(), getEvictionAction());
   }
 
