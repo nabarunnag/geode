@@ -208,7 +208,7 @@ public class ClusterSelectedRegionService implements PulseService {
 
       regionJSON.put("emptyNodes", reg.getEmptyNode());
       Long entrySize = reg.getEntrySize();
-      String entrySizeInMB = FOUR_PLACE_DECIMAL_FORMAT.format(entrySize / (1024f * 1024f));
+      String entrySizeInMB = FOUR_PLACE_DECIMAL_FORMAT.format(entrySize / (1024D * 1024D));
       if (entrySize < 0) {
         regionJSON.put(this.ENTRY_SIZE, PulseService.VALUE_NA);
       } else {

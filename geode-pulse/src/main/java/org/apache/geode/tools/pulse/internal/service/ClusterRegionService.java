@@ -180,7 +180,7 @@ public class ClusterRegionService implements PulseService {
           reg.getRegionStatisticTrend(Cluster.Region.REGION_STAT_DISK_WRITES_PER_SEC_TREND)));
       regionJSON.put("emptyNodes", reg.getEmptyNode());
       Long entrySize = reg.getEntrySize();
-      String entrySizeInMB = FOUR_PLACE_DECIMAL_FORMAT.format(entrySize / (1024f * 1024f));
+      String entrySizeInMB = FOUR_PLACE_DECIMAL_FORMAT.format(entrySize / (1024D * 1024D));
 
       if (entrySize < 0) {
         regionJSON.put(this.ENTRY_SIZE, VALUE_NA);

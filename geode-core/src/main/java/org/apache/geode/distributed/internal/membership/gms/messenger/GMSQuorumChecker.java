@@ -132,7 +132,7 @@ public class GMSQuorumChecker implements QuorumChecker {
     // quorum check
     int weight = getWeight(this.lastView.getMembers(), this.lastView.getLeadMember());
     int ackedWeight = getWeight(receivedAcks, this.lastView.getLeadMember());
-    int lossThreshold = (int) Math.round((weight * this.partitionThreshold) / 100.0);
+    int lossThreshold = (int) Math.round((1D * weight * this.partitionThreshold) / 100.0);
     if (isDebugEnabled) {
       logger.debug(
           "quorum check: contacted {} processes with {} member weight units.  Threshold for a quorum is {}",

@@ -603,10 +603,11 @@ public class PartitionedRegionLoadModel {
           }
         }
       }
-      double before = variance(getPrimaryAverage() * largestWeight + smallestBucket, largestWeight,
-          getPrimaryAverage());
+      double before =
+          variance((1D * getPrimaryAverage()) * largestWeight + smallestBucket, largestWeight,
+              getPrimaryAverage());
       double after =
-          variance(getPrimaryAverage() * largestWeight, largestWeight, getPrimaryAverage());
+          variance((1D * getPrimaryAverage()) * largestWeight, largestWeight, getPrimaryAverage());
       this.minPrimaryImprovement = (before - after) / smallestBucket;
     }
     return this.minPrimaryImprovement;
@@ -632,9 +633,11 @@ public class PartitionedRegionLoadModel {
           }
         }
       }
-      double before = variance(getAverageLoad() * largestWeight + smallestBucket, largestWeight,
-          getAverageLoad());
-      double after = variance(getAverageLoad() * largestWeight, largestWeight, getAverageLoad());
+      double before =
+          variance((1D * getAverageLoad()) * largestWeight + smallestBucket, largestWeight,
+              getAverageLoad());
+      double after =
+          variance((1D * getAverageLoad()) * largestWeight, largestWeight, getAverageLoad());
       this.minImprovement = (before - after) / smallestBucket;
     }
     return this.minImprovement;

@@ -86,7 +86,7 @@ public class MemberRegionsService implements PulseService {
         regionJSON.put("entryCount", memberRegion.getSystemRegionEntryCount());
         Long entrySize = memberRegion.getEntrySize();
 
-        String entrySizeInMB = FOUR_PLACE_DECIMAL_FORMAT.format(entrySize / (1024f * 1024f));
+        String entrySizeInMB = FOUR_PLACE_DECIMAL_FORMAT.format(entrySize / (1024D * 1024D));
 
         if (entrySize < 0) {
           regionJSON.put(this.ENTRY_SIZE, VALUE_NA);

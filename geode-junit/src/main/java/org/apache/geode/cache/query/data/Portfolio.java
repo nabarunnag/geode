@@ -134,16 +134,16 @@ public class Portfolio implements Serializable, DataSerializable {
     pkid = "" + i;
     status = i % 2 == 0 ? "active" : "inactive";
     type = "type" + (i % 3);
-    position1 = new Position(secIds[Position.cnt % secIds.length], Position.cnt * 1000L);
+    position1 = new Position(secIds[Position.cnt % secIds.length], Position.cnt * 1000D);
     if (i % 2 != 0) {
-      position2 = new Position(secIds[Position.cnt % secIds.length], Position.cnt * 1000L);
+      position2 = new Position(secIds[Position.cnt % secIds.length], Position.cnt * 1000D);
     } else {
       position2 = null;
     }
     positions.put(secIds[Position.cnt % secIds.length],
-        new Position(secIds[Position.cnt % secIds.length], Position.cnt * 1000L));
+        new Position(secIds[Position.cnt % secIds.length], Position.cnt * 1000D));
     positions.put(secIds[Position.cnt % secIds.length],
-        new Position(secIds[Position.cnt % secIds.length], Position.cnt * 1000L));
+        new Position(secIds[Position.cnt % secIds.length], Position.cnt * 1000D));
     collectionHolderMap.put("0", new CollectionHolder());
     collectionHolderMap.put("1", new CollectionHolder());
     collectionHolderMap.put("2", new CollectionHolder());
@@ -158,7 +158,7 @@ public class Portfolio implements Serializable, DataSerializable {
     this.position1.portfolioId = j;
     this.position3 = new Position[3];
     for (int k = 0; k < position3.length; k++) {
-      Position p = new Position(secIds[k], (k + 1) * 1000L);
+      Position p = new Position(secIds[k], (k + 1) * 1000D);
       p.portfolioId = (k + 1);
       this.position3[k] = p;
     }

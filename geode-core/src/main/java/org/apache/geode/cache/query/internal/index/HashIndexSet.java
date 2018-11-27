@@ -648,7 +648,7 @@ public class HashIndexSet implements Set {
   }
 
   private int computeMaxSize(int n, float loadFactor) {
-    return Math.min((int) Math.ceil(n * loadFactor), n - 1);
+    return Math.min((int) Math.ceil(1D * n * loadFactor), n - 1);
   }
 
   /**

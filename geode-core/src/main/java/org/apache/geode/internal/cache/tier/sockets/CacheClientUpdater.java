@@ -1559,8 +1559,8 @@ public class CacheClientUpdater extends LoggingThread implements ClientUpdater, 
   private void processMessages() {
     final boolean isDebugEnabled = logger.isDebugEnabled();
 
-    final int headerReadTimeout = (int) Math.round(serverQueueStatus.getPingInterval()
-        * qManager.getPool().getSubscriptionTimeoutMultiplier() * 1.25);
+    final int headerReadTimeout = (int) Math.round(1.25 * serverQueueStatus.getPingInterval()
+        * qManager.getPool().getSubscriptionTimeoutMultiplier());
 
     try {
       Message clientMessage = initializeMessage();
