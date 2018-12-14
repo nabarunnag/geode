@@ -169,7 +169,7 @@ public class GeoCoder {
     Set<String> areas = GeoHash.coverBoundingBox(boundingBox.maxlat, boundingBox.maxlon,
         boundingBox.minlat, boundingBox.minlon, steps).getHashes();
     if (!extra.isEmpty()) {
-      extra.forEach(ex -> areas.add(ex));
+      areas.addAll(extra);
     }
 
     return areas;

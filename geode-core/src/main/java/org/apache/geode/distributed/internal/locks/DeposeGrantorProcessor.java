@@ -172,12 +172,11 @@ public class DeposeGrantorProcessor extends ReplyProcessor21 {
 
     @Override
     public String toString() {
-      StringBuffer buff = new StringBuffer();
-      buff.append("DeposeGrantorMessage (serviceName='").append(this.serviceName)
-          .append("' processorId=").append(this.processorId).append(" newGrantor=")
-          .append(this.newGrantor).append(" newGrantorVersion=").append(this.newGrantorVersion)
-          .append(" newGrantorSerialNumber=").append(this.newGrantorSerialNumber).append(")");
-      return buff.toString();
+      String buff = "DeposeGrantorMessage (serviceName='" + this.serviceName
+          + "' processorId=" + this.processorId + " newGrantor="
+          + this.newGrantor + " newGrantorVersion=" + this.newGrantorVersion
+          + " newGrantorSerialNumber=" + this.newGrantorSerialNumber + ")";
+      return buff;
     }
   }
 }

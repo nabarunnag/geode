@@ -60,7 +60,7 @@ public class PFMergeExecutor extends HllExecutor {
       return;
     }
 
-    HyperLogLogPlus[] estimators = hlls.toArray(new HyperLogLogPlus[hlls.size()]);
+    HyperLogLogPlus[] estimators = hlls.toArray(new HyperLogLogPlus[0]);
     try {
       mergedHLL = (HyperLogLogPlus) mergedHLL.merge(estimators);
     } catch (CardinalityMergeException e) {

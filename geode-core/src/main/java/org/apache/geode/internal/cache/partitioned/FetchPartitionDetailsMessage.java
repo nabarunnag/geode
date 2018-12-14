@@ -285,14 +285,13 @@ public class FetchPartitionDetailsMessage extends PartitionMessage {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("FetchPartitionDetailsReplyMessage ").append("processorid=")
-          .append(this.processorId).append(" reply to sender ").append(this.getSender())
-          .append(" returning configuredMaxMemory=").append(this.configuredMaxMemory)
-          .append(" size=").append(this.size).append(" bucketCount=").append(this.bucketCount)
-          .append(" primaryCount=").append(this.primaryCount).append(" prLoad=").append(this.prLoad)
-          .append(" bucketSizes=").append(Arrays.toString(this.bucketSizes));
-      return sb.toString();
+      String sb = "FetchPartitionDetailsReplyMessage " + "processorid="
+          + this.processorId + " reply to sender " + this.getSender()
+          + " returning configuredMaxMemory=" + this.configuredMaxMemory
+          + " size=" + this.size + " bucketCount=" + this.bucketCount
+          + " primaryCount=" + this.primaryCount + " prLoad=" + this.prLoad
+          + " bucketSizes=" + Arrays.toString(this.bucketSizes);
+      return sb;
     }
   }
 

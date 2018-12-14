@@ -703,7 +703,7 @@ public class StatArchiveReader implements StatArchiveFormat, AutoCloseable {
      * Creates a ComboValue by adding all the specified values together.
      */
     ComboValue(List valueList) {
-      this((StatValue[]) valueList.toArray(new StatValue[valueList.size()]));
+      this((StatValue[]) valueList.toArray(new StatValue[0]));
     }
 
     /**
@@ -2391,7 +2391,7 @@ public class StatArchiveReader implements StatArchiveFormat, AutoCloseable {
       if (!active) {
         result.append(" inactive");
       }
-      result.append(" samples=" + getSampleCount());
+      result.append(" samples=").append(getSampleCount());
       return result.toString();
     }
 

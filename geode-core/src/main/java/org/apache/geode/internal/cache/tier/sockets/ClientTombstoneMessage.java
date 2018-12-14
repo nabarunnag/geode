@@ -160,11 +160,10 @@ public class ClientTombstoneMessage extends ClientUpdateMessageImpl {
 
   @Override
   public String toString() {
-    StringBuffer buffer = new StringBuffer();
-    buffer.append("ClientTombstoneMessage[op=").append(this.op).append(";region=")
-        .append(getRegionName()).append(";removalInfo=").append(this.removalInformation)
-        .append(";memberId=").append(getMembershipId()).append(";eventId=").append(getEventId())
-        .append("]");
-    return buffer.toString();
+    String buffer = "ClientTombstoneMessage[op=" + this.op + ";region="
+        + getRegionName() + ";removalInfo=" + this.removalInformation
+        + ";memberId=" + getMembershipId() + ";eventId=" + getEventId()
+        + "]";
+    return buffer;
   }
 }

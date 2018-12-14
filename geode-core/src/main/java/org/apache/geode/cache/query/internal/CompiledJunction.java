@@ -663,7 +663,7 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
           if (listOrPosition instanceof List) {
             List ops = (List) listOrPosition;
             nullifiedFields += ops.size();
-            CompiledValue operands[] = (CompiledValue[]) ops.toArray(new CompiledValue[ops.size()]);
+            CompiledValue operands[] = (CompiledValue[]) ops.toArray(new CompiledValue[0]);
             rangeJunctions[numRangeJunctions++] =
                 new RangeJunction(this._operator, grpIndpndntItr, completeExpnsn, operands);
           }
@@ -965,9 +965,7 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
           } else {
             toAddTo = compositeIterOperands;
           }
-          for (int i = 0; i < size; ++i) {
-            toAddTo.add(cv[i]);
-          }
+          toAddTo.addAll(Arrays.asList(cv).subList(0, size));
         } else {
           RuntimeIterator grpIndpndtItr = (RuntimeIterator) entry.getKey();
           AbstractGroupOrRangeJunction gj = createGroupJunctionOrRangeJunction(needsCompacting,

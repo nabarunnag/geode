@@ -1379,10 +1379,10 @@ public abstract class RegionVersionVector<T extends VersionSource<?>>
   public String fullToString() {
     StringBuilder sb = new StringBuilder();
     sb.append("RegionVersionVector[").append(this.myId).append("={rv")
-        .append(this.localExceptions.version).append(" gc" + this.localGCVersion)
-        .append(" localVersion=" + this.localVersion);
+        .append(this.localExceptions.version).append(" gc").append(this.localGCVersion)
+        .append(" localVersion=").append(this.localVersion);
     try {
-      sb.append(" local exceptions=" + this.localExceptions.exceptionsToString());
+      sb.append(" local exceptions=").append(this.localExceptions.exceptionsToString());
     } catch (ConcurrentModificationException c) {
       sb.append(" (unable to access local exceptions)");
     }

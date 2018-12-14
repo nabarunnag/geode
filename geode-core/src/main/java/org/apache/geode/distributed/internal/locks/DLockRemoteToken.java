@@ -174,13 +174,12 @@ public class DLockRemoteToken implements DataSerializableFixedID {
    */
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer("DLockRemoteToken@");
-    sb.append(Integer.toHexString(hashCode()));
-    sb.append(", name: ").append(this.name);
-    sb.append(", lesseeThread: ").append(this.lesseeThread);
-    sb.append(", leaseId: ").append(this.leaseId);
-    sb.append(", leaseExpireTime: ").append(this.leaseExpireTime);
-    return sb.toString();
+    String sb = "DLockRemoteToken@" + Integer.toHexString(hashCode())
+        + ", name: " + this.name
+        + ", lesseeThread: " + this.lesseeThread
+        + ", leaseId: " + this.leaseId
+        + ", leaseExpireTime: " + this.leaseExpireTime;
+    return sb;
   }
 
   /**

@@ -876,26 +876,26 @@ public class CacheDistributionAdvisor extends DistributionAdvisor {
     @Override
     public void fillInToString(StringBuilder sb) {
       super.fillInToString(sb);
-      sb.append("; dataPolicy=" + this.dataPolicy);
-      sb.append("; hasCacheLoader=" + this.hasCacheLoader);
-      sb.append("; hasCacheWriter=" + this.hasCacheWriter);
-      sb.append("; hasCacheListener=" + this.hasCacheListener);
+      sb.append("; dataPolicy=").append(this.dataPolicy);
+      sb.append("; hasCacheLoader=").append(this.hasCacheLoader);
+      sb.append("; hasCacheWriter=").append(this.hasCacheWriter);
+      sb.append("; hasCacheListener=").append(this.hasCacheListener);
       sb.append("; hasCacheServer=").append(this.hasCacheServer);
-      sb.append("; scope=" + this.scope);
+      sb.append("; scope=").append(this.scope);
       sb.append("; regionInitialized=").append(String.valueOf(this.regionInitialized));
-      sb.append("; inRecovery=" + this.inRecovery);
-      sb.append("; subcription=" + this.subscriptionAttributes);
-      sb.append("; isPartitioned=" + this.isPartitioned);
-      sb.append("; isGatewayEnabled=" + this.isGatewayEnabled);
-      sb.append("; isPersistent=" + this.isPersistent);
-      sb.append("; persistentID=" + this.persistentID);
+      sb.append("; inRecovery=").append(this.inRecovery);
+      sb.append("; subcription=").append(this.subscriptionAttributes);
+      sb.append("; isPartitioned=").append(this.isPartitioned);
+      sb.append("; isGatewayEnabled=").append(this.isGatewayEnabled);
+      sb.append("; isPersistent=").append(this.isPersistent);
+      sb.append("; persistentID=").append(this.persistentID);
       if (this.filterProfile != null) {
         sb.append("; ").append(this.filterProfile);
       }
-      sb.append("; gatewaySenderIds =" + this.gatewaySenderIds);
-      sb.append("; asyncEventQueueIds =" + this.asyncEventQueueIds);
-      sb.append("; IsOffHeap=" + this.isOffHeap);
-      sb.append("; cacheServiceProfiles=" + this.cacheServiceProfiles);
+      sb.append("; gatewaySenderIds =").append(this.gatewaySenderIds);
+      sb.append("; asyncEventQueueIds =").append(this.asyncEventQueueIds);
+      sb.append("; IsOffHeap=").append(this.isOffHeap);
+      sb.append("; cacheServiceProfiles=").append(this.cacheServiceProfiles);
     }
   }
 

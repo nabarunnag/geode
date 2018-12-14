@@ -118,14 +118,13 @@ public class GemFireHealthImpl implements GemFireHealth, JoinLeaveListener, Heal
 
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer();
-    sb.append("closed=" + isClosed);
-    sb.append("; hostMembers=" + hostMembers);
-    sb.append("; okayHealth=" + okayHealth);
-    sb.append("; poorHealth=" + poorHealth);
-    sb.append("; overallHealth=" + overallHealth);
-    sb.append("; diagnosis=" + getDiagnosis());
-    return sb.toString();
+    String sb = "closed=" + isClosed
+        + "; hostMembers=" + hostMembers
+        + "; okayHealth=" + okayHealth
+        + "; poorHealth=" + poorHealth
+        + "; overallHealth=" + overallHealth
+        + "; diagnosis=" + getDiagnosis();
+    return sb;
   }
   ////////////////////// Instance Methods //////////////////////
 
@@ -355,7 +354,7 @@ public class GemFireHealthImpl implements GemFireHealth, JoinLeaveListener, Heal
           sb.append(config.getHostName());
           sb.append("\" ");
         }
-        sb.append("not \"" + hostName + "\"");
+        sb.append("not \"").append(hostName).append("\"");
         throw new IllegalArgumentException(sb.toString());
       }
       InetAddress hostIpAddress = null;

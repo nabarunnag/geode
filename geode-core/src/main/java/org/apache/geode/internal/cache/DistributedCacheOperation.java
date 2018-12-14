@@ -610,8 +610,6 @@ public abstract class DistributedCacheOperation {
           logger.debug("Failed sending ({}) to {} while processing event:{}", msg, failures, event);
         }
 
-        Set<InternalDistributedMember> adjunctRecipientsWithNoCacheServer =
-            new HashSet<InternalDistributedMember>();
         // send partitioned region listener notification messages now
         if (!adjunctRecipients.isEmpty()) {
           if (cachelessNodes.size() > 0) {
@@ -624,7 +622,8 @@ public abstract class DistributedCacheOperation {
             }
           }
 
-          adjunctRecipientsWithNoCacheServer.addAll(adjunctRecipients);
+          Set<InternalDistributedMember> adjunctRecipientsWithNoCacheServer =
+              new HashSet<InternalDistributedMember>(adjunctRecipients);
           adviseCacheServers = ((Bucket) region).getPartitionedRegion()
               .getCacheDistributionAdvisor().adviseCacheServers();
           adjunctRecipientsWithNoCacheServer.removeAll(adviseCacheServers);

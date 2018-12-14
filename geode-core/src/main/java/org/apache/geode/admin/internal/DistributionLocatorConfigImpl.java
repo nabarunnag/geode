@@ -183,10 +183,9 @@ public class DistributionLocatorConfigImpl extends ManagedEntityConfigImpl
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("DistributionLocatorConfig: host=").append(getHost());
-    sb.append(", bindAddress=").append(getBindAddress());
-    sb.append(", port=").append(getPort());
-    return sb.toString();
+    String sb = "DistributionLocatorConfig: host=" + getHost()
+        + ", bindAddress=" + getBindAddress()
+        + ", port=" + getPort();
+    return sb;
   }
 }

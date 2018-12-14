@@ -442,10 +442,10 @@ public enum Command {
   public static String buffertoString(ByteBuffer header) {
     StringBuilder str = new StringBuilder("\n0: ");
     for (int i = 0; i < header.limit(); i++) {
-      str.append(byteToHex(header.get(i)) + " | ");
+      str.append(byteToHex(header.get(i))).append(" | ");
       if ((i + 1) % 4 == 0) {
         str.append("\n");
-        str.append((i + 1) + ": ");
+        str.append(i + 1).append(": ");
       }
     }
     return str.toString();

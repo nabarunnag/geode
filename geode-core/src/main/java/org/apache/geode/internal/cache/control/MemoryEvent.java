@@ -73,10 +73,10 @@ public class MemoryEvent implements ResourceEvent {
 
   @Override
   public String toString() {
-    return new StringBuilder().append("MemoryEvent@").append(System.identityHashCode(this))
-        .append("[Member:" + this.member).append(",type:" + this.type)
-        .append(",previousState:" + this.previousState).append(",state:" + this.state)
-        .append(",bytesUsed:" + this.bytesUsed).append(",isLocal:" + this.isLocal)
-        .append(",thresholds:" + this.thresholds + "]").toString();
+    return "MemoryEvent@" + System.identityHashCode(this)
+        + "[Member:" + this.member + ",type:" + this.type
+        + ",previousState:" + this.previousState + ",state:" + this.state
+        + ",bytesUsed:" + this.bytesUsed + ",isLocal:" + this.isLocal
+        + ",thresholds:" + this.thresholds + "]";
   }
 }

@@ -130,9 +130,7 @@ public class GatewaySenderEventCallbackArgument extends WrappedCallbackArgument
    */
   public void initializeReceipientDSIds(List<Integer> originalGatewaysReceivers) {
     this.receipientDSIds = new IntOpenHashSet(2);
-    for (Integer id : originalGatewaysReceivers) {
-      this.receipientDSIds.add(id);
-    }
+    this.receipientDSIds.addAll(originalGatewaysReceivers);
   }
 
   public int getDSFID() {
@@ -166,12 +164,11 @@ public class GatewaySenderEventCallbackArgument extends WrappedCallbackArgument
 
   @Override
   public String toString() {
-    StringBuffer buffer = new StringBuffer();
-    buffer.append("GatewaySenderEventCallbackArgument [").append("originalCallbackArg=")
-        .append(getOriginalCallbackArg()).append(";originatingSenderId=")
-        .append(this.originatingDSId).append(";recipientGatewayReceivers=")
-        .append(this.receipientDSIds).append("]");
-    return buffer.toString();
+    String buffer = "GatewaySenderEventCallbackArgument [" + "originalCallbackArg="
+        + getOriginalCallbackArg() + ";originatingSenderId="
+        + this.originatingDSId + ";recipientGatewayReceivers="
+        + this.receipientDSIds + "]";
+    return buffer;
   }
 
   @Override

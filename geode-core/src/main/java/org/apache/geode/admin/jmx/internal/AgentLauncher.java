@@ -291,7 +291,7 @@ public class AgentLauncher {
       commands.add(key + "=" + agentProps.get(key.toString()));
     }
 
-    return commands.toArray(new String[commands.size()]);
+    return commands.toArray(new String[0]);
   }
 
   private void printCommandLine(final String[] commandLine) {
@@ -914,8 +914,8 @@ public class AgentLauncher {
           if (msg != null) {
             buffer.append("\n").append(msg).append(" - ");
           } else {
-            buffer.append("\n " + String.format("Exception in %s : %s ",
-                this.baseName, exception.getMessage()) + " - ");
+            buffer.append("\n ").append(String.format("Exception in %s : %s ",
+                this.baseName, exception.getMessage())).append(" - ");
           }
           buffer
               .append("See log file for details.");

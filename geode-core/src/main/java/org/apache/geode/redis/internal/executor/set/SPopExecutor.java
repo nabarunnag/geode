@@ -46,7 +46,7 @@ public class SPopExecutor extends SetExecutor {
 
     Random rand = new Random();
 
-    ByteArrayWrapper[] entries = keyRegion.keySet().toArray(new ByteArrayWrapper[keyRegion.size()]);
+    ByteArrayWrapper[] entries = keyRegion.keySet().toArray(new ByteArrayWrapper[0]);
 
     ByteArrayWrapper pop = entries[rand.nextInt(entries.length)];
 

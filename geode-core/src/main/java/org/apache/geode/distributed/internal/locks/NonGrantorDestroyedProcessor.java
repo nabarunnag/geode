@@ -209,10 +209,9 @@ public class NonGrantorDestroyedProcessor extends ReplyProcessor21 {
 
     @Override
     public String toString() {
-      StringBuffer buff = new StringBuffer();
-      buff.append("NonGrantorDestroyedMessage (serviceName='").append(this.serviceName)
-          .append("' processorId=").append(this.processorId).append(")");
-      return buff.toString();
+      String buff = "NonGrantorDestroyedMessage (serviceName='" + this.serviceName
+          + "' processorId=" + this.processorId + ")";
+      return buff;
     }
   }
 
@@ -276,11 +275,10 @@ public class NonGrantorDestroyedProcessor extends ReplyProcessor21 {
 
     @Override
     public String toString() {
-      StringBuffer buff = new StringBuffer();
-      buff.append("NonGrantorDestroyedReplyMessage").append("; sender=").append(getSender())
-          .append("; processorId=").append(super.processorId).append("; replyCode=")
-          .append(replyCodeToString(this.replyCode)).append(")");
-      return buff.toString();
+      String buff = "NonGrantorDestroyedReplyMessage" + "; sender=" + getSender()
+          + "; processorId=" + super.processorId + "; replyCode="
+          + replyCodeToString(this.replyCode) + ")";
+      return buff;
     }
   }
 }

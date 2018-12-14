@@ -1199,12 +1199,12 @@ public class SocketCreator {
   public static String reverseDNS(InetAddress addr) {
     byte[] addrBytes = addr.getAddress();
     // reverse the address suitable for reverse lookup
-    String lookup = "";
+    StringBuilder lookupBuilder = new StringBuilder();
     for (int index = addrBytes.length - 1; index >= 0; index--) {
-      lookup = lookup + (addrBytes[index] & 0xff) + '.';
+      lookupBuilder.append(addrBytes[index] & 0xff).append('.');
     }
-    lookup += "in-addr.arpa";
-    // System.out.println("Looking up: " + lookup);
+    lookupBuilder.append("in-addr.arpa");
+    String lookup = lookupBuilder.toString();
 
     try {
       Hashtable env = new Hashtable();

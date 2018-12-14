@@ -508,7 +508,7 @@ public class StartLocatorCommand extends OfflineGfshCommand {
       commandLine.add("--redirect-output");
     }
 
-    return commandLine.toArray(new String[commandLine.size()]);
+    return commandLine.toArray(new String[0]);
   }
 
   String getLocatorClasspath(final boolean includeSystemClasspath, final String userClasspath) {
@@ -522,7 +522,7 @@ public class StartLocatorCommand extends OfflineGfshCommand {
     }
 
     return StartMemberUtils.toClasspath(includeSystemClasspath,
-        jarFilePathnames.toArray(new String[jarFilePathnames.size()]), userClasspath);
+        jarFilePathnames.toArray(new String[0]), userClasspath);
   }
 
   private String[] getExtensionsJars() {

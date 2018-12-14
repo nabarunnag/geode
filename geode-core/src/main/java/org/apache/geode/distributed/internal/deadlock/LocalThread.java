@@ -49,13 +49,13 @@ public class LocalThread implements Serializable, ThreadReference {
 
 
     if (info.getLockInfo() != null) {
-      result.append("\n\twaiting to lock <" + info.getLockInfo() + ">");
+      result.append("\n\twaiting to lock <").append(info.getLockInfo()).append(">");
     }
     for (StackTraceElement element : info.getStackTrace()) {
-      result.append("\n\tat " + element);
+      result.append("\n\tat ").append(element);
       for (MonitorInfo monitor : info.getLockedMonitors()) {
         if (element.equals(monitor.getLockedStackFrame())) {
-          result.append("\n\tlocked <" + monitor + ">");
+          result.append("\n\tlocked <").append(monitor).append(">");
         }
       }
     }
@@ -63,8 +63,8 @@ public class LocalThread implements Serializable, ThreadReference {
     if (info.getLockedSynchronizers().length > 0) {
       result.append("\nLocked synchronizers:");
       for (LockInfo sync : info.getLockedSynchronizers()) {
-        result.append(
-            "\n" + sync.getClassName() + "@" + Integer.toHexString(sync.getIdentityHashCode()));
+        result.append("\n").append(sync.getClassName()).append("@")
+            .append(Integer.toHexString(sync.getIdentityHashCode()));
 
       }
     }

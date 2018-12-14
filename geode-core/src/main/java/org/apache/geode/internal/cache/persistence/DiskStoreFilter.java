@@ -26,7 +26,7 @@ public class DiskStoreFilter implements FilenameFilter {
 
   public DiskStoreFilter(OplogType type, boolean includeKRF, String name) {
     this.includeKRF = includeKRF;
-    this.filterCondn = new StringBuffer(type.getPrefix()).append(name).toString();
+    this.filterCondn = type.getPrefix() + name;
   }
 
   private boolean selected(String fileName) {

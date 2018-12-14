@@ -179,7 +179,7 @@ public class InternalClientMembership {
     List<ClientMembershipListener> l = clientMembershipListeners; // volatile fetch
     // convert to an array
     ClientMembershipListener[] listeners =
-        (ClientMembershipListener[]) l.toArray(new ClientMembershipListener[l.size()]);
+        (ClientMembershipListener[]) l.toArray(new ClientMembershipListener[0]);
     return listeners;
   }
 
@@ -567,11 +567,10 @@ public class InternalClientMembership {
 
     @Override // GemStoneAddition
     public String toString() {
-      final StringBuffer sb = new StringBuffer("[ClientMembershipEvent: ");
-      sb.append("member=").append(this.member);
-      sb.append(", isClient=").append(this.client);
-      sb.append("]");
-      return sb.toString();
+      String sb = "[ClientMembershipEvent: " + "member=" + this.member
+          + ", isClient=" + this.client
+          + "]";
+      return sb;
     }
   }
 

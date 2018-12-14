@@ -559,7 +559,7 @@ public class StartServerCommand extends OfflineGfshCommand {
           + launcher.getHostNameForClients());
     }
 
-    return commandLine.toArray(new String[commandLine.size()]);
+    return commandLine.toArray(new String[0]);
   }
 
   String getServerClasspath(final boolean includeSystemClasspath, final String userClasspath) {
@@ -574,7 +574,7 @@ public class StartServerCommand extends OfflineGfshCommand {
     }
 
     return StartMemberUtils.toClasspath(includeSystemClasspath,
-        jarFilePathnames.toArray(new String[jarFilePathnames.size()]), userClasspath);
+        jarFilePathnames.toArray(new String[0]), userClasspath);
   }
 
   private String[] getExtensionsJars() {

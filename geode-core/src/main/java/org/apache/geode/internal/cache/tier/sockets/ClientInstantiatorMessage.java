@@ -197,13 +197,12 @@ public class ClientInstantiatorMessage extends ClientUpdateMessageImpl {
 
   @Override
   public String toString() {
-    StringBuffer buffer = new StringBuffer();
-    buffer.append("ClientInstantiatorMessage[value=")
-        .append(Arrays.toString(this.serializedInstantiators))
-        .append(";memberId=")
-        .append(getMembershipId()).append(";eventId=").append(getEventId())
-        .append("]");
-    return buffer.toString();
+    String buffer = "ClientInstantiatorMessage[value="
+        + Arrays.toString(this.serializedInstantiators)
+        + ";memberId="
+        + getMembershipId() + ";eventId=" + getEventId()
+        + "]";
+    return buffer;
   }
 
 }

@@ -533,7 +533,7 @@ public class CacheServerLauncher {
     commandLine.add("server");
     addToServerCommand(commandLine, options);
 
-    return commandLine.toArray(new String[commandLine.size()]);
+    return commandLine.toArray(new String[0]);
   }
 
   private void printCommandLine(final String[] commandLine) {

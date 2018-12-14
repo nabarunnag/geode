@@ -6529,10 +6529,9 @@ public class Oplog implements CompactableOplog, Flushable {
     }
 
     public String debugStr() {
-      StringBuilder sb = new StringBuilder();
-      sb.append(" opcode=").append(this.opCode).append(" len=").append(this.value.getLength())
-          .append(" vb=").append(this.value.getBytesAsString());
-      return sb.toString();
+      String sb = " opcode=" + this.opCode + " len=" + this.value.getLength()
+          + " vb=" + this.value.getBytesAsString();
+      return sb;
     }
 
     private void write(OplogFile olf, ValueWrapper vw) throws IOException {

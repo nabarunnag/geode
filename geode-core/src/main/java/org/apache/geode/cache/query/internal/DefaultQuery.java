@@ -744,16 +744,15 @@ public class DefaultQuery implements Query {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder("Query String = ");
-    sb.append(this.queryString);
-    sb.append(';');
-    sb.append("isCancelled = ");
-    sb.append(this.isCanceled());
-    sb.append("; Total Executions = ");
-    sb.append(this.numExecutions);
-    sb.append("; Total Execution Time = ");
-    sb.append(this.totalExecutionTime);
-    return sb.toString();
+    String sb = "Query String = " + this.queryString
+        + ';'
+        + "isCancelled = "
+        + this.isCanceled()
+        + "; Total Executions = "
+        + this.numExecutions
+        + "; Total Execution Time = "
+        + this.totalExecutionTime;
+    return sb;
   }
 
   void setProxyCache(ProxyCache proxyCache) {

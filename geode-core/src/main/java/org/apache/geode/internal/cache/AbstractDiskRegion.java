@@ -919,49 +919,49 @@ public abstract class AbstractDiskRegion implements DiskRegionView {
 
     sb.append(name);
     sb.append(lineSeparator);
-    sb.append("lru=" + getEvictionAttributes().getAlgorithm());
+    sb.append("lru=").append(getEvictionAttributes().getAlgorithm());
     sb.append(lineSeparator);
 
     if (!getEvictionAttributes().getAlgorithm().isNone()) {
-      sb.append("lruAction=" + getEvictionAttributes().getAction());
+      sb.append("lruAction=").append(getEvictionAttributes().getAction());
       sb.append(lineSeparator);
 
       if (!getEvictionAttributes().getAlgorithm().isLRUHeap()) {
-        sb.append("lruAction=" + getEvictionAttributes().getAction());
+        sb.append("lruAction=").append(getEvictionAttributes().getAction());
         sb.append(lineSeparator);
       }
     }
 
-    sb.append("-concurrencyLevel=" + getConcurrencyLevel());
+    sb.append("-concurrencyLevel=").append(getConcurrencyLevel());
     sb.append(lineSeparator);
-    sb.append("-initialCapacity=" + getInitialCapacity());
+    sb.append("-initialCapacity=").append(getInitialCapacity());
     sb.append(lineSeparator);
-    sb.append("-loadFactor=" + getLoadFactor());
+    sb.append("-loadFactor=").append(getLoadFactor());
     sb.append(lineSeparator);
-    sb.append("-offHeap=" + getOffHeap());
+    sb.append("-offHeap=").append(getOffHeap());
     sb.append(lineSeparator);
-    sb.append(
-        "-compressor=" + (getCompressorClassName() == null ? "none" : getCompressorClassName()));
+    sb.append("-compressor=")
+        .append(getCompressorClassName() == null ? "none" : getCompressorClassName());
     sb.append(lineSeparator);
-    sb.append("-statisticsEnabled=" + getStatisticsEnabled());
+    sb.append("-statisticsEnabled=").append(getStatisticsEnabled());
     sb.append(lineSeparator);
 
     if (logger.isTraceEnabled(LogMarker.PERSIST_RECOVERY_VERBOSE)) {
-      sb.append("drId=" + getId());
+      sb.append("drId=").append(getId());
       sb.append(lineSeparator);
-      sb.append("isBucket=" + isBucket());
+      sb.append("isBucket=").append(isBucket());
       sb.append(lineSeparator);
-      sb.append("clearEntryId=" + getClearOplogEntryId());
+      sb.append("clearEntryId=").append(getClearOplogEntryId());
       sb.append(lineSeparator);
-      sb.append("MyInitializingID=<" + getMyInitializingID() + ">");
+      sb.append("MyInitializingID=<").append(getMyInitializingID()).append(">");
       sb.append(lineSeparator);
-      sb.append("MyPersistentID=<" + getMyPersistentID() + ">");
+      sb.append("MyPersistentID=<").append(getMyPersistentID()).append(">");
       sb.append(lineSeparator);
-      sb.append("onlineMembers=" + getOnlineMembers());
+      sb.append("onlineMembers=").append(getOnlineMembers());
       sb.append(lineSeparator);
-      sb.append("offlineMembers=" + getOfflineMembers());
+      sb.append("offlineMembers=").append(getOfflineMembers());
       sb.append(lineSeparator);
-      sb.append("equalsMembers=" + getOfflineAndEqualMembers());
+      sb.append("equalsMembers=").append(getOfflineAndEqualMembers());
       sb.append(lineSeparator);
       sb.append("flags=").append(getFlags());
       sb.append(lineSeparator);

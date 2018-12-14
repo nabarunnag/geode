@@ -75,7 +75,7 @@ public class StatAlertNotification extends StatAlert
     StringBuffer buf = new StringBuffer();
     buf.append("[");
     for (int i = 0; i < getValues().length; i++) {
-      buf.append(getValues()[i] + ", ");
+      buf.append(getValues()[i]).append(", ");
     }
     buf.append("]");
     return Integer.valueOf(getDefinitionId()) + ":" + buf.toString();
@@ -94,7 +94,8 @@ public class StatAlertNotification extends StatAlert
     buf.append("\n");
     buf.append("[ ");
     for (int i = 0; i < getValues().length; i++) {
-      buf.append(defn.getStatisticInfo()[i].toString() + "=" + getValues()[i] + "\n");
+      buf.append(defn.getStatisticInfo()[i].toString()).append("=").append(getValues()[i])
+          .append("\n");
     }
     buf.append("]");
     return getTime().toString() + ":" + buf.toString();

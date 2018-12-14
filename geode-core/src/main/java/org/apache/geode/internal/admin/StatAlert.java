@@ -37,15 +37,15 @@ public class StatAlert implements Serializable {
   public String toString() {
     StringBuffer sb = new StringBuffer();
     sb.append("StatAlert[");
-    sb.append("def=" + definitionId);
-    sb.append("; values (" + values.length + ") = [");
+    sb.append("def=").append(definitionId);
+    sb.append("; values (").append(values.length).append(") = [");
     for (int i = 0; i < values.length; i++) {
       sb.append(values[i].toString());
       if (i != values.length - 1) {
         sb.append(", ");
       }
     } // for
-    sb.append("]; time = " + time.toString());
+    sb.append("]; time = ").append(time.toString());
     sb.append("]");
     return sb.toString();
   }

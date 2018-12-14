@@ -253,7 +253,7 @@ public class ExplicitConnectionSourceImpl implements ConnectionSource {
       Iterator it = serverList.iterator();
       while (it.hasNext()) {
         ServerLocation loc = (ServerLocation) it.next();
-        sb.append(loc.getHostName() + ":" + loc.getPort());
+        sb.append(loc.getHostName()).append(":").append(loc.getPort());
         if (it.hasNext()) {
           sb.append(",");
         }
@@ -265,8 +265,7 @@ public class ExplicitConnectionSourceImpl implements ConnectionSource {
 
   @Override
   public ArrayList<ServerLocation> getAllServers() {
-    ArrayList<ServerLocation> list = new ArrayList<ServerLocation>();
-    list.addAll(this.serverList);
+    ArrayList<ServerLocation> list = new ArrayList<ServerLocation>(this.serverList);
     return list;
   }
 

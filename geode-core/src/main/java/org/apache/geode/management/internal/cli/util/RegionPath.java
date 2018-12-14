@@ -15,6 +15,7 @@
 package org.apache.geode.management.internal.cli.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -75,10 +76,8 @@ public class RegionPath {
     // Ignore preceding separator if there is one
     int start = regionsOnPath[0] == null || regionsOnPath[0].isEmpty() ? 1 : 0;
 
-    List<String> regions = new ArrayList<>();
-    for (int i = start; i < regionsOnPath.length; i++) {
-      regions.add(regionsOnPath[i]);
-    }
+    List<String> regions =
+        new ArrayList<>(Arrays.asList(regionsOnPath).subList(start, regionsOnPath.length));
 
     return regions.toArray(new String[] {});
   }

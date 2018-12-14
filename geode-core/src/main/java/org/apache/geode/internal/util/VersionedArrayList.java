@@ -190,9 +190,9 @@ public class VersionedArrayList implements DataSerializable, Versionable, Iterab
       // vh = this.vhist;
     }
     StringBuffer sb = new StringBuffer();
-    sb.append("ArrayList version = " + getVersion() + " Elements = { ");
+    sb.append("ArrayList version = ").append(getVersion()).append(" Elements = { ");
     for (int i = 0; i < l.size(); i++) {
-      sb.append(l.get(i).toString() + ", ");
+      sb.append(l.get(i).toString()).append(", ");
     }
     // sb.append("vhist:\n " + vh);
     sb.append("}");

@@ -368,9 +368,7 @@ public class Helper {
     if ("".equals(keys[0]))
       return synonyms;
 
-    for (int i = 1; i < keys.length; i++) {
-      synonyms.add(keys[i]);
-    }
+    synonyms.addAll(Arrays.asList(keys).subList(1, keys.length));
     return synonyms;
   }
 

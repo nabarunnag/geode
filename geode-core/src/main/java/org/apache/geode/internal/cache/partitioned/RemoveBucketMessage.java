@@ -212,11 +212,10 @@ public class RemoveBucketMessage extends PartitionMessage {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("RemoveBucketReplyMessage ").append("processorid=").append(this.processorId)
-          .append(" removed=").append(this.removed).append(" reply to sender ")
-          .append(this.getSender());
-      return sb.toString();
+      String sb = "RemoveBucketReplyMessage " + "processorid=" + this.processorId
+          + " removed=" + this.removed + " reply to sender "
+          + this.getSender();
+      return sb;
     }
   }
 

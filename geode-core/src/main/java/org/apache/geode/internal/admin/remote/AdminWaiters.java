@@ -80,15 +80,14 @@ public class AdminWaiters {
         if (!gotResponse) {
           if (dm.isCurrentMember(msg.getRecipient())) { // still here?
             // no one ever replied
-            StringBuffer sb = new StringBuffer("Administration request ");
-            sb.append(msg);
-            sb.append(" sent to ");
-            sb.append(msg.getRecipient());
-            sb.append(" timed out after ");
-            sb.append((timeout / 1000));
-            sb.append(" seconds.");
 
-            throw new RuntimeAdminException(sb.toString());
+            String sb = "Administration request " + msg
+                + " sent to "
+                + msg.getRecipient()
+                + " timed out after "
+                + (timeout / 1000)
+                + " seconds.";
+            throw new RuntimeAdminException(sb);
           } // still here?
           // recipient vanished
           String s = " (" + msg + ")";

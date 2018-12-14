@@ -721,7 +721,7 @@ public class InitialImageOperation {
           // member(s) These will either be DistributedMember IDs or DiskStore IDs
           RequestSyncMessage msg = new RequestSyncMessage();
           msg.regionPath = this.region.getFullPath();
-          msg.lostVersionSources = needsSync.toArray(new VersionSource[needsSync.size()]);
+          msg.lostVersionSources = needsSync.toArray(new VersionSource[0]);
           Set recipients = this.region.getCacheDistributionAdvisor().adviseReplicates();
           for (Iterator it = recipients.iterator(); it.hasNext();) {
             InternalDistributedMember mbr = (InternalDistributedMember) it.next();
@@ -2375,10 +2375,9 @@ public class InitialImageOperation {
     @Override
     public String toString() {
       String cname = getClass().getName().substring(getClass().getPackage().getName().length() + 1);
-      StringBuffer sb = new StringBuffer();
-      sb.append("<" + cname + " " + this.getProcessorId());
-      sb.append(" ,from " + membersToString() + ">");
-      return sb.toString();
+      String sb = "<" + cname + " " + this.getProcessorId()
+          + " ,from " + membersToString() + ">";
+      return sb;
     }
 
     @Override

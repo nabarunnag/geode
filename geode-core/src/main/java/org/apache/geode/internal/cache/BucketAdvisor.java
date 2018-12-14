@@ -1774,7 +1774,7 @@ public class BucketAdvisor extends CacheDistributionAdvisor {
           getAdvisee().getName(), primaryMembers);
     }
     return (InternalDistributedMember[]) primaryMembers
-        .toArray(new InternalDistributedMember[primaryMembers.size()]);
+        .toArray(new InternalDistributedMember[0]);
   }
 
   /**
@@ -2321,9 +2321,9 @@ public class BucketAdvisor extends CacheDistributionAdvisor {
     @Override
     public void fillInToString(StringBuilder sb) {
       super.fillInToString(sb);
-      sb.append("; isPrimary=" + this.isPrimary);
-      sb.append("; isHosting=" + this.isHosting);
-      sb.append("; isInitializing=" + this.isInitializing);
+      sb.append("; isPrimary=").append(this.isPrimary);
+      sb.append("; isHosting=").append(this.isHosting);
+      sb.append("; isInitializing=").append(this.isInitializing);
     }
 
     @Override
@@ -2374,8 +2374,8 @@ public class BucketAdvisor extends CacheDistributionAdvisor {
     public void fillInToString(StringBuilder sb) {
       super.fillInToString(sb);
       for (BucketServerLocation66 location : bucketServerLocations) {
-        sb.append("; hostName=" + location.getHostName());
-        sb.append("; port=" + location.getPort());
+        sb.append("; hostName=").append(location.getHostName());
+        sb.append("; port=").append(location.getPort());
       }
     }
 

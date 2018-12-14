@@ -26,9 +26,11 @@ public class CLIConsoleBufferUtil {
       int bufferLength = reader.getCursorBuffer().length();
       if (bufferLength > messege.length()) {
         int appendSpaces = bufferLength - messege.length();
+        StringBuilder messegeBuilder = new StringBuilder(messege);
         for (int i = 0; i < appendSpaces; i++) {
-          messege = messege + " ";
+          messegeBuilder.append(" ");
         }
+        messege = messegeBuilder.toString();
       }
     }
     return messege;

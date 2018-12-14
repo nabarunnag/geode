@@ -80,7 +80,7 @@ public class ConfigurationResponse implements DataSerializableFixedID {
     StringBuffer sb = new StringBuffer();
     Set<String> configNames = requestedConfiguration.keySet();
     for (String configName : configNames) {
-      sb.append("\n" + requestedConfiguration.get(configName));
+      sb.append("\n").append(requestedConfiguration.get(configName));
     }
     return sb.toString();
   }
@@ -100,7 +100,7 @@ public class ConfigurationResponse implements DataSerializableFixedID {
 
         if (config != null) {
           sb.append("\n***************************************************************");
-          sb.append("\nConfiguration for  '" + configType + "'");
+          sb.append("\nConfiguration for  '").append(configType).append("'");
           sb.append("\n\nJar files to deployed");
 
           Set<String> jarNames = config.getJarNames();
@@ -108,13 +108,13 @@ public class ConfigurationResponse implements DataSerializableFixedID {
           int jarCounter = 0;
 
           while (jarIter.hasNext()) {
-            sb.append("\n" + ++jarCounter + "." + jarIter.next());
+            sb.append("\n").append(++jarCounter).append(".").append(jarIter.next());
           }
 
           try {
             String cacheXmlContent = config.getCacheXmlContent();
             if (StringUtils.isNotBlank(cacheXmlContent)) {
-              sb.append("\n" + XmlUtils.prettyXml(cacheXmlContent));
+              sb.append("\n").append(XmlUtils.prettyXml(cacheXmlContent));
             }
           } catch (IOException | TransformerFactoryConfigurationError | TransformerException
               | SAXException | ParserConfigurationException e) {

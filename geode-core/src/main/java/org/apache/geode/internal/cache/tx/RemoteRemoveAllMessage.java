@@ -398,7 +398,7 @@ public class RemoteRemoveAllMessage extends RemoteOperationMessageWithDirectRepl
       buff.append("; bridgeContext=").append(this.bridgeContext);
     }
     for (int i = 0; i < removeAllDataCount; i++) {
-      buff.append("; entry" + i + ":")
+      buff.append("; entry").append(i).append(":")
           .append(removeAllData[i] == null ? "null" : removeAllData[i].getKey());
     }
   }
@@ -476,10 +476,9 @@ public class RemoteRemoveAllMessage extends RemoteOperationMessageWithDirectRepl
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("RemoveAllReplyMessage ").append(" processorid=").append(this.processorId)
-          .append(" returning versionTags=").append(this.versions);
-      return sb.toString();
+      String sb = "RemoveAllReplyMessage " + " processorid=" + this.processorId
+          + " returning versionTags=" + this.versions;
+      return sb;
     }
 
   }

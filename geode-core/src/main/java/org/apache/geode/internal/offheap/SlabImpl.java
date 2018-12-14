@@ -57,11 +57,10 @@ public class SlabImpl implements Slab {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder(getClass().getSimpleName());
-    sb.append("{");
-    sb.append("MemoryAddress=").append(getMemoryAddress());
-    sb.append(", Size=").append(getSize());
-    sb.append("}");
-    return sb.toString();
+    String sb = getClass().getSimpleName() + "{"
+        + "MemoryAddress=" + getMemoryAddress()
+        + ", Size=" + getSize()
+        + "}";
+    return sb;
   }
 }

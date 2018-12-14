@@ -411,14 +411,13 @@ public abstract class StreamingOperation {
 
     @Override
     public String toString() {
-      StringBuffer buff = new StringBuffer();
-      buff.append(getClass().getName());
-      buff.append("'; sender=");
-      buff.append(getSender());
-      buff.append("; processorId=");
-      buff.append(this.processorId);
-      buff.append(")");
-      return buff.toString();
+      String buff = getClass().getName()
+          + "'; sender="
+          + getSender()
+          + "; processorId="
+          + this.processorId
+          + ")";
+      return buff;
     }
   }
 

@@ -258,10 +258,9 @@ public class DistTXPrecommitMessage extends TXMessage {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("DistTXPhaseOneCommitReplyMessage").append("processorid=").append(this.processorId)
-          .append(" reply to sender ").append(this.getSender());
-      return sb.toString();
+      String sb = "DistTXPhaseOneCommitReplyMessage" + "processorid=" + this.processorId
+          + " reply to sender " + this.getSender();
+      return sb;
     }
 
     public DistTxPrecommitResponse getCommitResponse() {

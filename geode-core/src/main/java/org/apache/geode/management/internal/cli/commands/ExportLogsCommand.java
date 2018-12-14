@@ -133,13 +133,13 @@ public class ExportLogsCommand extends InternalGfshCommand {
         }
         // then check if total estimated file size exceeds user specified value
         if (totalEstimatedExportSize > userSpecifiedLimit) {
-          StringBuilder sb = new StringBuilder();
-          sb.append("Estimated exported logs expanded file size = ")
-              .append(totalEstimatedExportSize).append(", ")
-              .append(CliStrings.EXPORT_LOGS__FILESIZELIMIT).append(" = ")
-              .append(userSpecifiedLimit).append(
-                  ". To disable exported logs file size check use option \"--file-size-limit=0\".");
-          return ResultBuilder.createUserErrorResult(sb.toString());
+          String sb = "Estimated exported logs expanded file size = "
+              + totalEstimatedExportSize + ", "
+              + CliStrings.EXPORT_LOGS__FILESIZELIMIT + " = "
+              + userSpecifiedLimit
+              + ". To disable exported logs file size check use option \"--file-size-limit=0\".";
+          return ResultBuilder.createUserErrorResult(
+              sb);
         }
       }
 

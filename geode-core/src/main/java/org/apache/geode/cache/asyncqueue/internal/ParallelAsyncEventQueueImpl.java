@@ -130,13 +130,12 @@ public class ParallelAsyncEventQueueImpl extends AbstractGatewaySender {
 
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer();
-    sb.append("ParallelGatewaySender{");
-    sb.append("id=" + getId());
-    sb.append(",remoteDsId=" + getRemoteDSId());
-    sb.append(",isRunning =" + isRunning());
-    sb.append("}");
-    return sb.toString();
+    String sb = "ParallelGatewaySender{"
+        + "id=" + getId()
+        + ",remoteDsId=" + getRemoteDSId()
+        + ",isRunning =" + isRunning()
+        + "}";
+    return sb;
   }
 
   public void fillInProfile(Profile profile) {

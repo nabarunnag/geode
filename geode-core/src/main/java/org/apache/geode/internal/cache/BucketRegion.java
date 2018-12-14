@@ -1561,9 +1561,9 @@ public class BucketRegion extends DistributedRegion implements Bucket {
 
   @Override
   public String toString() {
-    return new StringBuilder().append("BucketRegion").append("[path='").append(getFullPath())
-        .append(";serial=").append(getSerialNumber()).append(";primary=")
-        .append(getBucketAdvisor().getProxyBucketRegion().isPrimary()).append("]").toString();
+    return "BucketRegion" + "[path='" + getFullPath()
+        + ";serial=" + getSerialNumber() + ";primary="
+        + getBucketAdvisor().getProxyBucketRegion().isPrimary() + "]";
   }
 
   @Override

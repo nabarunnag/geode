@@ -2033,11 +2033,10 @@ public class TXEntryState implements Releasable {
 
   @Override
   public String toString() {
-    StringBuilder str = new StringBuilder();
-    str.append("{").append(super.toString()).append(" ");
-    str.append(this.op);
-    str.append("}");
-    return str.toString();
+    String str = "{" + super.toString() + " "
+        + this.op
+        + "}";
+    return str;
   }
 
   public DistTxThinEntryState getDistTxEntryStates() {
@@ -2090,12 +2089,11 @@ public class TXEntryState implements Releasable {
 
     @Override
     public String toString() {
-      StringBuilder buf = new StringBuilder();
-      buf.append("DistTxThinEntryState: ");
-      buf.append(" ,regionVersion=" + this.regionVersion);
-      buf.append(" ,tailKey=" + this.tailKey);
-      buf.append(" ,memberID=" + this.memberID);
-      return buf.toString();
+      String buf = "DistTxThinEntryState: "
+          + " ,regionVersion=" + this.regionVersion
+          + " ,tailKey=" + this.tailKey
+          + " ,memberID=" + this.memberID;
+      return buf;
     }
 
     public long getRegionVersion() {

@@ -517,9 +517,9 @@ public class ClientProxyMembershipID
     if (id.indexOf('/') >= 0) {
       id = id.replace('/', ':');
     }
-    StringBuffer buffer = new StringBuffer().append("_gfe_").append(isDurable() ? "" : "non_")
-        .append("durable_client_").append("with_id_" + id).append("_").append(this.uniqueId);
-    return buffer.toString();
+    String buffer = "_gfe_" + (isDurable() ? "" : "non_")
+        + "durable_client_" + "with_id_" + id + "_" + this.uniqueId;
+    return buffer;
   }
 
   /**

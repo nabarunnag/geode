@@ -412,11 +412,10 @@ public class TableBuilder {
       // This can happen because colSizes are re-computed
       // to fit the screen width
       if (this.stringValue.length() > colWidth) {
-        StringBuilder stringBuffer = new StringBuilder();
         int endIndex = colWidth - 2;
         if (endIndex < 0)
           return "";
-        return stringBuffer.append(stringValue.substring(0, endIndex)).append("..").toString();
+        return stringValue.substring(0, endIndex) + "..";
       }
 
       int numSpaces = colWidth - this.stringValue.length();

@@ -227,21 +227,19 @@ public class IndexDetails implements Comparable<IndexDetails>, Serializable {
 
   @Override
   public String toString() {
-    final StringBuilder buffer = new StringBuilder(getClass().getSimpleName());
 
-    buffer.append(" {fromClause = ").append(getFromClause());
-    buffer.append(", indexExpression = ").append(getIndexedExpression());
-    buffer.append(", indexName = ").append(getIndexName());
-    buffer.append(", indexType = ").append(getIndexType().getName());
-    buffer.append(", memberId = ").append(getMemberId());
-    buffer.append(", memberName = ").append(getMemberName());
-    buffer.append(", regionName = ").append(getRegionName());
-    buffer.append(", regionPath = ").append(getRegionPath());
-    buffer.append(", isValid = ").append(getIsValid());
-    buffer.append(", projectAttributes = ").append(getProjectionAttributes());
-    buffer.append("}");
-
-    return buffer.toString();
+    String buffer = getClass().getSimpleName() + " {fromClause = " + getFromClause()
+        + ", indexExpression = " + getIndexedExpression()
+        + ", indexName = " + getIndexName()
+        + ", indexType = " + getIndexType().getName()
+        + ", memberId = " + getMemberId()
+        + ", memberName = " + getMemberName()
+        + ", regionName = " + getRegionName()
+        + ", regionPath = " + getRegionPath()
+        + ", isValid = " + getIsValid()
+        + ", projectAttributes = " + getProjectionAttributes()
+        + "}";
+    return buffer;
   }
 
   public static class IndexStatisticsDetails implements Serializable {
@@ -294,16 +292,14 @@ public class IndexDetails implements Comparable<IndexDetails>, Serializable {
 
     @Override
     public String toString() {
-      final StringBuilder buffer = new StringBuilder(getClass().getSimpleName());
 
-      buffer.append(" {numberOfKeys = ").append(getNumberOfKeys());
-      buffer.append(", numberOfUpdates = ").append(getNumberOfUpdates());
-      buffer.append(", numberOfValues = ").append(getNumberOfValues());
-      buffer.append(", totalUpdateTime = ").append(getTotalUpdateTime());
-      buffer.append(", totalUses").append(getTotalUses());
-      buffer.append("}");
-
-      return buffer.toString();
+      String buffer = getClass().getSimpleName() + " {numberOfKeys = " + getNumberOfKeys()
+          + ", numberOfUpdates = " + getNumberOfUpdates()
+          + ", numberOfValues = " + getNumberOfValues()
+          + ", totalUpdateTime = " + getTotalUpdateTime()
+          + ", totalUses" + getTotalUses()
+          + "}";
+      return buffer;
     }
   }
 }

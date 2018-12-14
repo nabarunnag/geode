@@ -272,11 +272,10 @@ public class SizeMessage extends PartitionMessage {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append(this.getClass().getName()).append(" processorid=").append(this.processorId)
-          .append(" reply to sender ").append(this.getSender())
-          .append(" returning bucketSizes.size=").append(getBucketSizes().size());
-      return sb.toString();
+      String sb = this.getClass().getName() + " processorid=" + this.processorId
+          + " reply to sender " + this.getSender()
+          + " returning bucketSizes.size=" + getBucketSizes().size();
+      return sb;
     }
 
     public Map<Integer, SizeEntry> getBucketSizes() {

@@ -148,7 +148,7 @@ public class MemoryBlockNode implements MemoryBlock {
         if (ba.length < 1024) {
           sb.append(Arrays.toString(ba));
         } else {
-          sb.append("<byte array of length " + ba.length + ">");
+          sb.append("<byte array of length ").append(ba.length).append(">");
         }
       } else {
         sb.append(dataValue);

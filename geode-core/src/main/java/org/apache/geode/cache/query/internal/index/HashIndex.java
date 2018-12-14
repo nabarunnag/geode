@@ -948,13 +948,12 @@ public class HashIndex extends AbstractIndex {
     }
 
     public String toString() {
-      StringBuilder sb = new StringBuilder();
-      sb.append("No Keys = ").append(getNumberOfKeys()).append(getLineSeparator());
-      sb.append("No Values = ").append(getNumberOfValues()).append(getLineSeparator());
-      sb.append("No Uses = ").append(getTotalUses()).append(getLineSeparator());
-      sb.append("No Updates = ").append(getNumUpdates()).append(getLineSeparator());
-      sb.append("Total Update time = ").append(getTotalUpdateTime()).append(getLineSeparator());
-      return sb.toString();
+      String sb = "No Keys = " + getNumberOfKeys() + getLineSeparator()
+          + "No Values = " + getNumberOfValues() + getLineSeparator()
+          + "No Uses = " + getTotalUses() + getLineSeparator()
+          + "No Updates = " + getNumUpdates() + getLineSeparator()
+          + "Total Update time = " + getTotalUpdateTime() + getLineSeparator();
+      return sb;
     }
   }
 

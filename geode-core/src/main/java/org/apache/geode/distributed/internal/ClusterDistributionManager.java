@@ -18,6 +18,7 @@ import java.io.NotSerializableException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -2837,13 +2838,11 @@ public class ClusterDistributionManager implements DistributionManager {
       }
 
       logger.fatal(String.format("While pushing message <%s> to %s",
-          new Object[] {message, receiver}),
+          message, receiver),
           ex);
       if (message == null || message.forAll())
         return null;
-      result = new HashSet<>();
-      for (int i = 0; i < message.getRecipients().length; i++)
-        result.add(message.getRecipients()[i]);
+      result = new HashSet<>(Arrays.asList(message.getRecipients()));
       return result;
     }
     return result;

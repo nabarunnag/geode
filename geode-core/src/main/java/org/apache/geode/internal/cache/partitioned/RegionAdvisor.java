@@ -1318,8 +1318,7 @@ public class RegionAdvisor extends CacheDistributionAdvisor {
         System.arraycopy(oa, 0, a, 0, oa.length);
       }
 
-      for (int i = 0; i < oa.length; i++)
-        a[i] = oa[i];
+      System.arraycopy(oa, 0, a, 0, oa.length);
 
       if (a.length > oa.length)
         a[oa.length] = null;

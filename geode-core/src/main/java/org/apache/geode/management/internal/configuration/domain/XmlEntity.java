@@ -184,10 +184,9 @@ public class XmlEntity implements VersionedDataSerializable {
     this.childNamespace = childNamespace;
     this.attributes.put(key, value);
 
-    StringBuilder sb = new StringBuilder();
-    sb.append("//").append(this.parentType);
-    sb.append('/').append(childPrefix).append(':').append(this.type);
-    this.searchString = sb.toString();
+    String sb = "//" + this.parentType
+        + '/' + childPrefix + ':' + this.type;
+    this.searchString = sb;
     this.xmlDefinition = parseXmlForDefinition();
   }
 

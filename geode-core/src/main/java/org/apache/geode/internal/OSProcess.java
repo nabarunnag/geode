@@ -483,7 +483,8 @@ public class OSProcess {
   private static void formatThreadInfo(ThreadInfo t, PrintWriter pw) {
     // this is largely copied from the JDK's ThreadInfo.java, but it limits the
     // stacks to 8 elements
-    pw.append("\"" + t.getThreadName() + "\"" + " tid=0x" + Long.toHexString(t.getThreadId()));
+    pw.append("\"").append(t.getThreadName()).append("\"").append(" tid=0x")
+        .append(Long.toHexString(t.getThreadId()));
     // this is in the stack trace elements so we don't need to add it
     // if (t.getLockName() != null) {
     // pw.append(" ");
@@ -499,30 +500,31 @@ public class OSProcess {
       pw.append(" (in native)");
     }
     if (t.getLockOwnerName() != null) {
-      pw.append(" owned by \"" + t.getLockOwnerName() + "\" tid=0x"
-          + Long.toHexString(t.getLockOwnerId()));
+      pw.append(" owned by \"").append(t.getLockOwnerName()).append("\" tid=0x")
+          .append(Long.toHexString(t.getLockOwnerId()));
     }
     pw.append('\n');
-    pw.append("    java.lang.Thread.State: " + t.getThreadState() + "\n");
+    pw.append("    java.lang.Thread.State: ").append(String.valueOf(t.getThreadState()))
+        .append("\n");
     int i = 0;
     StackTraceElement[] stackTrace = t.getStackTrace();
     for (; i < stackTrace.length && i < MAX_STACK_FRAMES; i++) {
       StackTraceElement ste = stackTrace[i];
-      pw.append("\tat " + ste.toString());
+      pw.append("\tat ").append(ste.toString());
       pw.append('\n');
       if (i == 0 && t.getLockInfo() != null) {
         Thread.State ts = t.getThreadState();
         switch (ts) {
           case BLOCKED:
-            pw.append("\t-  blocked on " + t.getLockInfo());
+            pw.append("\t-  blocked on ").append(String.valueOf(t.getLockInfo()));
             pw.append('\n');
             break;
           case WAITING:
-            pw.append("\t-  waiting on " + t.getLockInfo());
+            pw.append("\t-  waiting on ").append(String.valueOf(t.getLockInfo()));
             pw.append('\n');
             break;
           case TIMED_WAITING:
-            pw.append("\t-  waiting on " + t.getLockInfo());
+            pw.append("\t-  waiting on ").append(String.valueOf(t.getLockInfo()));
             pw.append('\n');
             break;
           default:
@@ -531,7 +533,7 @@ public class OSProcess {
 
       for (MonitorInfo mi : t.getLockedMonitors()) {
         if (mi.getLockedStackDepth() == i) {
-          pw.append("\t-  locked " + mi);
+          pw.append("\t-  locked ").append(String.valueOf(mi));
           pw.append('\n');
         }
       }
@@ -543,10 +545,10 @@ public class OSProcess {
 
     LockInfo[] locks = t.getLockedSynchronizers();
     if (locks.length > 0) {
-      pw.append("\n\tNumber of locked synchronizers = " + locks.length);
+      pw.append("\n\tNumber of locked synchronizers = ").append(String.valueOf(locks.length));
       pw.append('\n');
       for (LockInfo li : locks) {
-        pw.append("\t- " + li);
+        pw.append("\t- ").append(String.valueOf(li));
         pw.append('\n');
       }
     }

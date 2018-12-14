@@ -157,7 +157,7 @@ public class StatisticsTypeXml implements EntityResolver, ErrorHandler {
       Element typeNode = (Element) typeNodes.item(i);
       types.add(extractType(typeNode, statFactory));
     }
-    return (StatisticsType[]) types.toArray(new StatisticsType[types.size()]);
+    return (StatisticsType[]) types.toArray(new StatisticsType[0]);
   }
 
   /**
@@ -175,7 +175,7 @@ public class StatisticsTypeXml implements EntityResolver, ErrorHandler {
       stats.add(extractStat(statNode, statFactory));
     }
     StatisticDescriptor[] descriptors =
-        (StatisticDescriptor[]) stats.toArray(new StatisticDescriptor[stats.size()]);
+        (StatisticDescriptor[]) stats.toArray(new StatisticDescriptor[0]);
     String description = "";
     {
       NodeList descriptionNodes = typeNode.getElementsByTagName("description");

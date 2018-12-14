@@ -103,8 +103,8 @@ public class ReadWriteFile {
         lineCount++;
         foundLogLevelTag = line.startsWith("[");
         if (line.contains("[info ") && !timeRangeCheck) {
-          String stTime = "";
           int spaceCounter = 0;
+          StringBuilder stTimeBuilder = new StringBuilder();
           for (int i = line.indexOf("[info ") + 6; i < line.length(); i++) {
             if (line.charAt(i) == ' ') {
               spaceCounter++;
@@ -112,8 +112,9 @@ public class ReadWriteFile {
             if (spaceCounter > 2) {
               break;
             }
-            stTime = stTime + line.charAt(i);
+            stTimeBuilder.append(line.charAt(i));
           }
+          String stTime = stTimeBuilder.toString();
           SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
           Date d = df.parse(stTime.substring(0, stTime.length() - 4));
           Time fileStartTime = new Time(d.getTime());

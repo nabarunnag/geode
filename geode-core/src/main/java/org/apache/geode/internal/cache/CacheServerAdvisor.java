@@ -159,10 +159,10 @@ public class CacheServerAdvisor extends GridAdvisor {
     public void fillInToString(StringBuilder sb) {
       super.fillInToString(sb);
       if (this.groups != null) {
-        sb.append("; groups=" + Arrays.asList(this.groups));
-        sb.append("; maxConnections=" + maxConnections);
-        sb.append("; initialLoad=" + initialLoad);
-        sb.append("; loadPollInterval=" + getLoadPollInterval());
+        sb.append("; groups=").append(Arrays.asList(this.groups));
+        sb.append("; maxConnections=").append(maxConnections);
+        sb.append("; initialLoad=").append(initialLoad);
+        sb.append("; loadPollInterval=").append(getLoadPollInterval());
       }
     }
   }

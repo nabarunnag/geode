@@ -116,11 +116,10 @@ public class PluckStacks {
           int lineNumber = reader.getLineNumber();
           List<ThreadStack> stacks = getStacks(reader);
           if (stacks.size() > 0) {
-            StringBuffer buffer = new StringBuffer();
-            buffer.append("[Stack #").append(stackNumber++)
-                .append(" from " + logFileName + " line " + lineNumber + "]\n").append(line)
-                .append("\n");
-            result.put(buffer.toString(), stacks);
+            String buffer = "[Stack #" + stackNumber++ + " from " + logFileName
+                + " line " + lineNumber + "]\n" + line
+                + "\n";
+            result.put(buffer, stacks);
           }
           if (ONE_STACK) {
             break;
@@ -556,8 +555,9 @@ public class PluckStacks {
 
     public void writeTo(Writer w) throws IOException {
       if (DEBUG) {
-        w.append("stack.name='" + getThreadName() + "' runnable=" + this.runnable + " lines="
-            + lines.size());
+        w.append("stack.name='").append(getThreadName()).append("' runnable=")
+            .append(String.valueOf(this.runnable)).append(" lines=")
+            .append(String.valueOf(lines.size()));
         w.append("\n");
       }
       boolean first = true;
@@ -577,8 +577,8 @@ public class PluckStacks {
 
     public void appendToBuffer(StringBuffer buffer) {
       if (DEBUG)
-        buffer.append("stack.name='" + getThreadName() + "' runnable=" + this.runnable + " lines="
-            + lines.size()).append("\n");
+        buffer.append("stack.name='").append(getThreadName()).append("' runnable=")
+            .append(this.runnable).append(" lines=").append(lines.size()).append("\n");
       boolean first = true;
       for (String line : lines) {
         buffer.append(line).append("\n");

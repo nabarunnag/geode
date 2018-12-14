@@ -56,7 +56,7 @@ public class PFCountExecutor extends HllExecutor {
     }
 
     HyperLogLogPlus tmp = hlls.remove(0);
-    HyperLogLogPlus[] estimators = hlls.toArray(new HyperLogLogPlus[hlls.size()]);
+    HyperLogLogPlus[] estimators = hlls.toArray(new HyperLogLogPlus[0]);
     try {
       tmp = (HyperLogLogPlus) tmp.merge(estimators);
     } catch (CardinalityMergeException e) {

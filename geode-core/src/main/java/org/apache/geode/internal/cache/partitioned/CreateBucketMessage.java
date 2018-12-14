@@ -281,8 +281,8 @@ public class CreateBucketMessage extends PartitionMessage {
 
     @Override
     public String toString() {
-      return new StringBuffer().append("CreateBucketReplyMessage ").append("processorid=")
-          .append(this.processorId).toString();
+      return "CreateBucketReplyMessage " + "processorid="
+          + this.processorId;
     }
   }
 

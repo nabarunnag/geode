@@ -332,12 +332,12 @@ public class BeanUtilFuncs {
     }
     GZIPInputStream gis = new GZIPInputStream(new ByteArrayInputStream(bytes));
     BufferedReader bf = new BufferedReader(new InputStreamReader(gis, "UTF-8"));
-    String outStr = "";
+    StringBuilder outStr = new StringBuilder();
     String line;
     while ((line = bf.readLine()) != null) {
-      outStr += line;
+      outStr.append(line);
     }
-    return outStr;
+    return outStr.toString();
   }
 
 }

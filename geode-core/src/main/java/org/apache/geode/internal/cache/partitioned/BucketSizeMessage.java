@@ -211,11 +211,10 @@ public class BucketSizeMessage extends PartitionMessage {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("PRDistributedBucketSizeReplyMessage ").append("processorid=")
-          .append(this.processorId).append(" reply to sender ").append(this.getSender())
-          .append(" returning numEntries=").append(getSize());
-      return sb.toString();
+      String sb = "PRDistributedBucketSizeReplyMessage " + "processorid="
+          + this.processorId + " reply to sender " + this.getSender()
+          + " returning numEntries=" + getSize();
+      return sb;
     }
 
     public long getSize() {

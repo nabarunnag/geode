@@ -552,7 +552,7 @@ public class RegionProvider implements Closeable {
   public String dumpRegionsCache() {
     StringBuilder builder = new StringBuilder();
     for (Entry<ByteArrayWrapper, Region<?, ?>> e : this.regions.entrySet()) {
-      builder.append(e.getKey() + " --> {" + e.getValue() + "}\n");
+      builder.append(e.getKey()).append(" --> {").append(e.getValue()).append("}\n");
     }
     return builder.toString();
   }

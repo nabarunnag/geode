@@ -260,11 +260,10 @@ public class DistPeerTXStateStub extends PeerTXStateStub implements DistTXCoordi
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append(super.toString());
-    builder.append(" ,primary txOps=").append(this.primaryTransactionalOperations);
-    builder.append(" ,secondary txOps=").append(this.secondaryTransactionalOperations);
-    return builder.toString();
+    String builder = super.toString()
+        + " ,primary txOps=" + this.primaryTransactionalOperations
+        + " ,secondary txOps=" + this.secondaryTransactionalOperations;
+    return builder;
   }
 
   @Override

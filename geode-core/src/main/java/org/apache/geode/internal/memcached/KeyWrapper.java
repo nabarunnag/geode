@@ -83,10 +83,9 @@ public class KeyWrapper implements DataSerializable {
 
   @Override
   public String toString() {
-    StringBuilder str = new StringBuilder();
-    str.append(getClass().getCanonicalName()).append("@").append(System.identityHashCode(this));
-    str.append(" key:").append(Arrays.toString(this.key));
-    str.append(" hashCode:").append(hashCode());
-    return str.toString();
+    String str = getClass().getCanonicalName() + "@" + System.identityHashCode(this)
+        + " key:" + Arrays.toString(this.key)
+        + " hashCode:" + hashCode();
+    return str;
   }
 }

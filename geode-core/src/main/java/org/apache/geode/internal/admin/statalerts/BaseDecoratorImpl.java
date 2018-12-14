@@ -85,12 +85,11 @@ public abstract class BaseDecoratorImpl implements StatAlertDefinition {
   }
 
   public String getStringRepresentation() {
-    StringBuffer buffer = new StringBuffer();
-    buffer.append("StatAlertDefinition [\n");
-    buffer.append(toString());
-    buffer.append("]");
 
-    return buffer.toString();
+    String buffer = "StatAlertDefinition [\n"
+        + toString()
+        + "]";
+    return buffer;
   }
 
   public boolean evaluate(Number[] params) {

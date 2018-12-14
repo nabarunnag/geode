@@ -135,12 +135,11 @@ public class InterestRegistrationEventImpl implements InterestRegistrationEvent,
 
   @Override // GemStoneAddition
   public String toString() {
-    StringBuffer buffer = new StringBuffer();
-    buffer.append("InterestRegistrationEvent [").append("isRegister=").append(this.isRegister)
-        .append("clientSession=").append(this.clientSession).append("; isRegister=")
-        .append("; regionName=").append(this.regionName).append("; keysOfInterest=")
-        .append(this.keysOfInterest).append("; interestType=")
-        .append(InterestType.getString(this.interestType)).append("]");
-    return buffer.toString();
+    String buffer = "InterestRegistrationEvent [" + "isRegister=" + this.isRegister
+        + "clientSession=" + this.clientSession + "; isRegister="
+        + "; regionName=" + this.regionName + "; keysOfInterest="
+        + this.keysOfInterest + "; interestType="
+        + InterestType.getString(this.interestType) + "]";
+    return buffer;
   }
 }

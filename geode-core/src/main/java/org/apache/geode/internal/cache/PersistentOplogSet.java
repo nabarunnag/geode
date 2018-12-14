@@ -838,12 +838,8 @@ public class PersistentOplogSet implements OplogSet {
     // to fix bug 44336 put them in another collection
     ArrayList<Oplog> oplogsToClear = new ArrayList<Oplog>();
     synchronized (this.oplogIdToOplog) {
-      for (Oplog oplog : this.oplogIdToOplog.values()) {
-        oplogsToClear.add(oplog);
-      }
-      for (Oplog oplog : this.inactiveOplogs.values()) {
-        oplogsToClear.add(oplog);
-      }
+      oplogsToClear.addAll(this.oplogIdToOplog.values());
+      oplogsToClear.addAll(this.inactiveOplogs.values());
       {
         Oplog child = getChild();
         if (child != null) {
@@ -998,15 +994,9 @@ public class PersistentOplogSet implements OplogSet {
   public void basicDestroy(DiskRegion dr) {
     ArrayList<Oplog> oplogsToDestroy = new ArrayList<Oplog>();
     synchronized (this.oplogIdToOplog) {
-      for (Oplog oplog : this.oplogIdToOplog.values()) {
-        oplogsToDestroy.add(oplog);
-      }
-      for (Oplog oplog : this.inactiveOplogs.values()) {
-        oplogsToDestroy.add(oplog);
-      }
-      for (Oplog oplog : this.drfOnlyOplogs.values()) {
-        oplogsToDestroy.add(oplog);
-      }
+      oplogsToDestroy.addAll(this.oplogIdToOplog.values());
+      oplogsToDestroy.addAll(this.inactiveOplogs.values());
+      oplogsToDestroy.addAll(this.drfOnlyOplogs.values());
       {
         Oplog child = getChild();
         if (child != null) {

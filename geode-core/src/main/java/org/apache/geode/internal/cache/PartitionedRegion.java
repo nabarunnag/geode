@@ -6081,9 +6081,7 @@ public class PartitionedRegion extends LocalRegion
     @Override
     public Object[] toArray(Object[] array) {
       List temp = new ArrayList(this.size());
-      for (Iterator iter = this.iterator(); iter.hasNext();) {
-        temp.add(iter.next());
-      }
+      temp.addAll(this);
       if (array == null) {
         return temp.toArray();
       } else {
@@ -6493,8 +6491,7 @@ public class PartitionedRegion extends LocalRegion
     Map<Integer, SizeEntry> bucketSizes = null;
     if (buckets != null) {
       if (this.dataStore != null) {
-        List<Integer> list = new ArrayList<Integer>();
-        list.addAll(buckets);
+        List<Integer> list = new ArrayList<Integer>(buckets);
         bucketSizes = this.dataStore.getSizeLocallyForBuckets(list);
       }
     } else {
@@ -6885,15 +6882,14 @@ public class PartitionedRegion extends LocalRegion
 
   @Override
   public String toString() {
-    return new StringBuffer().append("Partitioned Region ").append("@")
-        .append(Integer.toHexString(hashCode())).append(" [").append("path='").append(getFullPath())
-        .append("'; dataPolicy=").append(this.getDataPolicy()).append("; prId=")
-        .append(this.partitionedRegionId).append("; isDestroyed=").append(this.isDestroyed)
-        .append("; isClosed=").append(this.isClosed).append("; retryTimeout=")
-        .append(this.retryTimeout).append("; serialNumber=").append(getSerialNumber())
-
-        .append("; partition attributes=").append(getPartitionAttributes().toString())
-        .append("; on VM ").append(getMyId()).append("]").toString();
+    return "Partitioned Region " + "@"
+        + Integer.toHexString(hashCode()) + " [" + "path='" + getFullPath()
+        + "'; dataPolicy=" + this.getDataPolicy() + "; prId="
+        + this.partitionedRegionId + "; isDestroyed=" + this.isDestroyed
+        + "; isClosed=" + this.isClosed + "; retryTimeout="
+        + this.retryTimeout + "; serialNumber=" + getSerialNumber()
+        + "; partition attributes=" + getPartitionAttributes().toString()
+        + "; on VM " + getMyId() + "]";
   }
 
   public RegionLock getRegionLock() {
@@ -7896,12 +7892,11 @@ public class PartitionedRegion extends LocalRegion
    * PartitionedRegion.
    */
   public void dumpSelfEntryFromAllPartitionedRegions() {
-    StringBuilder sb = new StringBuilder(this.prRoot.getFullPath());
-    sb.append("Dumping allPartitionedRegions for ");
-    sb.append(this);
-    sb.append("\n");
-    sb.append(this.prRoot.get(getRegionIdentifier()));
-    logger.debug(sb.toString());
+    String sb = this.prRoot.getFullPath() + "Dumping allPartitionedRegions for "
+        + this
+        + "\n"
+        + this.prRoot.get(getRegionIdentifier());
+    logger.debug(sb);
   }
 
   /**
@@ -9258,11 +9253,10 @@ public class PartitionedRegion extends LocalRegion
             HeapEvictor.BUCKET_SORTING_INTERVAL);
       }
     }
-    List<BucketRegion> bucketList = new ArrayList<>();
     if (!bucketSortedOnce.get()) {
       while (bucketSortedOnce.get() == false);
     }
-    bucketList.addAll(this.sortedBuckets);
+    List<BucketRegion> bucketList = new ArrayList<>(this.sortedBuckets);
     return bucketList;
   }
 
@@ -9916,8 +9910,7 @@ public class PartitionedRegion extends LocalRegion
     // and primary nodes have been decided.
     // This is required in case of persistent PR and sender.
     Set<Integer> allBuckets = userPR.getDataStore().getAllLocalBucketIds();
-    Set<Integer> allBucketsClone = new HashSet<Integer>();
-    allBucketsClone.addAll(allBuckets);
+    Set<Integer> allBucketsClone = new HashSet<Integer>(allBuckets);
     while (allBucketsClone.size() != 0) {
       logger.debug(
           "Need to wait until partitionedRegionQueue <<{}>> is loaded with all the buckets",

@@ -493,7 +493,7 @@ public class RangeJunction extends AbstractGroupOrRangeJunction {
                 + ri.getClass().getName() + "'");
       // now do the actual and
 
-      r = new Boolean(((Boolean) r).booleanValue() && ((Boolean) ri).booleanValue());
+      r = (Boolean) r && (Boolean) ri;
 
     }
     return r;

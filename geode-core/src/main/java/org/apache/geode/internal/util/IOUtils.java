@@ -50,12 +50,15 @@ public abstract class IOUtils {
    */
   public static String appendToPath(String pathname, final String... pathElements) {
     if (pathElements != null) {
-      pathname = StringUtils.defaultIfBlank(pathname, File.separator);
 
+      StringBuilder pathnameBuilder =
+          new StringBuilder(StringUtils.defaultIfBlank(pathname, File.separator));
       for (final String pathElement : pathElements) {
-        pathname += (pathname.endsWith(File.separator) ? "" : File.separator);
-        pathname += pathElement;
+        pathnameBuilder
+            .append(pathnameBuilder.toString().endsWith(File.separator) ? "" : File.separator);
+        pathnameBuilder.append(pathElement);
       }
+      pathname = pathnameBuilder.toString();
     }
 
     return pathname;

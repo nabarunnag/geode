@@ -691,7 +691,7 @@ public class SearchLoadAndWriteProcessor implements MembershipListener {
       ArrayList list = new ArrayList(loadCandidatesSet);
       Collections.shuffle(list);
       InternalDistributedMember[] loadCandidates =
-          (InternalDistributedMember[]) list.toArray(new InternalDistributedMember[list.size()]);
+          (InternalDistributedMember[]) list.toArray(new InternalDistributedMember[0]);
       initRemainingTimeout();
 
       RegionAttributes attrs = region.getAttributes();
@@ -911,7 +911,7 @@ public class SearchLoadAndWriteProcessor implements MembershipListener {
     ArrayList list = new ArrayList(writeCandidateSet);
     Collections.shuffle(list);
     InternalDistributedMember[] writeCandidates =
-        (InternalDistributedMember[]) list.toArray(new InternalDistributedMember[list.size()]);
+        (InternalDistributedMember[]) list.toArray(new InternalDistributedMember[0]);
     initRemainingTimeout();
     int index = 0;
     do {

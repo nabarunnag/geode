@@ -427,28 +427,27 @@ public class GemFireMemberStatus implements Serializable {
 
   @Override
   public String toString() {
-    StringBuffer buffer = new StringBuffer();
-    buffer.append("GemFireMemberStatus[").append("isConnected=").append(this._isConnected)
-        .append("; memberName=").append(this._memberName).append("; memberId=")
-        .append(this._memberId).append("; hostAddress=").append(this._hostAddress)
-        .append("; mcastPort=").append(this._mcastPort).append("; mcastAddress=")
-        .append(this._mcastAddress).append("; bindAddress=").append(this._bindAddress)
-        .append("; serverPort=").append(this._serverPort).append("; locators=")
-        .append(this._locators).append("; isClient=").append(this._isClient).append("; isServer=")
-        .append(this._isServer).append("; isGatewayHub=").append(this._isGatewayHub)
-        .append("; isLocator=").append(this._isLocator).append("; isPrimaryGatewayHub=")
-        .append(this._isPrimaryGatewayHub).append("; gatewayHubStatus=")
-        .append(this._gatewayHubStatus).append("; connectedPeers=").append(this._connectedPeers)
-        .append("; connectedServers=").append(this._connectedServers)
-        .append("; unconnectedServers=").append(this._unconnectedServers)
-        .append("; connectedClients=").append(this._connectedClients).append("; clientHostNames=")
-        .append(this._clientHostNames).append("; clientQueueSizes=").append(this._clientQueueSizes)
-        .append("; clientHealthStats=").append(this._clientHealthStats)
-        .append("; gatewayQueueSizes=").append(this._gatewayQueueSizes).append("; regionStatuses=")
-        .append(this._regionStatuses).append("; maximumHeapSize=").append(this._maximumHeapSize)
-        .append("; freeHeapSize=").append(this._freeHeapSize).append("; upTime=")
-        .append(this.upTime).append("]");
-    return buffer.toString();
+    String buffer = "GemFireMemberStatus[" + "isConnected=" + this._isConnected
+        + "; memberName=" + this._memberName + "; memberId="
+        + this._memberId + "; hostAddress=" + this._hostAddress
+        + "; mcastPort=" + this._mcastPort + "; mcastAddress="
+        + this._mcastAddress + "; bindAddress=" + this._bindAddress
+        + "; serverPort=" + this._serverPort + "; locators="
+        + this._locators + "; isClient=" + this._isClient + "; isServer="
+        + this._isServer + "; isGatewayHub=" + this._isGatewayHub
+        + "; isLocator=" + this._isLocator + "; isPrimaryGatewayHub="
+        + this._isPrimaryGatewayHub + "; gatewayHubStatus="
+        + this._gatewayHubStatus + "; connectedPeers=" + this._connectedPeers
+        + "; connectedServers=" + this._connectedServers
+        + "; unconnectedServers=" + this._unconnectedServers
+        + "; connectedClients=" + this._connectedClients + "; clientHostNames="
+        + this._clientHostNames + "; clientQueueSizes=" + this._clientQueueSizes
+        + "; clientHealthStats=" + this._clientHealthStats
+        + "; gatewayQueueSizes=" + this._gatewayQueueSizes + "; regionStatuses="
+        + this._regionStatuses + "; maximumHeapSize=" + this._maximumHeapSize
+        + "; freeHeapSize=" + this._freeHeapSize + "; upTime="
+        + this.upTime + "]";
+    return buffer;
   }
 
   protected void initialize(DistributedSystem distributedSystem) {

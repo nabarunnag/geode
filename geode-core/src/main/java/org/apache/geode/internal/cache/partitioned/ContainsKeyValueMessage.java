@@ -233,10 +233,9 @@ public class ContainsKeyValueMessage extends PartitionMessageWithDirectReply {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("ContainsKeyValueReplyMessage ").append("processorid=").append(this.processorId)
-          .append(" returning ").append(doesItContainKeyValue());
-      return sb.toString();
+      String sb = "ContainsKeyValueReplyMessage " + "processorid=" + this.processorId
+          + " returning " + doesItContainKeyValue();
+      return sb;
     }
 
     public boolean doesItContainKeyValue() {

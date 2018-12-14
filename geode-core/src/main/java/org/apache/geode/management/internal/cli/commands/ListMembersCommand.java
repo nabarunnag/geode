@@ -45,8 +45,8 @@ public class ListMembersCommand extends InternalGfshCommand {
       help = CliStrings.LIST_MEMBER__GROUP__HELP) String[] groups) {
 
     ResultModel crm = new ResultModel();
-    Set<DistributedMember> memberSet = new TreeSet<>();
-    memberSet.addAll(this.findMembersIncludingLocators(groups, null));
+    Set<DistributedMember> memberSet =
+        new TreeSet<>(this.findMembersIncludingLocators(groups, null));
 
     if (memberSet.isEmpty()) {
       crm.addInfo().addLine(CliStrings.LIST_MEMBER__MSG__NO_MEMBER_FOUND);

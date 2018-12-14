@@ -61,11 +61,11 @@ public class SystemMemberBridgeServerJmxImpl extends SystemMemberBridgeServerImp
   private void initializeMBean(SystemMemberCacheImpl cache) throws AdminException {
 
     GemFireVM vm = cache.getVM();
-    this.mbeanName = new StringBuffer("GemFire.Cache:").append("name=")
-        .append(MBeanUtil.makeCompliantMBeanNameProperty(cache.getName())).append(",id=")
-        .append(this.getBridgeId()).append(",owner=")
-        .append(MBeanUtil.makeCompliantMBeanNameProperty(vm.getId().toString()))
-        .append(",type=CacheServer").toString();
+    this.mbeanName = "GemFire.Cache:" + "name="
+        + MBeanUtil.makeCompliantMBeanNameProperty(cache.getName()) + ",id="
+        + this.getBridgeId() + ",owner="
+        + MBeanUtil.makeCompliantMBeanNameProperty(vm.getId().toString())
+        + ",type=CacheServer";
 
     this.objectName = MBeanUtil.createMBean(this);
   }

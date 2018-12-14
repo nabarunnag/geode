@@ -79,19 +79,17 @@ public class EventSequenceID {
   }
 
   public int hashCode() {
-    StringBuilder builder = new StringBuilder();
-    builder.append(this.membershipID);
-    builder.append(this.threadID);
-    builder.append(this.sequenceID);
-    return builder.toString().hashCode();
+    String builder = this.membershipID
+        + this.threadID
+        + this.sequenceID;
+    return builder.hashCode();
   }
 
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("membershipID: " + membershipID);
-    builder.append("; threadID: " + threadID);
-    builder.append("; sequenceID: " + sequenceID);
-    return builder.toString();
+    String builder = "membershipID: " + membershipID
+        + "; threadID: " + threadID
+        + "; sequenceID: " + sequenceID;
+    return builder;
   }
 
 }

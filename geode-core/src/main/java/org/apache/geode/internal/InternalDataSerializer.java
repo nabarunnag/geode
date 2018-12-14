@@ -1337,7 +1337,7 @@ public abstract class InternalDataSerializer extends DataSerializer {
       }
     }
 
-    return (DataSerializer[]) coll.toArray(new DataSerializer[coll.size()]);
+    return (DataSerializer[]) coll.toArray(new DataSerializer[0]);
   }
 
   /**
@@ -1368,7 +1368,7 @@ public abstract class InternalDataSerializer extends DataSerializer {
       coll.add(v);
     }
 
-    return coll.toArray(new SerializerAttributesHolder[coll.size()]);
+    return coll.toArray(new SerializerAttributesHolder[0]);
   }
 
   /**

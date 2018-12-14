@@ -182,7 +182,7 @@ public class SystemAdmin {
     }
     cmdVec.add(hostnameForClientsOption);
 
-    String[] cmd = (String[]) cmdVec.toArray(new String[cmdVec.size()]);
+    String[] cmd = (String[]) cmdVec.toArray(new String[0]);
 
     try {
       // start with a fresh log each time
@@ -585,8 +585,8 @@ public class SystemAdmin {
       Map<InternalDistributedMember, byte[]> dumps =
           msg.dumpStacks(ads.getDistributionManager().getAllOtherMembers(), false, true);
       for (Map.Entry<InternalDistributedMember, byte[]> entry : dumps.entrySet()) {
-        ps.append("--- dump of stack for member " + entry.getKey()
-            + " ------------------------------------------------------------------------------\n");
+        ps.append("--- dump of stack for member ").append(String.valueOf(entry.getKey())).append(
+            " ------------------------------------------------------------------------------\n");
         ps.flush();
         GZIPInputStream zipIn = new GZIPInputStream(new ByteArrayInputStream(entry.getValue()));
         if (allStacks) {
@@ -1174,7 +1174,7 @@ public class SystemAdmin {
       StatArchiveReader reader = null;
       boolean interrupted = false;
       try {
-        reader = new StatArchiveReader((File[]) archiveNames.toArray(new File[archiveNames.size()]),
+        reader = new StatArchiveReader((File[]) archiveNames.toArray(new File[0]),
             specs, !monitor);
         // Runtime.getRuntime().gc(); System.out.println("DEBUG: heap size=" +
         // (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()));

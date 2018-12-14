@@ -59,7 +59,7 @@ public class JmxManagerAdvisor extends DistributionAdvisor {
 
   @Override
   public String toString() {
-    return new StringBuilder().append("JmxManagerAdvisor for " + getAdvisee()).toString();
+    return "JmxManagerAdvisor for " + getAdvisee();
   }
 
   public void broadcastChange() {
@@ -242,11 +242,10 @@ public class JmxManagerAdvisor extends DistributionAdvisor {
 
     @Override
     public String toString() {
-      StringBuilder sb = new StringBuilder();
-      sb.append(getShortClassName()).append(" (processorId=").append(this.processorId)
-          .append("; profile=").append(this.profile);
-      sb.append(")");
-      return sb.toString();
+      String sb = getShortClassName() + " (processorId=" + this.processorId
+          + "; profile=" + this.profile
+          + ")";
+      return sb;
     }
   }
 

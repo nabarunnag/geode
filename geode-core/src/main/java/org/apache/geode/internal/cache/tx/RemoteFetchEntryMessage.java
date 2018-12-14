@@ -238,11 +238,10 @@ public class RemoteFetchEntryMessage extends RemoteOperationMessage {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("FetchEntryReplyMessage ").append("processorid=").append(this.processorId)
-          .append(" reply to sender ").append(this.getSender()).append(" returning value=")
-          .append(this.value);
-      return sb.toString();
+      String sb = "FetchEntryReplyMessage " + "processorid=" + this.processorId
+          + " reply to sender " + this.getSender() + " returning value="
+          + this.value;
+      return sb;
     }
   }
 

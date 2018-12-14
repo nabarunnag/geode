@@ -1059,9 +1059,7 @@ public class TXCommitMessage extends PooledDistributionMessage
 
     @Override
     public String toString() {
-      StringBuilder result = new StringBuilder(256);
-      result.append('@').append(System.identityHashCode(this)).append(' ').append(super.toString());
-      return result.toString();
+      return "@" + System.identityHashCode(this) + ' ' + super.toString();
     }
   }
 
@@ -1732,10 +1730,9 @@ public class TXCommitMessage extends PooledDistributionMessage
 
     @Override
     public String toString() {
-      StringBuilder result = new StringBuilder(128);
-      result.append("CommitProcessForLockIdMessage@").append(System.identityHashCode(this))
-          .append(" lockId=").append(this.lockId);
-      return result.toString();
+      String result = "CommitProcessForLockIdMessage@" + System.identityHashCode(this)
+          + " lockId=" + this.lockId;
+      return result;
     }
   }
 
@@ -1784,10 +1781,9 @@ public class TXCommitMessage extends PooledDistributionMessage
 
     @Override
     public String toString() {
-      StringBuilder result = new StringBuilder(128);
-      result.append("CommitProcessForTXIdMessage@").append(System.identityHashCode(this))
-          .append(" txId=").append(this.txId);
-      return result.toString();
+      String result = "CommitProcessForTXIdMessage@" + System.identityHashCode(this)
+          + " txId=" + this.txId;
+      return result;
     }
   }
 
@@ -1866,12 +1862,11 @@ public class TXCommitMessage extends PooledDistributionMessage
 
     @Override
     public String toString() {
-      StringBuilder result = new StringBuilder(128);
-      result.append("CommitProcessQueryMessage@").append(System.identityHashCode(this))
-          .append(" trackerKeyClass=").append(this.trackerKey.getClass().getName())
-          .append(" trackerKey=").append(this.trackerKey).append(" processorId=")
-          .append(this.processorId);
-      return result.toString();
+      String result = "CommitProcessQueryMessage@" + System.identityHashCode(this)
+          + " trackerKeyClass=" + this.trackerKey.getClass().getName()
+          + " trackerKey=" + this.trackerKey + " processorId="
+          + this.processorId;
+      return result;
     }
   }
 
@@ -1910,11 +1905,10 @@ public class TXCommitMessage extends PooledDistributionMessage
 
     @Override
     public String toString() {
-      StringBuilder result = new StringBuilder(128);
-      result.append("CommitProcessQueryReplyMessage@").append(System.identityHashCode(this))
-          .append(" wasReceived=").append(this.wasReceived).append(" processorId=")
-          .append(this.processorId).append(" from ").append(this.getSender());
-      return result.toString();
+      String result = "CommitProcessQueryReplyMessage@" + System.identityHashCode(this)
+          + " wasReceived=" + this.wasReceived + " processorId="
+          + this.processorId + " from " + this.getSender();
+      return result;
     }
   }
 

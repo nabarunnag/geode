@@ -805,11 +805,10 @@ public class PutAllPRMessage extends PartitionMessageWithDirectReply {
 
     @Override
     public String toString() {
-      StringBuilder sb = new StringBuilder();
-      sb.append("PutAllReplyMessage ").append("processorid=").append(this.processorId)
-          .append(" returning ").append(this.result).append(" exception=").append(getException())
-          .append(" versions= ").append(this.versions);
-      return sb.toString();
+      String sb = "PutAllReplyMessage " + "processorid=" + this.processorId
+          + " returning " + this.result + " exception=" + getException()
+          + " versions= " + this.versions;
+      return sb;
     }
 
   }

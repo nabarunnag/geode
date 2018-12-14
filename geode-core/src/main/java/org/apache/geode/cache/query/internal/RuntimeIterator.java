@@ -269,11 +269,7 @@ public class RuntimeIterator extends AbstractCompiledValue {
   // }
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer();
-    sb.append(this.getClass().getName());
-    sb.append(" (name=" + this.name);
     // if(isDependent)
-    sb.append(" collection expr=" + cmpIteratorDefn);
     // else {
     // sb.append("; collection=" +this.collection + ")");
     // sb.append("; collectionType=" +this.collection.getCollectionType() +
@@ -281,7 +277,10 @@ public class RuntimeIterator extends AbstractCompiledValue {
     // sb.append("; elementType="
     // +this.collection.getCollectionType().getElementType() + ")");
     // }
-    return sb.toString();
+    String sb = this.getClass().getName()
+        + " (name=" + this.name
+        + " collection expr=" + cmpIteratorDefn;
+    return sb;
   }
 
   // Canonicalization

@@ -39,10 +39,9 @@ public class SignalEvent extends EventObject {
 
   @Override
   public String toString() {
-    StringBuilder buffer = new StringBuilder(getClass().getSimpleName());
-    buffer.append("{ signal = ").append(getSignal());
-    buffer.append(", source = ").append(getSource());
-    buffer.append("}");
-    return buffer.toString();
+    String buffer = getClass().getSimpleName() + "{ signal = " + getSignal()
+        + ", source = " + getSource()
+        + "}";
+    return buffer;
   }
 }

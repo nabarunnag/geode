@@ -290,8 +290,7 @@ public class LocatorLoadSnapshot {
     if (groupServers == null || groupServers.isEmpty()) {
       return null;
     }
-    ArrayList servers = new ArrayList();
-    servers.addAll(groupServers.keySet());
+    ArrayList servers = new ArrayList(groupServers.keySet());
     return servers;
   }
 

@@ -661,7 +661,7 @@ public class RemoveAllPRMessage extends PartitionMessageWithDirectReply {
     buff.append("; directAck=").append(this.directAck);
 
     for (int i = 0; i < removeAllPRDataSize; i++) {
-      buff.append("; entry" + i + ":").append(removeAllPRData[i].getKey()).append(",")
+      buff.append("; entry").append(i).append(":").append(removeAllPRData[i].getKey()).append(",")
           .append(removeAllPRData[i].versionTag);
     }
   }
@@ -764,11 +764,10 @@ public class RemoveAllPRMessage extends PartitionMessageWithDirectReply {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("RemoveAllReplyMessage ").append("processorid=").append(this.processorId)
-          .append(" returning ").append(this.result).append(" exception=").append(getException())
-          .append(" versions= ").append(this.versions);
-      return sb.toString();
+      String sb = "RemoveAllReplyMessage " + "processorid=" + this.processorId
+          + " returning " + this.result + " exception=" + getException()
+          + " versions= " + this.versions;
+      return sb;
     }
 
   }

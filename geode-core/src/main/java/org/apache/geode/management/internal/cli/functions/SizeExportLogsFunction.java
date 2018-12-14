@@ -48,11 +48,12 @@ public class SizeExportLogsFunction extends ExportLogsFunction implements Intern
       if (estimatedSize == 0 || estimatedSize < diskAvailable) {
         context.getResultSender().lastResult(estimatedSize);
       } else {
-        StringBuilder sb = new StringBuilder().append("Estimated disk space required (")
-            .append(bytesToString.of(estimatedSize)).append(") to consolidate logs on member ")
-            .append(cache.getName()).append(" will exceed available disk space (")
-            .append(bytesToString.of(diskAvailable)).append(")");
-        context.getResultSender().sendException(new ManagementException(sb.toString())); // FileTooBigException
+        String sb = "Estimated disk space required ("
+            + bytesToString.of(estimatedSize) + ") to consolidate logs on member "
+            + cache.getName() + " will exceed available disk space ("
+            + bytesToString.of(diskAvailable) + ")";
+        context.getResultSender().sendException(new ManagementException(
+            sb)); // FileTooBigException
       }
 
     } catch (Exception e) {

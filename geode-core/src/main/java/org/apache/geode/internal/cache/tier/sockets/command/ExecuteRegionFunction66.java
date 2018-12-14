@@ -312,10 +312,10 @@ public class ExecuteRegionFunction66 extends BaseCommand {
     String message = null;
     if (regionName == null) {
       message =
-          String.format("The input region for the execute function request is null");
+          "The input region for the execute function request is null";
     } else if (function == null) {
       message =
-          String.format("The input function for the execute function request is null");
+          "The input function for the execute function request is null";
     }
 
     return message;

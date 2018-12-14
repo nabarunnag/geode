@@ -405,7 +405,7 @@ public class RemotePutAllMessage extends RemoteOperationMessageWithDirectReply {
       buff.append("; bridgeContext=").append(this.bridgeContext);
     }
     for (int i = 0; i < putAllDataCount; i++) {
-      buff.append("; entry" + i + ":")
+      buff.append("; entry").append(i).append(":")
           .append(putAllData[i] == null ? "null" : putAllData[i].getKey());
     }
   }
@@ -483,10 +483,9 @@ public class RemotePutAllMessage extends RemoteOperationMessageWithDirectReply {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("PutAllReplyMessage ").append(" processorid=").append(this.processorId)
-          .append(" returning versionTags=").append(this.versions);
-      return sb.toString();
+      String sb = "PutAllReplyMessage " + " processorid=" + this.processorId
+          + " returning versionTags=" + this.versions;
+      return sb;
     }
 
   }

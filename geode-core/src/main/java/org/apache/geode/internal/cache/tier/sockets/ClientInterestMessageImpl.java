@@ -279,13 +279,13 @@ public class ClientInterestMessageImpl implements ClientMessage {
   public void setLatestValue(Object value) {}
 
   public String toString() {
-    return new StringBuilder().append(getClass().getSimpleName()).append("[").append("eventId=")
-        .append(this.eventId).append("; regionName=").append(this.regionName)
-        .append("; keyOfInterest=").append(this.keyOfInterest).append("; isDurable=")
-        .append(this.isDurable).append("; forUpdatesAsInvalidates=")
-        .append(this.forUpdatesAsInvalidates).append("; interestType=").append(this.interestType)
-        .append("; interestResultPolicy=").append(this.interestResultPolicy).append("; action=")
-        .append(this.action).append("]").toString();
+    return getClass().getSimpleName() + "[" + "eventId="
+        + this.eventId + "; regionName=" + this.regionName
+        + "; keyOfInterest=" + this.keyOfInterest + "; isDurable="
+        + this.isDurable + "; forUpdatesAsInvalidates="
+        + this.forUpdatesAsInvalidates + "; interestType=" + this.interestType
+        + "; interestResultPolicy=" + this.interestResultPolicy + "; action="
+        + this.action + "]";
   }
 
   @Override

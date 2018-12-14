@@ -53,9 +53,7 @@ public class ObjectPartList651 extends ObjectPartList {
       this.keys = other.keys;
     }
 
-    for (int i = 0; i < other.objects.size(); i++) {
-      this.objects.add(other.objects.get(i));
-    }
+    this.objects.addAll(other.objects);
 
     if (this.objectTypeArray != null) {
       byte[] temp = new byte[this.objectTypeArray.length];

@@ -94,22 +94,20 @@ public class SingleAttrDefinitionImpl implements StatAlertDefinition {
 
   public String getStringRepresentation() {
 
-    StringBuffer buffer = new StringBuffer();
-    buffer.append("StatAlertDefinition [\n");
-    buffer.append(toString());
-    buffer.append("]");
-
-    return buffer.toString();
+    String buffer = "StatAlertDefinition [\n"
+        + toString()
+        + "]";
+    return buffer;
   }
 
   @Override // GemStoneAddition
   public String toString() {
 
     StringBuffer buffer = new StringBuffer();
-    buffer.append("Name:" + getName() + "\n");
+    buffer.append("Name:").append(getName()).append("\n");
     buffer.append("Attribute:\n");
     if (statisticInfo != null) {
-      buffer.append(statisticInfo.toString() + "\n");
+      buffer.append(statisticInfo.toString()).append("\n");
     }
 
     return buffer.toString();

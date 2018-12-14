@@ -16,6 +16,7 @@ package org.apache.geode.internal.cache.wan.parallel;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -314,10 +315,7 @@ public class ConcurrentParallelGatewaySenderEventProcessor
    */
   public List<ParallelGatewaySenderEventProcessor> getProcessors() {
     List<ParallelGatewaySenderEventProcessor> l =
-        new LinkedList<ParallelGatewaySenderEventProcessor>();
-    for (int i = 0; i < processors.length; i++) {
-      l.add(processors[i]);
-    }
+        new LinkedList<ParallelGatewaySenderEventProcessor>(Arrays.asList(processors));
     return l;
   }
 

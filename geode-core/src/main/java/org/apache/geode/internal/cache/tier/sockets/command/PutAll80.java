@@ -150,13 +150,12 @@ public class PutAll80 extends BaseCommand {
       Object callbackArg = getOptionalCallbackArg(clientMessage);
 
       if (logger.isDebugEnabled()) {
-        StringBuilder buffer = new StringBuilder();
-        buffer.append(serverConnection.getName()).append(": Received ")
-            .append(this.putAllClassName()).append(" request from ")
-            .append(serverConnection.getSocketString()).append(" for region ").append(regionName)
-            .append(callbackArg != null ? (" callbackArg " + callbackArg) : "").append(" with ")
-            .append(numberOfKeys).append(" entries.");
-        logger.debug(buffer.toString());
+        String buffer = serverConnection.getName() + ": Received "
+            + this.putAllClassName() + " request from "
+            + serverConnection.getSocketString() + " for region " + regionName
+            + (callbackArg != null ? (" callbackArg " + callbackArg) : "") + " with "
+            + numberOfKeys + " entries.";
+        logger.debug(buffer);
       }
       // building the map
       Map map = new LinkedHashMap();

@@ -88,9 +88,7 @@ public class QueueStateImpl implements QueueState {
       regions.add(rootRegion);
       try {
         Set subRegions = rootRegion.subregions(true); // throws RDE
-        for (Iterator iter2 = subRegions.iterator(); iter2.hasNext();) {
-          regions.add(iter2.next());
-        }
+        regions.addAll(subRegions);
       } catch (RegionDestroyedException e) {
         continue; // region is gone go to the next one bug 38705
       }
@@ -395,14 +393,13 @@ public class QueueStateImpl implements QueueState {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("SequenceIdAndExpirationObject[");
-      sb.append("ackSend = " + this.ackSend);
-      sb.append("; creation = " + creationTime);
-      sb.append("; seq = " + sequenceId);
-      sb.append("; putAll seq = " + putAllSequenceId);
-      sb.append("]");
-      return sb.toString();
+      String sb = "SequenceIdAndExpirationObject["
+          + "ackSend = " + this.ackSend
+          + "; creation = " + creationTime
+          + "; seq = " + sequenceId
+          + "; putAll seq = " + putAllSequenceId
+          + "]";
+      return sb;
     }
   }
 

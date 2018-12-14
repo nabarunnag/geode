@@ -730,15 +730,15 @@ public class MemoryIndexStore implements IndexStore {
     Iterator iterator = this.valueToEntriesMap.entrySet().iterator();
     while (iterator.hasNext()) {
       Map.Entry mapEntry = (Map.Entry) iterator.next();
-      sb.append("Key: " + mapEntry.getKey());
+      sb.append("Key: ").append(mapEntry.getKey());
       Object value = mapEntry.getValue();
       if (value instanceof Collection) {
         Iterator entriesIterator = ((Collection) value).iterator();
         while (entriesIterator.hasNext()) {
-          sb.append(" Value:" + getTargetObject((RegionEntry) entriesIterator.next()));
+          sb.append(" Value:").append(getTargetObject((RegionEntry) entriesIterator.next()));
         }
       } else {
-        sb.append(" Value:" + getTargetObject((RegionEntry) value));
+        sb.append(" Value:").append(getTargetObject((RegionEntry) value));
       }
 
       sb.append("\n");
@@ -845,9 +845,9 @@ public class MemoryIndexStore implements IndexStore {
     }
 
     public String toString() {
-      return new StringBuilder("CachedEntryWrapper@")
-          .append(Integer.toHexString(System.identityHashCode(this))).append(' ').append(this.key)
-          .append(' ').append(this.value).toString();
+      return "CachedEntryWrapper@"
+          + Integer.toHexString(System.identityHashCode(this)) + ' ' + this.key
+          + ' ' + this.value;
     }
   }
 

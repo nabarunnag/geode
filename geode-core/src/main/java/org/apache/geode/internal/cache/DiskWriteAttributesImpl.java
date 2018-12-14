@@ -389,8 +389,8 @@ public class DiskWriteAttributesImpl implements DiskWriteAttributes {
       sb.append(this.getBytesThreshold());
       sb.append(" bytes");
     }
-    sb.append(". MaxOplog size is        : " + maxOplogSize);
-    sb.append(". RollOplogs is          : " + compactOplogs);
+    sb.append(". MaxOplog size is        : ").append(maxOplogSize);
+    sb.append(". RollOplogs is          : ").append(compactOplogs);
     return sb.toString();
   }
 

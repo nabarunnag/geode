@@ -182,12 +182,11 @@ public class LockGrantorId {
    */
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer("[LockGrantorId: ");
-    sb.append("lockGrantorMember=").append(this.lockGrantorMember);
-    sb.append(", lockGrantorVersion=").append(this.lockGrantorVersion);
-    sb.append(", lockGrantorSerialNumber=").append(this.lockGrantorSerialNumber);
-    sb.append("]");
-    return sb.toString();
+    String sb = "[LockGrantorId: " + "lockGrantorMember=" + this.lockGrantorMember
+        + ", lockGrantorVersion=" + this.lockGrantorVersion
+        + ", lockGrantorSerialNumber=" + this.lockGrantorSerialNumber
+        + "]";
+    return sb;
   }
 
   /**

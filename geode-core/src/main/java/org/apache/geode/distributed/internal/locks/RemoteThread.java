@@ -76,13 +76,12 @@ public class RemoteThread {
    */
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer("[RemoteThread@");
-    sb.append(System.identityHashCode(this)).append(": ");
-    sb.append("member@").append(System.identityHashCode(this.member)).append("=")
-        .append(this.member);
-    sb.append(", threadId=").append(this.threadId);
-    sb.append("]");
-    return sb.toString();
+    String sb = "[RemoteThread@" + System.identityHashCode(this) + ": "
+        + "member@" + System.identityHashCode(this.member) + "="
+        + this.member
+        + ", threadId=" + this.threadId
+        + "]";
+    return sb;
   }
 
 }

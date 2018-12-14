@@ -750,12 +750,12 @@ public class DistributedSystemConfigImpl implements DistributedSystemConfig {
    */
   public CacheServerConfig[] getCacheServerConfigs() {
     return (CacheServerConfig[]) this.cacheServerConfigs
-        .toArray(new CacheServerConfig[this.cacheServerConfigs.size()]);
+        .toArray(new CacheServerConfig[0]);
   }
 
   public CacheVmConfig[] getCacheVmConfigs() {
     return (CacheVmConfig[]) this.cacheServerConfigs
-        .toArray(new CacheVmConfig[this.cacheServerConfigs.size()]);
+        .toArray(new CacheVmConfig[0]);
   }
 
   /**
@@ -1125,7 +1125,7 @@ public class DistributedSystemConfigImpl implements DistributedSystemConfig {
     buf.append("  " + BIND_ADDRESS + "=");
     buf.append(String.valueOf(this.bindAddress));
     buf.append(lf);
-    buf.append("  " + TCP_PORT + "=" + this.tcpPort);
+    buf.append("  " + TCP_PORT + "=").append(this.tcpPort);
     buf.append(lf);
     buf.append("  " + DISABLE_TCP + "=");
     buf.append(String.valueOf(this.disableTcp));

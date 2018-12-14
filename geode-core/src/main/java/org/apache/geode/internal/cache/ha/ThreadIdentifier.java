@@ -190,14 +190,12 @@ public class ThreadIdentifier implements DataSerializable {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
 
-    sb.append("ThreadId[");
-    sb.append("id=").append(membershipID.length).append("bytes; ");
-    sb.append(toDisplayString(threadID));
-    sb.append("]");
-
-    return sb.toString();
+    String sb = "ThreadId["
+        + "id=" + membershipID.length + "bytes; "
+        + toDisplayString(threadID)
+        + "]";
+    return sb;
   }
 
   public String expensiveToString() {

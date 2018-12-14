@@ -200,10 +200,9 @@ public class TXState implements TXStateInterface {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append(this.getClass()).append("@").append(System.identityHashCode(this))
-        .append(" onBehalfOfRemoteStub:").append(this.onBehalfOfRemoteStub);
-    return builder.toString();
+    String builder = String.valueOf(this.getClass()) + "@" + System.identityHashCode(this)
+        + " onBehalfOfRemoteStub:" + this.onBehalfOfRemoteStub;
+    return builder;
   }
 
   /*

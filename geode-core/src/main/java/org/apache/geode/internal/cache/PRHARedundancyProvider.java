@@ -174,7 +174,7 @@ public class PRHARedundancyProvider {
   public static String regionStatus(PartitionedRegion prRegion, Set allStores,
       Collection alreadyUsed, boolean forLog) {
     StringBuffer sb = new StringBuffer();
-    sb.append("Partitioned Region name = " + prRegion.getFullPath());
+    sb.append("Partitioned Region name = ").append(prRegion.getFullPath());
     final char newLine;
     final String spaces;
     if (forLog) {
@@ -185,13 +185,16 @@ public class PRHARedundancyProvider {
       spaces = "   ";
     }
     if (allStores != null) {
-      sb.append(newLine + spaces + "Redundancy level set to " + prRegion.getRedundantCopies());
-      sb.append(newLine + ". Number of available data stores: " + allStores.size());
-      sb.append(newLine + spaces + ". Number successfully allocated = " + alreadyUsed.size());
-      sb.append(newLine + ". Data stores: " + PartitionedRegionHelper.printCollection(allStores));
-      sb.append(newLine + ". Data stores successfully allocated: "
-          + PartitionedRegionHelper.printCollection(alreadyUsed));
-      sb.append(newLine + ". Equivalent members: " + PartitionedRegionHelper
+      sb.append(newLine).append(spaces).append("Redundancy level set to ")
+          .append(prRegion.getRedundantCopies());
+      sb.append(newLine).append(". Number of available data stores: ").append(allStores.size());
+      sb.append(newLine).append(spaces).append(". Number successfully allocated = ")
+          .append(alreadyUsed.size());
+      sb.append(newLine).append(". Data stores: ")
+          .append(PartitionedRegionHelper.printCollection(allStores));
+      sb.append(newLine).append(". Data stores successfully allocated: ")
+          .append(PartitionedRegionHelper.printCollection(alreadyUsed));
+      sb.append(newLine).append(". Equivalent members: ").append(PartitionedRegionHelper
           .printCollection(prRegion.getDistributionManager().getMembersInThisZone()));
     }
     return sb.toString();
@@ -1445,7 +1448,7 @@ public class PRHARedundancyProvider {
     if (prefix != null) {
       logStr.append(prefix);
     }
-    logStr.append("Bucket Allocation for prId=" + this.prRegion.getPRId() + ":\n");
+    logStr.append("Bucket Allocation for prId=").append(this.prRegion.getPRId()).append(":\n");
     for (Iterator i = dataStores.iterator(); i.hasNext();) {
       DataStoreBuckets dsb = (DataStoreBuckets) i.next();
       logStr.append(dsb.memberId).append(": ");

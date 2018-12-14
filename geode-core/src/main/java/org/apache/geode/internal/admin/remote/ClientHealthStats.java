@@ -270,21 +270,21 @@ public class ClientHealthStats implements DataSerializableFixedID, Serializable 
 
     StringBuffer buf = new StringBuffer();
     buf.append("ClientHealthStats [");
-    buf.append("\n numOfGets=" + this.numOfGets);
-    buf.append("\n numOfPuts=" + this.numOfPuts);
-    buf.append("\n numOfMisses=" + this.numOfMisses);
-    buf.append("\n numOfCacheListenerCalls=" + this.numOfCacheListenerCalls);
-    buf.append("\n numOfThreads=" + this.numOfThreads);
-    buf.append("\n cpus=" + this.cpus);
-    buf.append("\n processCpuTime=" + this.processCpuTime);
-    buf.append("\n updateTime=" + this.updateTime);
+    buf.append("\n numOfGets=").append(this.numOfGets);
+    buf.append("\n numOfPuts=").append(this.numOfPuts);
+    buf.append("\n numOfMisses=").append(this.numOfMisses);
+    buf.append("\n numOfCacheListenerCalls=").append(this.numOfCacheListenerCalls);
+    buf.append("\n numOfThreads=").append(this.numOfThreads);
+    buf.append("\n cpus=").append(this.cpus);
+    buf.append("\n processCpuTime=").append(this.processCpuTime);
+    buf.append("\n updateTime=").append(this.updateTime);
     Iterator<Entry<String, String>> it = this.poolStats.entrySet().iterator();
     StringBuffer tempBuffer = new StringBuffer();
     while (it.hasNext()) {
       Entry<String, String> entry = it.next();
-      tempBuffer.append(entry.getKey() + " = " + entry.getValue());
+      tempBuffer.append(entry.getKey()).append(" = ").append(entry.getValue());
     }
-    buf.append("\n poolStats " + tempBuffer);
+    buf.append("\n poolStats ").append(tempBuffer);
     buf.append("\n]");
 
     return buf.toString();

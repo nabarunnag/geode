@@ -656,7 +656,6 @@ public class InternalInstantiator {
    * Returns all of the currently registered instantiators
    */
   public static Instantiator[] getInstantiators() {
-    Collection coll = new ArrayList();
     if (!classNamesToHolders.isEmpty()) {
       Iterator it = classNamesToHolders.values().iterator();
       while (it.hasNext()) {
@@ -685,8 +684,8 @@ public class InternalInstantiator {
         }
       }
     }
-    coll.addAll(dsMap.values()); // Don't move it before the if block above.
-    return (Instantiator[]) coll.toArray(new Instantiator[coll.size()]);
+    Collection coll = new ArrayList(dsMap.values()); // Don't move it before the if block above.
+    return (Instantiator[]) coll.toArray(new Instantiator[0]);
   }
 
   /**
@@ -698,7 +697,7 @@ public class InternalInstantiator {
     Collection coll = new ArrayList(dsMap.size() + idsToHolders.size());
     coll.addAll(dsMap.values());
     coll.addAll(classNamesToHolders.values()); // TODO (ashetkar) will it add duplicates?
-    return coll.toArray(new Object[coll.size()]);
+    return coll.toArray(new Object[0]);
   }
 
   public static int getIdsToHoldersSize() {

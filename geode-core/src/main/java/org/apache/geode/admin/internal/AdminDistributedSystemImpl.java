@@ -215,8 +215,8 @@ public class AdminDistributedSystemImpl implements org.apache.geode.admin.AdminD
       this.id = this.getLocators();
 
     } else {
-      this.id = new StringBuffer(this.getMcastAddress()).append("[").append(this.getMcastPort())
-          .append("]").toString();
+      this.id = this.getMcastAddress() + "[" + this.getMcastPort()
+          + "]";
     }
 
     // LOG: create LogWriterAppender unless one already exists
@@ -1290,8 +1290,8 @@ public class AdminDistributedSystemImpl implements org.apache.geode.admin.AdminD
     // assumes host[port] format, delimited by ","
     List locatorIds = new ArrayList();
     if (isMcastEnabled()) {
-      String mcastId = new StringBuffer(this.getMcastAddress()).append("[")
-          .append(this.getMcastPort()).append("]").toString();
+      String mcastId = this.getMcastAddress() + "["
+          + this.getMcastPort() + "]";
       locatorIds.add(new DistributionLocatorId(mcastId));
     }
     StringTokenizer st = new StringTokenizer(this.getLocators(), ",");

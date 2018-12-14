@@ -501,7 +501,7 @@ public class DiskInitFileParser {
     if (logger.isTraceEnabled(LogMarker.PERSIST_RECOVERY_VERBOSE)) {
       StringBuffer sb = new StringBuffer();
       for (int i = 0; i < OPLOG_TYPE.getLen(); i++) {
-        sb.append(" " + seq[i]);
+        sb.append(" ").append(seq[i]);
       }
       logger.trace(LogMarker.PERSIST_RECOVERY_VERBOSE, "oplog magic code: {}", sb);
     }

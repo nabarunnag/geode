@@ -238,11 +238,10 @@ public class BecomePrimaryBucketMessage extends PartitionMessage {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("BecomePrimaryBucketReplyMessage ").append("processorid=").append(this.processorId)
-          .append(" reply to sender ").append(this.getSender()).append(" returning responseCode=")
-          .append(this.responseCode);
-      return sb.toString();
+      String sb = "BecomePrimaryBucketReplyMessage " + "processorid=" + this.processorId
+          + " reply to sender " + this.getSender() + " returning responseCode="
+          + this.responseCode;
+      return sb;
     }
   }
 

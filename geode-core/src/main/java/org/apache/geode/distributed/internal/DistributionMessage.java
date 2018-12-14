@@ -249,7 +249,7 @@ public abstract class DistributionMessage implements DataSerializableFixedID, Cl
           "Recipients can only be set once");
     }
     this.recipients = recipients
-        .toArray(new InternalDistributedMember[recipients.size()]);
+        .toArray(new InternalDistributedMember[0]);
   }
 
   public void resetRecipients() {
@@ -666,11 +666,10 @@ public abstract class DistributionMessage implements DataSerializableFixedID, Cl
   @Override
   public String toString() {
     String cname = getShortClassName();
-    final StringBuilder sb = new StringBuilder(cname);
-    sb.append('@').append(Integer.toHexString(System.identityHashCode(this)));
-    sb.append(" processorId=").append(getProcessorId());
-    sb.append(" sender=").append(getSender());
-    return sb.toString();
+    String sb = cname + '@' + Integer.toHexString(System.identityHashCode(this))
+        + " processorId=" + getProcessorId()
+        + " sender=" + getSender();
+    return sb;
   }
 
   public Version[] getSerializationVersions() {

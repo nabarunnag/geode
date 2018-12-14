@@ -740,7 +740,7 @@ public class InternalDistributedMember implements DistributedMember, Externaliza
     }
     int vmViewId = getVmViewId();
     if (vmViewId >= 0) {
-      sb.append("<v" + vmViewId + ">");
+      sb.append("<v").append(vmViewId).append(">");
     }
     sb.append(":");
     sb.append(getPort());

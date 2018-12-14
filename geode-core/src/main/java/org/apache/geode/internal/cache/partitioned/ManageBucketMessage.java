@@ -326,9 +326,9 @@ public class ManageBucketMessage extends PartitionMessage {
 
     @Override
     public String toString() {
-      return new StringBuffer().append("ManageBucketReplyMessage ").append("processorid=")
-          .append(this.processorId).append(" accepted bucket=").append(this.acceptedBucket)
-          .append(" isInitializing=").append(this.notYetInitialized).toString();
+      return "ManageBucketReplyMessage " + "processorid="
+          + this.processorId + " accepted bucket=" + this.acceptedBucket
+          + " isInitializing=" + this.notYetInitialized;
     }
   }
 
