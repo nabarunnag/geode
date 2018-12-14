@@ -275,14 +275,13 @@ public class GMSJoinLeave implements JoinLeave, MessageHandler {
     }
 
     public String toString() {
-      StringBuffer sb = new StringBuffer(200);
-      sb.append("SearchState(locatorsContacted=").append(locatorsContacted)
-          .append("; alreadyTried=").append(alreadyTried).append("; registrants=")
-          .append(registrants).append("; possibleCoordinator=").append(possibleCoordinator)
-          .append("; viewId=").append(viewId).append("; hasContactedAJoinedLocator=")
-          .append(hasContactedAJoinedLocator).append("; view=").append(view).append("; responses=")
-          .append(responses).append(")");
-      return sb.toString();
+      String sb = "SearchState(locatorsContacted=" + locatorsContacted
+          + "; alreadyTried=" + alreadyTried + "; registrants="
+          + registrants + "; possibleCoordinator=" + possibleCoordinator
+          + "; viewId=" + viewId + "; hasContactedAJoinedLocator="
+          + hasContactedAJoinedLocator + "; view=" + view + "; responses="
+          + responses + ")";
+      return sb;
     }
   }
 
@@ -826,7 +825,7 @@ public class GMSJoinLeave implements JoinLeave, MessageHandler {
   private NetView copyCurrentViewAndAddMyAddress(InternalDistributedMember oldCoordinator) {
     boolean testing = unitTesting.contains("noRandomViewChange");
     NetView newView;
-    Set<InternalDistributedMember> leaving = new HashSet<>();
+    Set<InternalDistributedMember> leaving;
     Set<InternalDistributedMember> removals;
     synchronized (viewInstallationLock) {
       int rand = testing ? 0 : NetView.RANDOM.nextInt(10);
@@ -842,7 +841,7 @@ public class GMSJoinLeave implements JoinLeave, MessageHandler {
         removals = new HashSet<>(this.removedMembers);
       }
       synchronized (this.leftMembers) {
-        leaving.addAll(leftMembers);
+        leaving = new HashSet<>(leftMembers);
       }
       if (oldCoordinator != null && !removals.contains(oldCoordinator)) {
         leaving.add(oldCoordinator);

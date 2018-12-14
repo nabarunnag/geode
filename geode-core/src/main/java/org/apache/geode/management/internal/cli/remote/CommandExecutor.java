@@ -17,6 +17,7 @@ package org.apache.geode.management.internal.cli.remote;
 import static org.apache.geode.management.internal.cli.commands.AlterAsyncEventQueueCommand.GROUP_STATUS_SECTION;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -155,7 +156,7 @@ public class CommandExecutor {
       table = resultModel.addTable(GROUP_STATUS_SECTION);
       table.setColumnHeader("Group", "Status");
     } else {
-      groupsToUpdate = Arrays.asList("cluster");
+      groupsToUpdate = Collections.singletonList("cluster");
     }
 
     final TabularResultModel finalTable = table;

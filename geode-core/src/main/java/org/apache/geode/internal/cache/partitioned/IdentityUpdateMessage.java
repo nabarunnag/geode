@@ -120,9 +120,9 @@ public class IdentityUpdateMessage extends DistributionMessage implements Messag
 
   @Override
   public String toString() {
-    return new StringBuffer().append(getClass().getName()).append("(sender=").append(getSender())
-        .append("; processorId=").append(this.processorId).append("; newPRId=").append(this.newId)
-        .append(")").toString();
+    return getClass().getName() + "(sender=" + getSender()
+        + "; processorId=" + this.processorId + "; newPRId=" + this.newId
+        + ")";
   }
 
   /**

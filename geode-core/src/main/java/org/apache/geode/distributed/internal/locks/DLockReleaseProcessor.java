@@ -360,10 +360,9 @@ public class DLockReleaseProcessor extends ReplyProcessor21 {
 
     @Override
     public String toString() {
-      return new StringBuilder("DLockReleaseMessage for ").append(this.serviceName).append(", ")
-          .append(this.objectName).append("; processorId=").append(this.processorId)
-          .append("; lockBatch=").append(this.lockBatch).append("; lockId=").append(this.lockId)
-          .toString();
+      return "DLockReleaseMessage for " + this.serviceName + ", "
+          + this.objectName + "; processorId=" + this.processorId
+          + "; lockBatch=" + this.lockBatch + "; lockId=" + this.lockId;
     }
   } // DLockReleaseMessage
 

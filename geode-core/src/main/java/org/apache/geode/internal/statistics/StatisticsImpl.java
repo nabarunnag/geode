@@ -581,14 +581,13 @@ public abstract class StatisticsImpl implements Statistics {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder(getClass().getName());
-    sb.append("@").append(System.identityHashCode(this)).append("{");
-    sb.append("uniqueId=").append(this.uniqueId);
-    sb.append(", numericId=").append(this.numericId);
-    sb.append(", textId=").append(this.textId);
-    sb.append(", type=").append(this.type.getName());
-    sb.append(", closed=").append(this.closed);
-    sb.append("}");
-    return sb.toString();
+    String sb = getClass().getName() + "@" + System.identityHashCode(this) + "{"
+        + "uniqueId=" + this.uniqueId
+        + ", numericId=" + this.numericId
+        + ", textId=" + this.textId
+        + ", type=" + this.type.getName()
+        + ", closed=" + this.closed
+        + "}";
+    return sb;
   }
 }

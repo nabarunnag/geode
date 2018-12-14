@@ -70,12 +70,11 @@ public class SystemTimer {
 
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer();
-    sb.append("SystemTimer[");
-    sb.append("swarm = " + swarm);
     // sb.append("; timer = " + timer);
-    sb.append("]");
-    return sb.toString();
+    String sb = "SystemTimer["
+        + "swarm = " + swarm
+        + "]";
+    return sb;
   }
 
   /**

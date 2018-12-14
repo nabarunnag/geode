@@ -235,19 +235,16 @@ public abstract class ManagedEntityConfigImpl implements ManagedEntityConfig {
     int index = className.lastIndexOf('.');
     className = className.substring(index + 1);
 
-    StringBuffer sb = new StringBuffer();
-    sb.append(className);
-
-    sb.append(" host=");
-    sb.append(this.getHost());
-    sb.append(" workingDirectory=");
-    sb.append(this.getWorkingDirectory());
-    sb.append(" productDirectory=");
-    sb.append(this.getProductDirectory());
-    sb.append(" remoteCommand=\"");
-    sb.append(this.getRemoteCommand());
-    sb.append("\"");
-
-    return sb.toString();
+    String sb = className
+        + " host="
+        + this.getHost()
+        + " workingDirectory="
+        + this.getWorkingDirectory()
+        + " productDirectory="
+        + this.getProductDirectory()
+        + " remoteCommand=\""
+        + this.getRemoteCommand()
+        + "\"";
+    return sb;
   }
 }

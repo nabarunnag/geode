@@ -640,9 +640,10 @@ public class PdxWriterImpl implements PdxWriter {
     }
     if (this.vlfCount == vlfOffsetsCapacity) {
       int[] tmp = new int[vlfOffsetsCapacity + EXPAND_SIZE];
-      for (int i = 0; i < vlfOffsetsCapacity; i++) {
-        tmp[i] = this.vlfOffsets[i];
+      if (this.vlfOffsets != null) {
+        System.arraycopy(this.vlfOffsets, 0, tmp, 0, vlfOffsetsCapacity);
       }
+
       this.vlfOffsets = tmp;
     }
   }

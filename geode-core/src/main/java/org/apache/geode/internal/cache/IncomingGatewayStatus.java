@@ -64,10 +64,9 @@ public class IncomingGatewayStatus implements Serializable {
 
   @Override
   public String toString() {
-    StringBuffer buffer = new StringBuffer();
-    buffer.append("IncomingGatewayStatus[").append("memberId=").append(this._memberId)
-        .append("; socketAddress=").append(this._socketAddress).append("; socketPort=")
-        .append(this._socketPort).append("]");
-    return buffer.toString();
+    String buffer = "IncomingGatewayStatus[" + "memberId=" + this._memberId
+        + "; socketAddress=" + this._socketAddress + "; socketPort="
+        + this._socketPort + "]";
+    return buffer;
   }
 }

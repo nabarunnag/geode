@@ -70,10 +70,10 @@ public class SystemMemberCacheJmxImpl extends org.apache.geode.admin.internal.Sy
 
   /** Create and register the MBean to manage this resource */
   private void initializeMBean() throws org.apache.geode.admin.AdminException {
-    this.mbeanName = new StringBuffer("GemFire.Cache:").append("name=")
-        .append(MBeanUtil.makeCompliantMBeanNameProperty(getName())).append(",id=").append(getId())
-        .append(",owner=").append(MBeanUtil.makeCompliantMBeanNameProperty(vm.getId().toString()))
-        .append(",type=Cache").toString();
+    this.mbeanName = "GemFire.Cache:" + "name="
+        + MBeanUtil.makeCompliantMBeanNameProperty(getName()) + ",id=" + getId()
+        + ",owner=" + MBeanUtil.makeCompliantMBeanNameProperty(vm.getId().toString())
+        + ",type=Cache";
 
     this.objectName =
         MBeanUtil.createMBean(this, addDynamicAttributes(MBeanUtil.lookupManagedBean(this)));

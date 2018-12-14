@@ -430,14 +430,13 @@ public class DeployedJar {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder(getClass().getName());
-    sb.append('@').append(System.identityHashCode(this)).append('{');
-    sb.append("jarName=").append(this.jarName);
-    sb.append(",file=").append(this.file.getAbsolutePath());
-    sb.append(",md5hash=").append(toHex(this.md5hash));
-    sb.append(",version=").append(this.getVersion());
-    sb.append('}');
-    return sb.toString();
+    String sb = getClass().getName() + '@' + System.identityHashCode(this) + '{'
+        + "jarName=" + this.jarName
+        + ",file=" + this.file.getAbsolutePath()
+        + ",md5hash=" + toHex(this.md5hash)
+        + ",version=" + this.getVersion()
+        + '}';
+    return sb;
   }
 
   private String toHex(byte[] data) {

@@ -120,7 +120,7 @@ public abstract class AbstractStatisticsFactory implements StatisticsFactory, St
   @Override
   public Statistics[] getStatistics() {
     List<Statistics> statsList = this.statsList;
-    return (Statistics[]) statsList.toArray(new Statistics[statsList.size()]);
+    return (Statistics[]) statsList.toArray(new Statistics[0]);
   }
 
   // StatisticsFactory methods

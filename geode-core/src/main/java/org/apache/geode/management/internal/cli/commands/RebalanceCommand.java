@@ -198,9 +198,11 @@ public class RebalanceCommand extends InternalGfshCommand {
       } else {
         headerText = "Rebalanced partition regions ";
       }
+      StringBuilder headerTextBuilder = new StringBuilder(headerText);
       for (int i = resultItemCount; i < rstlist.size(); i++) {
-        headerText = headerText + " " + rstlist.get(i);
+        headerTextBuilder.append(" ").append(rstlist.get(i));
       }
+      headerText = headerTextBuilder.toString();
       table1.setHeader(headerText);
       cache.getLogger().info(headerText + resultStr);
     }
@@ -469,10 +471,12 @@ public class RebalanceCommand extends InternalGfshCommand {
         headerText = "Rebalanced partition regions ";
       }
 
+      StringBuilder headerTextBuilder = new StringBuilder(headerText);
       while (it.hasNext()) {
         PartitionRebalanceInfo rgn = it.next();
-        headerText = headerText + " " + rgn.getRegionPath();
+        headerTextBuilder.append(" ").append(rgn.getRegionPath());
       }
+      headerText = headerTextBuilder.toString();
       resultData.setHeader(resultData.getHeader() + headerText);
 
       cache.getLogger().info(headerText + resultStr);

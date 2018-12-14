@@ -1943,12 +1943,11 @@ public class DLockService extends DistributedLockService {
 
   @Override
   public String toString() {
-    StringBuffer buffer = new StringBuffer(128);
-    buffer.append('<').append("DLockService").append("@")
-        .append(Integer.toHexString(System.identityHashCode(this))).append(" named ")
-        .append(this.serviceName).append(" destroyed=").append(this.destroyed).append(" grantorId=")
-        .append(this.lockGrantorId).append(" grantor=").append(this.grantor).append('>');
-    return buffer.toString();
+    String buffer = "<" + "DLockService" + "@"
+        + Integer.toHexString(System.identityHashCode(this)) + " named "
+        + this.serviceName + " destroyed=" + this.destroyed + " grantorId="
+        + this.lockGrantorId + " grantor=" + this.grantor + '>';
+    return buffer;
   }
 
   // -------------------------------------------------------------------------
@@ -2848,7 +2847,7 @@ public class DLockService extends DistributedLockService {
       logger.info(LogMarker.DLS_MARKER,
           "DLockService.dumpAllServices() - " + services.size() + " services:\n");
       for (Map.Entry entry : services.entrySet()) {
-        buffer.append("  " + entry.getKey() + ":\n");
+        buffer.append("  ").append(entry.getKey()).append(":\n");
         DLockService svc = (DLockService) entry.getValue();
         svc.dumpService();
         if (svc.isCurrentlyLockGrantor()) {

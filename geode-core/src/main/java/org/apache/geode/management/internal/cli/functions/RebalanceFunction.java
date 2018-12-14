@@ -66,17 +66,21 @@ public class RebalanceFunction implements InternalFunction {
       results = op.getResults();
       logger.info("Starting RebalanceFunction got results = {}", results);
       StringBuilder str1 = new StringBuilder();
-      str1.append(results.getTotalBucketCreateBytes() + "," + results.getTotalBucketCreateTime()
-          + "," + results.getTotalBucketCreatesCompleted() + ","
-          + results.getTotalBucketTransferBytes() + "," + results.getTotalBucketTransferTime() + ","
-          + results.getTotalBucketTransfersCompleted() + "," + results.getTotalPrimaryTransferTime()
-          + "," + results.getTotalPrimaryTransfersCompleted() + "," + results.getTotalTime() + ",");
+      str1.append(results.getTotalBucketCreateBytes()).append(",")
+          .append(results.getTotalBucketCreateTime()).append(",")
+          .append(results.getTotalBucketCreatesCompleted()).append(",")
+          .append(results.getTotalBucketTransferBytes()).append(",")
+          .append(results.getTotalBucketTransferTime()).append(",")
+          .append(results.getTotalBucketTransfersCompleted()).append(",")
+          .append(results.getTotalPrimaryTransferTime()).append(",")
+          .append(results.getTotalPrimaryTransfersCompleted()).append(",")
+          .append(results.getTotalTime()).append(",");
 
       Set<PartitionRebalanceInfo> regns1 = results.getPartitionRebalanceDetails();
       Iterator it = regns1.iterator();
       while (it.hasNext()) {
         PartitionRebalanceInfo rgn = (PartitionRebalanceInfo) it.next();
-        str1.append(rgn.getRegionPath() + ",");
+        str1.append(rgn.getRegionPath()).append(",");
       }
       logger.info("Starting RebalanceFunction str1={}", str1);
       context.getResultSender().lastResult(str1.toString());

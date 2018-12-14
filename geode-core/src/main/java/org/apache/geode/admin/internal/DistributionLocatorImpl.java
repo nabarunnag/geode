@@ -268,7 +268,8 @@ public class DistributionLocatorImpl implements DistributionLocator, InternalMan
     Enumeration en = props.propertyNames();
     while (en.hasMoreElements()) {
       String pn = (String) en.nextElement();
-      sb.append(" -D" + DistributionConfig.GEMFIRE_PREFIX + "" + pn + "=" + props.getProperty(pn));
+      sb.append(" -D" + DistributionConfig.GEMFIRE_PREFIX + "").append(pn).append("=")
+          .append(props.getProperty(pn));
     }
 
     String bindAddress = this.getConfig().getBindAddress();
@@ -310,21 +311,19 @@ public class DistributionLocatorImpl implements DistributionLocator, InternalMan
   }
 
   public String getIsRunningCommand() {
-    StringBuffer sb = new StringBuffer();
-    sb.append(this.controller.getProductExecutable(this, "gemfire"));
-    sb.append(" status-locator -dir=");
-    sb.append(this.getConfig().getWorkingDirectory());
 
-    return sb.toString().trim();
+    String sb = this.controller.getProductExecutable(this, "gemfire")
+        + " status-locator -dir="
+        + this.getConfig().getWorkingDirectory();
+    return sb.trim();
   }
 
   public String getLogCommand() {
-    StringBuffer sb = new StringBuffer();
-    sb.append(this.controller.getProductExecutable(this, "gemfire"));
-    sb.append(" tail-locator-log -dir=");
-    sb.append(this.getConfig().getWorkingDirectory());
 
-    return sb.toString().trim();
+    String sb = this.controller.getProductExecutable(this, "gemfire")
+        + " tail-locator-log -dir="
+        + this.getConfig().getWorkingDirectory();
+    return sb.trim();
   }
 
 }

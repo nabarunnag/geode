@@ -97,7 +97,7 @@ public class MemberAttributes {
     List<String> groups = new ArrayList<String>();
     parseCsv(groups, csvRoles);
     parseCsv(groups, csvGroups);
-    return (String[]) groups.toArray(new String[groups.size()]);
+    return (String[]) groups.toArray(new String[0]);
   }
 
 

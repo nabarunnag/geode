@@ -213,9 +213,8 @@ public abstract class AbstractCommandsController {
    * @see LoginHandlerInterceptor#getEnvironment()
    */
   protected Map<String, String> getEnvironment() {
-    final Map<String, String> environment = new HashMap<>();
 
-    environment.putAll(LoginHandlerInterceptor.getEnvironment());
+    final Map<String, String> environment = new HashMap<>(LoginHandlerInterceptor.getEnvironment());
     environment.put(Gfsh.ENV_APP_NAME, Gfsh.GFSH_APP_NAME);
 
     return environment;

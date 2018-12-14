@@ -202,16 +202,14 @@ public class PutAllPartialResultException extends GemFireException {
           + " and possibly others failed the operation due to " + firstCauseOfFailure + "\n");
       if (totalMapSize > 0) {
         int failedKeyNum = totalMapSize - this.succeededKeys.size();
-        sb.append("The bulk operation failed on " + failedKeyNum + " out of " + totalMapSize
-            + " entries. ");
+        sb.append("The bulk operation failed on ").append(failedKeyNum).append(" out of ")
+            .append(totalMapSize).append(" entries. ");
       }
       return sb.toString();
     }
 
     public String detailString() {
-      StringBuffer sb = new StringBuffer(toString());
-      sb.append(getKeyListString());
-      return sb.toString();
+      return toString() + getKeyListString();
     }
 
     public String getKeyListString() {

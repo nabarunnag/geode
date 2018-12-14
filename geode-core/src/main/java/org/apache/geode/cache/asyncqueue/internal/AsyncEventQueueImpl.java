@@ -142,10 +142,9 @@ public class AsyncEventQueueImpl implements InternalAsyncEventQueue {
   }
 
   public static String getSenderIdFromAsyncEventQueueId(String asyncQueueId) {
-    StringBuilder builder = new StringBuilder();
-    builder.append(ASYNC_EVENT_QUEUE_PREFIX);
-    builder.append(asyncQueueId);
-    return builder.toString();
+    String builder = ASYNC_EVENT_QUEUE_PREFIX
+        + asyncQueueId;
+    return builder;
   }
 
   public static String getAsyncEventQueueIdFromSenderId(String senderId) {
@@ -198,8 +197,7 @@ public class AsyncEventQueueImpl implements InternalAsyncEventQueue {
 
   @Override
   public String toString() {
-    return new StringBuilder().append(getClass().getSimpleName()).append("{")
-        .append("id=" + getId())
-        .append(",isRunning=" + sender.isRunning()).append("}").toString();
+    return getClass().getSimpleName() + "{" + "id="
+        + getId() + ",isRunning=" + sender.isRunning() + "}";
   }
 }

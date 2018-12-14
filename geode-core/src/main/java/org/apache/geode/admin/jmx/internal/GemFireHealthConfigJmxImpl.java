@@ -72,11 +72,10 @@ public class GemFireHealthConfigJmxImpl
 
     this.delegate = new GemFireHealthConfigImpl(hostName);
     this.health = health;
-    this.mbeanName = new StringBuffer().append(MBEAN_NAME_PREFIX).append("GemFireHealthConfig,id=")
-        .append(MBeanUtil.makeCompliantMBeanNameProperty(health.getDistributedSystem().getId()))
-        .append(",host=")
-        .append((hostName == null ? "default" : MBeanUtil.makeCompliantMBeanNameProperty(hostName)))
-        .toString();
+    this.mbeanName = MBEAN_NAME_PREFIX + "GemFireHealthConfig,id="
+        + MBeanUtil.makeCompliantMBeanNameProperty(health.getDistributedSystem().getId())
+        + ",host="
+        + (hostName == null ? "default" : MBeanUtil.makeCompliantMBeanNameProperty(hostName));
     this.objectName = MBeanUtil.createMBean(this);
   }
 

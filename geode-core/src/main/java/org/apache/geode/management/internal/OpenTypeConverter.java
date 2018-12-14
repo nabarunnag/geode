@@ -680,14 +680,17 @@ public abstract class OpenTypeConverter {
         for (int i = 0; i < propertyNames.length; i++) {
           String propertyName = propertyNames[i];
           if (!getterMap.containsKey(propertyName)) {
-            String msg = "@ConstructorProperties includes name " + propertyName
-                + " which does not correspond to a property";
+            StringBuilder msgBuilder =
+                new StringBuilder("@ConstructorProperties includes name " + propertyName
+                    + " which does not correspond to a property");
             for (String getterName : getterMap.keySet()) {
               if (getterName.equalsIgnoreCase(propertyName)) {
-                msg += " (differs only in case from property " + getterName + ")";
+                msgBuilder.append(" (differs only in case from property ").append(getterName)
+                    .append(")");
               }
             }
-            msg += ": " + constr;
+            msgBuilder.append(": ").append(constr);
+            String msg = msgBuilder.toString();
             throw new InvalidObjectException(msg);
           }
           int getterIndex = getterMap.get(propertyName);

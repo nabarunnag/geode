@@ -97,16 +97,15 @@ public class RegionFunctionContextImpl extends FunctionContextImpl
 
   @Override
   public String toString() {
-    final StringBuilder buf = new StringBuilder();
-    buf.append("[RegionFunctionContextImpl:");
-    buf.append("dataSet=");
-    buf.append(this.dataSet);
-    buf.append(";filter=");
-    buf.append(this.filter);
-    buf.append(";args=");
-    buf.append(getArguments());
-    buf.append(']');
-    return buf.toString();
+    String buf = "[RegionFunctionContextImpl:"
+        + "dataSet="
+        + this.dataSet
+        + ";filter="
+        + this.filter
+        + ";args="
+        + getArguments()
+        + ']';
+    return buf;
   }
 
   public Region getLocalDataSet(Region r) {

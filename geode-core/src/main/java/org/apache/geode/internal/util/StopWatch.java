@@ -66,11 +66,10 @@ public class StopWatch {
 
   @Override
   public String toString() {
-    final StringBuffer sb = new StringBuffer("[StopWatch: ");
-    sb.append("startTime=").append(this.startTime);
-    sb.append(", stopTime=").append(this.stopTime);
-    sb.append(", isRunning=").append(isRunning());
-    sb.append("]");
-    return sb.toString();
+    String sb = "[StopWatch: " + "startTime=" + this.startTime
+        + ", stopTime=" + this.stopTime
+        + ", isRunning=" + isRunning()
+        + "]";
+    return sb;
   }
 }

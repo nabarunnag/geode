@@ -145,11 +145,10 @@ public abstract class ProcessStreamReader implements Runnable {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder(getClass().getSimpleName());
-    sb.append(" Thread").append(" #").append(System.identityHashCode(this));
-    sb.append(" alive=").append(isRunning());
-    sb.append(" listener=").append(inputListener);
-    return sb.toString();
+    String sb = getClass().getSimpleName() + " Thread" + " #" + System.identityHashCode(this)
+        + " alive=" + isRunning()
+        + " listener=" + inputListener;
+    return sb;
   }
 
   private String createThreadName() {

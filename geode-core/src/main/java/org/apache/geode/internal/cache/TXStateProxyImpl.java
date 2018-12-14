@@ -788,11 +788,10 @@ public class TXStateProxyImpl implements TXStateProxy {
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append("TXStateProxyImpl@").append(System.identityHashCode(this)).append(" txId:")
-        .append(this.txId).append(" realDeal:").append(this.realDeal).append(" isJTA:")
-        .append(isJTA);
-    return builder.toString();
+    String builder = "TXStateProxyImpl@" + System.identityHashCode(this) + " txId:"
+        + this.txId + " realDeal:" + this.realDeal + " isJTA:"
+        + isJTA;
+    return builder;
   }
 
   @Override

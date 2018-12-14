@@ -93,10 +93,6 @@ public class NetstatFunction implements InternalFunction {
 
     String osInfo = getOsName() + " " + getOsVersion() + " " + getOsArchitecture();
 
-    StringBuilder memberPlatFormInfo = new StringBuilder();
-    memberPlatFormInfo.append(CliStrings.format(CliStrings.NETSTAT__MSG__FOR_HOST_1_OS_2_MEMBER_0,
-        new Object[] {id, host, osInfo, lineSeparator}));
-
     int nameIdLength = Math.max(Math.max(id.length(), host.length()), osInfo.length()) * 2;
 
     StringBuilder netstatInfoBottom = new StringBuilder();
@@ -105,7 +101,10 @@ public class NetstatFunction implements InternalFunction {
       netstatInfoBottom.append("#");
     }
 
-    netstatInfo.append(lineSeparator).append(memberPlatFormInfo.toString()).append(lineSeparator)
+    String memberPlatFormInfo = CliStrings.format(CliStrings.NETSTAT__MSG__FOR_HOST_1_OS_2_MEMBER_0,
+        new Object[] {id, host, osInfo, lineSeparator});
+    netstatInfo.append(lineSeparator).append(
+        memberPlatFormInfo).append(lineSeparator)
         .append(netstatInfoBottom.toString()).append(lineSeparator);
   }
 

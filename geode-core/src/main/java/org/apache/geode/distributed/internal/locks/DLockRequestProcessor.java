@@ -955,24 +955,23 @@ public class DLockRequestProcessor extends ReplyProcessor21 {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
 
-      sb.append("{DLockRequestMessage id=" + this.processorId);
-      sb.append(" for " + this.serviceName + ":" + this.dlsSerialNumber);
-      sb.append(" name=" + this.objectName);
-      sb.append(" start=" + this.startTime);
-      sb.append(" sender=" + getSender());
-      sb.append(" threadId=" + this.threadId);
-      sb.append(" leaseMillis=" + this.leaseMillis);
-      sb.append(" waitMillis=" + this.waitMillis);
-      sb.append(" reentrant=" + this.reentrant);
-      sb.append(" tryLock=" + this.tryLock);
-      sb.append(" lockId=" + this.lockId);
-      sb.append(" grantorVersion=" + this.grantorVersion);
-      sb.append(" grantorSerialNumber=" + this.grantorSerialNumber);
-      sb.append(" dlsSerialNumber=" + this.dlsSerialNumber);
-      sb.append("}");
-      return sb.toString();
+      String sb = "{DLockRequestMessage id=" + this.processorId
+          + " for " + this.serviceName + ":" + this.dlsSerialNumber
+          + " name=" + this.objectName
+          + " start=" + this.startTime
+          + " sender=" + getSender()
+          + " threadId=" + this.threadId
+          + " leaseMillis=" + this.leaseMillis
+          + " waitMillis=" + this.waitMillis
+          + " reentrant=" + this.reentrant
+          + " tryLock=" + this.tryLock
+          + " lockId=" + this.lockId
+          + " grantorVersion=" + this.grantorVersion
+          + " grantorSerialNumber=" + this.grantorSerialNumber
+          + " dlsSerialNumber=" + this.dlsSerialNumber
+          + "}";
+      return sb;
     }
 
   }

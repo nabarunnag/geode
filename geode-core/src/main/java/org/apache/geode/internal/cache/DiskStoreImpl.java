@@ -2718,7 +2718,7 @@ public class DiskStoreImpl implements DiskStore {
       return null;
     }
 
-    return l.toArray(new CompactableOplog[l.size()]);
+    return l.toArray(new CompactableOplog[0]);
   }
 
   /**

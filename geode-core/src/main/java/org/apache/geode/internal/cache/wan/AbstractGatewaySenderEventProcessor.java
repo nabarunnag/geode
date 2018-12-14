@@ -509,9 +509,8 @@ public abstract class AbstractGatewaySenderEventProcessor extends LoggingThread
           beforeExecute();
           try {
             // this list is access by ack reader thread so create new every time. #50220
-            filteredList = new ArrayList<GatewaySenderEventImpl>();
 
-            filteredList.addAll(events);
+            filteredList = new ArrayList<GatewaySenderEventImpl>(events);
 
             // If the exception has been set and its cause is an IllegalStateExcetption,
             // remove all events whose serialized value is no longer available
@@ -757,7 +756,6 @@ public abstract class AbstractGatewaySenderEventProcessor extends LoggingThread
     if (this.sender.isBatchConflationEnabled() && events.size() > 1) {
       Map<ConflationKey, GatewaySenderEventImpl> conflatedEventsMap =
           new LinkedHashMap<ConflationKey, GatewaySenderEventImpl>();
-      conflatedEvents = new ArrayList<GatewaySenderEventImpl>();
       for (GatewaySenderEventImpl gsEvent : events) {
         // Determine whether the event should be conflated.
         if (gsEvent.shouldBeConflated()) {
@@ -782,9 +780,7 @@ public abstract class AbstractGatewaySenderEventProcessor extends LoggingThread
       }
 
       // Iterate the map and add the events to the conflated events list
-      for (GatewaySenderEventImpl gei : conflatedEventsMap.values()) {
-        conflatedEvents.add(gei);
-      }
+      conflatedEvents = new ArrayList<GatewaySenderEventImpl>(conflatedEventsMap.values());
 
       // Increment the events conflated from batches statistic
       this.sender.getStatistics()
@@ -1257,7 +1253,7 @@ public abstract class AbstractGatewaySenderEventProcessor extends LoggingThread
       StringBuffer buffer = new StringBuffer();
       buffer.append(message);
       buffer.append(events.size()).append(" events");
-      buffer.append(" (batch #" + getBatchId());
+      buffer.append(" (batch #").append(getBatchId());
       buffer.append("):\n");
       for (GatewaySenderEventImpl ge : events) {
         buffer.append("\tEvent ").append(ge.getEventId()).append(":");

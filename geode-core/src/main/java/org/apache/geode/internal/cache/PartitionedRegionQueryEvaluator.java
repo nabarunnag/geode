@@ -567,7 +567,7 @@ public class PartitionedRegionQueryEvaluator extends StreamingPartitionOperation
       logStr.append("Query ").append(this.query.getQueryString())
           .append(" needs to retry bucketsIds: [");
       for (Integer i : retryBuckets) {
-        logStr.append("," + i);
+        logStr.append(",").append(i);
       }
       logStr.append("]");
       logger.debug(logStr);
@@ -862,7 +862,7 @@ public class PartitionedRegionQueryEvaluator extends StreamingPartitionOperation
     if (dataStore != null) {
       for (Integer bid : bucketIdsToConsider) {
         if (dataStore.isManagingBucket(bid)) {
-          bucketIds.add(Integer.valueOf(bid));
+          bucketIds.add(bid);
         }
       }
       if (bucketIds.size() > 0) {

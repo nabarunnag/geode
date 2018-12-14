@@ -323,14 +323,13 @@ public class StatisticDescriptorImpl implements StatisticDescriptor {
 
   public int checkLong() {
     if (this.typeCode != LONG) {
-      StringBuffer sb = new StringBuffer();
-      sb.append("The statistic " + getName() + " with id ");
-      sb.append(getId());
-      sb.append(" is of type ");
-      sb.append(StatisticDescriptorImpl.getTypeCodeName(getTypeCode()));
 
-      sb.append(" and it was expected to be a long");
-      throw new IllegalArgumentException(sb.toString());
+      String sb = "The statistic " + getName() + " with id "
+          + getId()
+          + " is of type "
+          + StatisticDescriptorImpl.getTypeCodeName(getTypeCode())
+          + " and it was expected to be a long";
+      throw new IllegalArgumentException(sb);
     }
     return this.id;
   }

@@ -73,12 +73,11 @@ public class MapBasedStatisticsNotification implements StatisticsNotification {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder(getClass().getName());
-    sb.append("@").append(System.identityHashCode(this)).append("{");
-    sb.append("millisTimeStamp=").append(this.millisTimeStamp);
-    sb.append(", type=").append(this.type);
-    sb.append(", stats=").append(this.stats);
-    sb.append("}");
-    return sb.toString();
+    String sb = getClass().getName() + "@" + System.identityHashCode(this) + "{"
+        + "millisTimeStamp=" + this.millisTimeStamp
+        + ", type=" + this.type
+        + ", stats=" + this.stats
+        + "}";
+    return sb;
   }
 }

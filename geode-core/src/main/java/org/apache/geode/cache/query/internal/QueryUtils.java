@@ -276,10 +276,7 @@ public class QueryUtils {
       rs = new ResultsBag(large, null);
     }
 
-    for (Iterator itr = small.iterator(); itr.hasNext();) {
-      Object element = itr.next();
-      rs.add(element);
-    }
+    rs.addAll(small);
     return rs;
   }
 
@@ -1268,8 +1265,7 @@ public class QueryUtils {
       // intermediate resultset Identify the final List which will depend upon the complete
       // expansion flag Identify the iterators to be expanded to, which will also depend upon
       // complete expansion flag..
-      List totalExpList = new ArrayList();
-      totalExpList.addAll(singleUsableICH.expansionList);
+      List totalExpList = new ArrayList(singleUsableICH.expansionList);
       if (completeExpansionNeeded) {
         Support.Assert(expnItrsToIgnore != null,
             "expnItrsToIgnore should not have been null as we are in this block itself indicates that intermediate results was not null");

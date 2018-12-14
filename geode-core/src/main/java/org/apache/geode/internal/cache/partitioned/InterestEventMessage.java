@@ -210,10 +210,9 @@ public class InterestEventMessage extends PartitionMessage {
 
     @Override
     public String toString() {
-      StringBuffer sb =
-          new StringBuffer().append("InterestEventReplyMessage ").append("processorid=")
-              .append(this.processorId).append(" reply to sender ").append(this.getSender());
-      return sb.toString();
+      String sb = "InterestEventReplyMessage " + "processorid="
+          + this.processorId + " reply to sender " + this.getSender();
+      return sb;
     }
 
     public int getDSFID() {

@@ -104,9 +104,7 @@ public class DistributedRemoveAllOperation extends AbstractUpdateOperation {
   }
 
   public void setRemoveAllEntryData(RemoveAllEntryData[] removeAllEntryData) {
-    for (int i = 0; i < removeAllEntryData.length; i++) {
-      removeAllData[i] = removeAllEntryData[i];
-    }
+    System.arraycopy(removeAllEntryData, 0, removeAllData, 0, removeAllEntryData.length);
     this.removeAllDataSize = removeAllEntryData.length;
   }
 
@@ -345,8 +343,8 @@ public class DistributedRemoveAllOperation extends AbstractUpdateOperation {
         sb.append(", b").append(this.bucketId);
       }
       if (versionTag != null) {
-        sb.append(",v").append(versionTag.getEntryVersion())
-            .append(",rv=" + versionTag.getRegionVersion());
+        sb.append(",v").append(versionTag.getEntryVersion()).append(",rv=")
+            .append(versionTag.getRegionVersion());
       }
       if (filterRouting != null) {
         sb.append(", ").append(filterRouting);

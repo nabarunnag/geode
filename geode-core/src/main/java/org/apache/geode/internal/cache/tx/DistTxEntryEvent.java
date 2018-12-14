@@ -238,10 +238,10 @@ public class DistTxEntryEvent extends EntryEventImpl {
     buf.append(this.getKeyInfo().getBucketId());
     buf.append(";oldValue=");
     if (this.putAllOp != null) {
-      buf.append(";putAllDataSize :" + this.putAllOp.putAllDataSize);
+      buf.append(";putAllDataSize :").append(this.putAllOp.putAllDataSize);
     }
     if (this.removeAllOp != null) {
-      buf.append(";removeAllDataSize :" + this.removeAllOp.removeAllDataSize);
+      buf.append(";removeAllDataSize :").append(this.removeAllOp.removeAllDataSize);
     }
     buf.append("]");
     return buf.toString();

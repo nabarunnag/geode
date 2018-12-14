@@ -70,10 +70,9 @@ public class ParallelQueueRemovalMessage extends PooledDistributionMessage {
   @Override
   public String toString() {
     String cname = getShortClassName();
-    final StringBuilder sb = new StringBuilder(cname);
-    sb.append("regionToDispatchedKeysMap=" + regionToDispatchedKeysMap);
-    sb.append(" sender=").append(getSender());
-    return sb.toString();
+    String sb = cname + "regionToDispatchedKeysMap=" + regionToDispatchedKeysMap
+        + " sender=" + getSender();
+    return sb;
   }
 
   @Override

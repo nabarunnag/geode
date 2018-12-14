@@ -537,13 +537,13 @@ public class LocalDataSet implements Region, QueryExecutor {
   }
 
   public String toString() {
-    final StringBuilder sb = new StringBuilder();
-    sb.append(getClass().getName());
-    sb.append("[path='").append(getFullPath());
-    sb.append("';scope=").append(this.proxy.getScope());
-    sb.append("';dataPolicy=").append(this.proxy.getDataPolicy());
-    sb.append(" ;bucketIds=").append(this.buckets);
-    return sb.append(']').toString();
+    String sb = getClass().getName()
+        + "[path='" + getFullPath()
+        + "';scope=" + this.proxy.getScope()
+        + "';dataPolicy=" + this.proxy.getDataPolicy()
+        + " ;bucketIds=" + this.buckets
+        + ']';
+    return sb;
   }
 
   public void saveSnapshot(OutputStream outputStream) throws IOException {}

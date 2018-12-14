@@ -112,9 +112,9 @@ public class SystemMemberJmxImpl extends org.apache.geode.admin.internal.SystemM
 
   /** Create and register the MBean to manage this resource */
   private void initializeMBean() throws org.apache.geode.admin.AdminException {
-    this.mbeanName = new StringBuffer("GemFire.Member:id=")
-        .append(MBeanUtil.makeCompliantMBeanNameProperty(getId())).append(",type=")
-        .append(MBeanUtil.makeCompliantMBeanNameProperty(getType().getName())).toString();
+    this.mbeanName = "GemFire.Member:id="
+        + MBeanUtil.makeCompliantMBeanNameProperty(getId()) + ",type="
+        + MBeanUtil.makeCompliantMBeanNameProperty(getType().getName());
 
     this.objectName =
         MBeanUtil.createMBean(this, addDynamicAttributes(MBeanUtil.lookupManagedBean(this)));

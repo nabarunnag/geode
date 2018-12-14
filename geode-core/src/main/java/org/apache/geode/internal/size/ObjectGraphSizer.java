@@ -162,7 +162,7 @@ public class ObjectGraphSizer {
         Class clazz = entry.clazz;
         Integer count = entry.count;
         Long size = entry.size;
-        result.append(clazz + "\t" + size + "\t" + count + "\n");
+        result.append(clazz).append("\t").append(size).append("\t").append(count).append("\n");
       }
       return result.toString();
     }

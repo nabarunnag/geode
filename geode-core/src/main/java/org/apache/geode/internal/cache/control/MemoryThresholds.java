@@ -214,15 +214,14 @@ public class MemoryThresholds {
 
   @Override
   public String toString() {
-    return new StringBuilder().append("MemoryThresholds@[").append(System.identityHashCode(this))
-        .append(" maxMemoryBytes:" + this.maxMemoryBytes)
-        .append(", criticalThreshold:" + this.criticalThreshold)
-        .append(", criticalThresholdBytes:" + this.criticalThresholdBytes)
-        .append(", criticalThresholdClearBytes:" + this.criticalThresholdClearBytes)
-        .append(", evictionThreshold:" + this.evictionThreshold)
-        .append(", evictionThresholdBytes:" + this.evictionThresholdBytes)
-        .append(", evictionThresholdClearBytes:" + this.evictionThresholdClearBytes).append("]")
-        .toString();
+    return "MemoryThresholds@[" + System.identityHashCode(this)
+        + " maxMemoryBytes:" + this.maxMemoryBytes + ", criticalThreshold:"
+        + this.criticalThreshold + ", criticalThresholdBytes:"
+        + this.criticalThresholdBytes + ", criticalThresholdClearBytes:"
+        + this.criticalThresholdClearBytes + ", evictionThreshold:"
+        + this.evictionThreshold + ", evictionThresholdBytes:"
+        + this.evictionThresholdBytes + ", evictionThresholdClearBytes:"
+        + this.evictionThresholdClearBytes + "]";
   }
 
   public long getMaxMemoryBytes() {

@@ -651,7 +651,7 @@ public class DistributedSystemBridge {
         set.addAll(hostedLocators);
       }
 
-      return set.toArray(new String[set.size()]);
+      return set.toArray(new String[0]);
     }
     return ManagementConstants.NO_DATA_STRING;
   }
@@ -1011,8 +1011,7 @@ public class DistributedSystemBridge {
   }
 
   public ObjectName[] listDistributedRegionObjectNames() {
-    List<ObjectName> list = new ArrayList<>();
-    list.addAll(distrRegionMap.keySet());
+    List<ObjectName> list = new ArrayList<>(distrRegionMap.keySet());
     ObjectName[] objNames = new ObjectName[list.size()];
     return list.toArray(objNames);
   }

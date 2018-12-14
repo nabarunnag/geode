@@ -136,8 +136,8 @@ public class DurableClientAttributes {
 
   @Override
   public String toString() {
-    StringBuffer buffer = new StringBuffer(50).append("DurableClientAttributes[id=")
-        .append(this.getId()).append("; timeout=").append(this.timeout).append("]");
-    return buffer.toString();
+    String buffer = "DurableClientAttributes[id="
+        + this.getId() + "; timeout=" + this.timeout + "]";
+    return buffer;
   }
 }

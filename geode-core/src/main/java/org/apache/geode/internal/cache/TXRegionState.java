@@ -540,12 +540,11 @@ public class TXRegionState {
 
   @Override
   public String toString() {
-    StringBuilder str = new StringBuilder();
-    str.append("{").append(super.toString()).append(" ");
-    str.append(" ,entryMods=").append(this.entryMods);
-    str.append(" ,isCreatedDuringCommit=").append(this.isCreatedDuringCommit());
-    str.append("}");
-    return str.toString();
+    String str = "{" + super.toString() + " "
+        + " ,entryMods=" + this.entryMods
+        + " ,isCreatedDuringCommit=" + this.isCreatedDuringCommit()
+        + "}";
+    return str;
   }
 
   /**

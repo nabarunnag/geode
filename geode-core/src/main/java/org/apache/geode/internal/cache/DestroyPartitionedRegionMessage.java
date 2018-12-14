@@ -187,8 +187,8 @@ public class DestroyPartitionedRegionMessage extends PartitionMessage {
   protected void appendFields(StringBuilder buff) {
     super.appendFields(buff);
     buff.append("; cbArg=").append(this.cbArg).append("; op=").append(this.op);
-    buff.append("; prSerial=" + prSerial);
-    buff.append("; bucketSerials (" + bucketSerials.length + ")=(");
+    buff.append("; prSerial=").append(prSerial);
+    buff.append("; bucketSerials (").append(bucketSerials.length).append(")=(");
     for (int i = 0; i < bucketSerials.length; i++) {
       buff.append(Integer.toString(bucketSerials[i]));
       if (i < bucketSerials.length - 1) {

@@ -1112,8 +1112,8 @@ public class CompiledSelect extends AbstractCompiledValue {
       RuntimeIterator rit = context.findRuntimeIterator(cv);
       List pathOnItr = cv.getPathOnIterator(rit, context);
       if (pathOnItr != null) {
-        String path[] = (String[]) pathOnItr.toArray(new String[pathOnItr.size()]);
-        ObjectType ot[] = PathUtils.calculateTypesAlongPath(context, rit.getElementType(), path);
+        String[] path = (String[]) pathOnItr.toArray(new String[0]);
+        ObjectType[] ot = PathUtils.calculateTypesAlongPath(context, rit.getElementType(), path);
         retType = ot[ot.length - 1];
       }
     } catch (NameNotFoundException ignore) {
@@ -1396,7 +1396,7 @@ public class CompiledSelect extends AbstractCompiledValue {
       } else if (type == METHOD_INV) {
         name = ((CompiledOperation) projExpr).getMethodName();
       } else {
-        name = new StringBuilder("field$").append(context.nextFieldNum()).toString();
+        name = "field$" + context.nextFieldNum();
         // name = projExpr.toString();
       }
     }

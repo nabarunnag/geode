@@ -94,12 +94,11 @@ public class ChunkedMessage extends Message {
 
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer();
 
-    sb.append(super.toString());
-    sb.append("; chunkLength= " + chunkLength);
-    sb.append("; lastChunk=" + lastChunk);
-    return sb.toString();
+    String sb = super.toString()
+        + "; chunkLength= " + chunkLength
+        + "; lastChunk=" + lastChunk;
+    return sb;
   }
 
   /**

@@ -277,13 +277,10 @@ public class ServerRegionFunctionExecutor extends AbstractExecution {
       }
       return srp;
     } else {
-      StringBuilder message = new StringBuilder();
-      message.append(srp).append(": ");
-      message
-          .append(
-              "No available connection was found. Server Region Proxy is not available for this region ")
-          .append(region.getName());
-      throw new FunctionException(message.toString());
+      String message = String.valueOf(srp) + ": "
+          + "No available connection was found. Server Region Proxy is not available for this region "
+          + region.getName();
+      throw new FunctionException(message);
     }
   }
 
@@ -293,9 +290,9 @@ public class ServerRegionFunctionExecutor extends AbstractExecution {
 
   @Override
   public String toString() {
-    return new StringBuffer().append("[ ServerRegionExecutor:").append("args=").append(this.args)
-        .append(" ;filter=").append(this.filter).append(" ;region=").append(this.region.getName())
-        .append("]").toString();
+    return "[ ServerRegionExecutor:" + "args=" + this.args
+        + " ;filter=" + this.filter + " ;region=" + this.region.getName()
+        + "]";
   }
 
   @Override

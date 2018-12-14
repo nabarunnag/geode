@@ -731,18 +731,17 @@ public class GatewaySenderEventImpl
 
   @Override
   public String toString() {
-    StringBuffer buffer = new StringBuffer();
-    buffer.append("GatewaySenderEventImpl[").append("id=").append(this.id).append(";action=")
-        .append(this.action).append(";operation=").append(getOperation()).append(";region=")
-        .append(this.regionPath).append(";key=").append(this.key).append(";value=")
-        .append(getValueAsString(true)).append(";valueIsObject=").append(this.valueIsObject)
-        .append(";numberOfParts=").append(this.numberOfParts).append(";callbackArgument=")
-        .append(this.callbackArgument).append(";possibleDuplicate=").append(this.possibleDuplicate)
-        .append(";creationTime=").append(this.creationTime).append(";shadowKey=")
-        .append(this.shadowKey).append(";timeStamp=").append(this.versionTimeStamp)
-        .append(";acked=").append(this.isAcked).append(";dispatched=").append(this.isDispatched)
-        .append(";bucketId=").append(this.bucketId).append("]");
-    return buffer.toString();
+    String buffer = "GatewaySenderEventImpl[" + "id=" + this.id + ";action="
+        + this.action + ";operation=" + getOperation() + ";region="
+        + this.regionPath + ";key=" + this.key + ";value="
+        + getValueAsString(true) + ";valueIsObject=" + this.valueIsObject
+        + ";numberOfParts=" + this.numberOfParts + ";callbackArgument="
+        + this.callbackArgument + ";possibleDuplicate=" + this.possibleDuplicate
+        + ";creationTime=" + this.creationTime + ";shadowKey="
+        + this.shadowKey + ";timeStamp=" + this.versionTimeStamp
+        + ";acked=" + this.isAcked + ";dispatched=" + this.isDispatched
+        + ";bucketId=" + this.bucketId + "]";
+    return buffer;
   }
 
   public static boolean isSerializingValue() {

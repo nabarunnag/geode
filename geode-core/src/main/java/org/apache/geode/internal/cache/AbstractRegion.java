@@ -990,8 +990,7 @@ public abstract class AbstractRegion implements InternalRegion, AttributesMutato
     if (getGatewaySenderIds().isEmpty() && getAsyncEventQueueIds().isEmpty()) {
       this.allGatewaySenderIds = Collections.emptySet(); // fix for bug 45774
     }
-    Set<String> tmp = new CopyOnWriteArraySet<String>();
-    tmp.addAll(this.getGatewaySenderIds());
+    Set<String> tmp = new CopyOnWriteArraySet<String>(this.getGatewaySenderIds());
     for (String asyncQueueId : this.getAsyncEventQueueIds()) {
       tmp.add(AsyncEventQueueImpl.getSenderIdFromAsyncEventQueueId(asyncQueueId));
     }
@@ -999,9 +998,8 @@ public abstract class AbstractRegion implements InternalRegion, AttributesMutato
   }
 
   private void initializeVisibleAsyncEventQueueIds(InternalRegionArguments internalRegionArgs) {
-    Set<String> visibleAsyncEventQueueIds = new CopyOnWriteArraySet<>();
     // Add all configured aeqIds
-    visibleAsyncEventQueueIds.addAll(getAsyncEventQueueIds());
+    Set<String> visibleAsyncEventQueueIds = new CopyOnWriteArraySet<>(getAsyncEventQueueIds());
     // Remove all internal aeqIds from internal region args if necessary
     if (internalRegionArgs.getInternalAsyncEventQueueIds() != null) {
       visibleAsyncEventQueueIds.removeAll(internalRegionArgs.getInternalAsyncEventQueueIds());
@@ -1064,7 +1062,7 @@ public abstract class AbstractRegion implements InternalRegion, AttributesMutato
           if (!wrml.isInitialized()) {
             if (members == null) {
               members = (DistributedMember[]) initialMembers
-                  .toArray(new DistributedMember[initialMembers.size()]);
+                  .toArray(new DistributedMember[0]);
             }
             wrml.initialMembers(this, members);
             if (newListeners == null) {

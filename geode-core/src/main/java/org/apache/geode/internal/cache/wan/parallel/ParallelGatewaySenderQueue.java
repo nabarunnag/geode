@@ -1412,7 +1412,7 @@ public class ParallelGatewaySenderQueue implements RegionQueue {
         Set<BucketRegion> allLocalBuckets = prQ.getDataStore().getAllLocalBucketRegions();
         for (BucketRegion br : allLocalBuckets) {
           if (br.size() > 0) {
-            sb.append("bucketId=" + br.getId() + ":" + br.keySet() + ";");
+            sb.append("bucketId=").append(br.getId()).append(":").append(br.keySet()).append(";");
           }
         }
       }
@@ -1655,8 +1655,7 @@ public class ParallelGatewaySenderQueue implements RegionQueue {
               }
             }
 
-            final HashMap<String, Map<Integer, List>> temp =
-                new HashMap<String, Map<Integer, List>>();
+            final HashMap<String, Map<Integer, List>> temp;
             buckToDispatchLock.lock();
             try {
               boolean wasEmpty = regionToDispatchedKeysMap.isEmpty();
@@ -1666,7 +1665,7 @@ public class ParallelGatewaySenderQueue implements RegionQueue {
               if (wasEmpty)
                 continue;
               // TODO: This should be optimized.
-              temp.putAll(regionToDispatchedKeysMap);
+              temp = new HashMap<String, Map<Integer, List>>(regionToDispatchedKeysMap);
               regionToDispatchedKeysMap.clear();
             } finally {
               buckToDispatchLock.unlock();

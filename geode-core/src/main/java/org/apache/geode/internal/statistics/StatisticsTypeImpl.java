@@ -209,13 +209,12 @@ public class StatisticsTypeImpl implements StatisticsType {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder(getClass().getName());
-    sb.append("@").append(System.identityHashCode(this)).append("{");
-    sb.append("name=").append(this.name);
-    sb.append(", description=").append(this.description);
-    sb.append(", stats.length=").append(this.stats.length);
-    sb.append("}");
-    return sb.toString();
+    String sb = getClass().getName() + "@" + System.identityHashCode(this) + "{"
+        + "name=" + this.name
+        + ", description=" + this.description
+        + ", stats.length=" + this.stats.length
+        + "}";
+    return sb;
   }
 
   @Override

@@ -132,15 +132,14 @@ public class SystemMemberCacheEventProcessor {
 
     @Override
     public String toString() {
-      StringBuffer buff = new StringBuffer();
-      buff.append("SystemMemberCacheMessage (region='");
-      buff.append(this.regionPath);
-      buff.append("'; sender=");
-      buff.append(this.sender);
-      buff.append("; op=");
-      buff.append(this.op);
-      buff.append(")");
-      return buff.toString();
+      String buff = "SystemMemberCacheMessage (region='"
+          + this.regionPath
+          + "'; sender="
+          + this.sender
+          + "; op="
+          + this.op
+          + ")";
+      return buff;
     }
   }
 }

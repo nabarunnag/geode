@@ -204,15 +204,14 @@ public abstract class DiskId {
     /*
      * StringBuffer temp = new StringBuffer("Oplog Key ID = "); temp.append(this.keyId);
      */
-    StringBuilder temp = new StringBuilder("Oplog ID = ");
-    temp.append(this.getOplogId());
-    temp.append("; Offset in Oplog = ");
-    temp.append(getOffsetInOplog());
-    temp.append("; Value Length = ");
-    temp.append(getValueLength());
-    temp.append("; UserBits is = ");
-    temp.append(this.getUserBits());
-    return temp.toString();
+    String temp = "Oplog ID = " + this.getOplogId()
+        + "; Offset in Oplog = "
+        + getOffsetInOplog()
+        + "; Value Length = "
+        + getValueLength()
+        + "; UserBits is = "
+        + this.getUserBits();
+    return temp;
   }
 
   /**
@@ -521,11 +520,10 @@ public abstract class DiskId {
 
     @Override
     public String toString() {
-      StringBuilder temp = new StringBuilder("Oplog Key ID = ");
-      temp.append(this.keyId);
-      temp.append("; ");
-      temp.append(super.toString());
-      return temp.toString();
+      String temp = "Oplog Key ID = " + this.keyId
+          + "; "
+          + super.toString();
+      return temp;
     }
   }
   protected static final class PersistenceWithIntOffset extends PersistenceWithIntOffsetNoLL {
@@ -589,11 +587,10 @@ public abstract class DiskId {
 
     @Override
     public String toString() {
-      StringBuilder temp = new StringBuilder("Oplog Key ID = ");
-      temp.append(this.keyId);
-      temp.append("; ");
-      temp.append(super.toString());
-      return temp.toString();
+      String temp = "Oplog Key ID = " + this.keyId
+          + "; "
+          + super.toString();
+      return temp;
 
     }
 

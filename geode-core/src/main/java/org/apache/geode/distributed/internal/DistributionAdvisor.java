@@ -1539,10 +1539,10 @@ public class DistributionAdvisor {
     }
 
     public void fillInToString(StringBuilder sb) {
-      sb.append("memberId=" + this.peerMemberId);
-      sb.append("; version=" + this.version);
-      sb.append("; serialNumber=" + this.serialNumber);
-      sb.append("; initialMembershipVersion=" + this.initialMembershipVersion);
+      sb.append("memberId=").append(this.peerMemberId);
+      sb.append("; version=").append(this.version);
+      sb.append("; serialNumber=").append(this.serialNumber);
+      sb.append("; initialMembershipVersion=").append(this.initialMembershipVersion);
     }
 
     @Override

@@ -161,16 +161,18 @@ public class RegionSubRegionSnapshot implements DataSerializable {
 
   @Override
   public String toString() {
-    String toStr = "RegionSnapshot [" + "path=" + this.getFullPath() + ",parent="
-        + (this.parent == null ? "null" : this.parent.name) + ", entryCount=" + this.entryCount
-        + ", subRegionCount=" + this.subRegionSnapshots.size() + "<<";
+    StringBuilder toStrBuilder =
+        new StringBuilder().append("RegionSnapshot [" + "path=").append(this.getFullPath())
+            .append(",parent=").append(this.parent == null ? "null" : this.parent.name)
+            .append(", entryCount=").append(this.entryCount).append(", subRegionCount=")
+            .append(this.subRegionSnapshots.size()).append("<<");
 
     for (Iterator iter = subRegionSnapshots.iterator(); iter.hasNext();) {
-      toStr = toStr + ((RegionSubRegionSnapshot) iter.next()).getName() + ", ";
+      toStrBuilder.append(((RegionSubRegionSnapshot) iter.next()).getName()).append(", ");
     }
 
-    toStr = toStr + ">>" + "]";
-    return toStr;
+    toStrBuilder.append(">>").append("]");
+    return toStrBuilder.toString();
   }
 
   protected String name;

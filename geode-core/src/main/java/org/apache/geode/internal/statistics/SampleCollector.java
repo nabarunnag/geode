@@ -303,16 +303,15 @@ public class SampleCollector {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder(getClass().getName());
-    sb.append("@").append(System.identityHashCode(this)).append("{");
-    sb.append("sampler=").append(this.sampler);
-    sb.append(", statResourcesModCount=").append(this.statResourcesModCount);
-    sb.append(", resourceTypeId=").append(this.resourceTypeId);
-    sb.append(", resourceInstId=").append(this.resourceInstId);
-    sb.append(", resourceTypeMap.size()=").append(this.resourceTypeMap.size());
-    sb.append(", resourceInstMap.size()=").append(this.resourceInstMap.size());
-    sb.append("}");
-    return sb.toString();
+    String sb = getClass().getName() + "@" + System.identityHashCode(this) + "{"
+        + "sampler=" + this.sampler
+        + ", statResourcesModCount=" + this.statResourcesModCount
+        + ", resourceTypeId=" + this.resourceTypeId
+        + ", resourceInstId=" + this.resourceInstId
+        + ", resourceTypeMap.size()=" + this.resourceTypeMap.size()
+        + ", resourceInstMap.size()=" + this.resourceInstMap.size()
+        + "}";
+    return sb;
   }
 
   /** For testing only */
@@ -664,11 +663,10 @@ public class SampleCollector {
 
     @Override
     public String toString() {
-      final StringBuilder sb = new StringBuilder(getClass().getName());
-      sb.append("@").append(System.identityHashCode(this)).append("{");
-      sb.append("mark=").append(this.mark);
-      sb.append(", sampleHandler=").append(this.sampleHandler);
-      return sb.toString();
+      String sb = getClass().getName() + "@" + System.identityHashCode(this) + "{"
+          + "mark=" + this.mark
+          + ", sampleHandler=" + this.sampleHandler;
+      return sb;
     }
   }
 
@@ -769,10 +767,9 @@ public class SampleCollector {
 
     @Override
     public String toString() {
-      final StringBuilder sb = new StringBuilder(getClass().getName());
-      sb.append("@").append(System.identityHashCode(this)).append("{");
-      sb.append("currentHandlers=").append(this.currentHandlers);
-      return sb.toString();
+      String sb = getClass().getName() + "@" + System.identityHashCode(this) + "{"
+          + "currentHandlers=" + this.currentHandlers;
+      return sb;
     }
 
     private class MarkableIterator implements Iterator<MarkableSampleHandler> {

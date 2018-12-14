@@ -183,9 +183,7 @@ public class PoolManagerImpl {
 
   @Override
   public String toString() {
-    StringBuffer result = new StringBuffer();
-    result.append(super.toString()).append("-").append(this.normalManager ? "normal" : "xml");
-    return result.toString();
+    return super.toString() + "-" + (this.normalManager ? "normal" : "xml");
   }
 
   /**

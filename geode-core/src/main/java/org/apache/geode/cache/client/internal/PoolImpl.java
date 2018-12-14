@@ -480,10 +480,9 @@ public class PoolImpl implements InternalPool {
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder(100);
-    sb.append(this.getClass().getSimpleName()).append('@').append(System.identityHashCode(this))
-        .append(" name=").append(getName());
-    return sb.toString();
+    String sb = this.getClass().getSimpleName() + '@' + System.identityHashCode(this)
+        + " name=" + getName();
+    return sb;
   }
 
   public void destroy(boolean keepAlive) {
@@ -1148,9 +1147,8 @@ public class PoolImpl implements InternalPool {
    * Returns a list of ServerLocation instances; one for each server we are currently connected to.
    */
   public List<ServerLocation> getCurrentServers() {
-    ArrayList result = new ArrayList();
     Map endpointMap = endpointManager.getEndpointMap();
-    result.addAll(endpointMap.keySet());
+    ArrayList result = new ArrayList(endpointMap.keySet());
     return result;
   }
 

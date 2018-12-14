@@ -2937,9 +2937,7 @@ public class DistributedRegion extends LocalRegion implements InternalDistribute
 
     @Override
     public String toString() {
-      StringBuilder sb = new StringBuilder();
-      sb.append('<').append(this.oplogId).append(':').append(this.offset).append('>');
-      return sb.toString();
+      return "<" + this.oplogId + ':' + this.offset + '>';
     }
   }
 

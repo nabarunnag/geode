@@ -369,13 +369,12 @@ public class DistTXStateOnCoordinator extends DistTXState implements DistTXCoord
 
   @Override
   public String toString() {
-    StringBuilder builder = new StringBuilder();
-    builder.append(super.toString());
-    builder.append(" ,primary txOps=").append(this.primaryTransactionalOperations);
-    builder.append(" ,secondary txOps=").append(this.secondaryTransactionalOperations);
-    builder.append(" ,preCommitResponse=").append(this.preCommitResponse);
-    builder.append(" ,rollbackResponse=").append(this.rollbackResponse);
-    return builder.toString();
+    String builder = super.toString()
+        + " ,primary txOps=" + this.primaryTransactionalOperations
+        + " ,secondary txOps=" + this.secondaryTransactionalOperations
+        + " ,preCommitResponse=" + this.preCommitResponse
+        + " ,rollbackResponse=" + this.rollbackResponse;
+    return builder;
   }
 
   @Override

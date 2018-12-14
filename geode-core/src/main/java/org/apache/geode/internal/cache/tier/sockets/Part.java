@@ -456,11 +456,10 @@ public class Part {
 
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer();
-    sb.append("partCode=");
-    sb.append(typeCodeToString(this.typeCode));
-    sb.append(" partLength=" + getLength());
-    return sb.toString();
+    String sb = "partCode="
+        + typeCodeToString(this.typeCode)
+        + " partLength=" + getLength();
+    return sb;
   }
 
   public void setVersion(Version clientVersion) {

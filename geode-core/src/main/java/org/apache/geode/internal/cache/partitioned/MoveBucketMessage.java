@@ -217,11 +217,10 @@ public class MoveBucketMessage extends PartitionMessage {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("MoveBucketReplyMessage ").append("processorid=").append(this.processorId)
-          .append(" moved=").append(this.moved).append(" reply to sender ")
-          .append(this.getSender());
-      return sb.toString();
+      String sb = "MoveBucketReplyMessage " + "processorid=" + this.processorId
+          + " moved=" + this.moved + " reply to sender "
+          + this.getSender();
+      return sb;
     }
   }
 

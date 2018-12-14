@@ -1226,11 +1226,11 @@ public class CacheClientProxy implements ClientSession {
       } else {
         subBuffer.append("unregister interest in ");
       }
-      StringBuffer buffer = new StringBuffer();
-      buffer.append(this).append(": Notifying secondary proxies to ").append(subBuffer.toString())
-          .append(message.getRegionName()).append("->").append(message.getKeyOfInterest())
-          .append("->").append(InterestType.getString(message.getInterestType()));
-      logger.debug(buffer.toString());
+      String buffer =
+          String.valueOf(this) + ": Notifying secondary proxies to " + subBuffer.toString()
+              + message.getRegionName() + "->" + message.getKeyOfInterest()
+              + "->" + InterestType.getString(message.getInterestType());
+      logger.debug(buffer);
     }
     this._cacheClientNotifier.deliverInterestChange(this.proxyID, message);
   }
@@ -1389,12 +1389,11 @@ public class CacheClientProxy implements ClientSession {
       // addFilterRegisteredClients(regionName, key);
 
       if (logger.isDebugEnabled()) {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(this).append(": Interest listener registered ")
-            .append(message.getIsDurable() ? "" : "non-").append("durable interest in ")
-            .append(message.getRegionName()).append("->").append(message.getKeyOfInterest())
-            .append("->").append(InterestType.getString(message.getInterestType()));
-        logger.debug(buffer.toString());
+        String buffer = String.valueOf(this) + ": Interest listener registered "
+            + (message.getIsDurable() ? "" : "non-") + "durable interest in "
+            + message.getRegionName() + "->" + message.getKeyOfInterest()
+            + "->" + InterestType.getString(message.getInterestType());
+        logger.debug(buffer);
       }
     } else {
       // Unregister interest in this region->key
@@ -1405,11 +1404,10 @@ public class CacheClientProxy implements ClientSession {
       }
 
       if (logger.isDebugEnabled()) {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(this).append(": Interest listener unregistered interest in ")
-            .append(message.getRegionName()).append("->").append(message.getKeyOfInterest())
-            .append("->").append(InterestType.getString(message.getInterestType()));
-        logger.debug(buffer.toString());
+        String buffer = String.valueOf(this) + ": Interest listener unregistered interest in "
+            + message.getRegionName() + "->" + message.getKeyOfInterest()
+            + "->" + InterestType.getString(message.getInterestType());
+        logger.debug(buffer);
       }
     }
 
@@ -1819,12 +1817,11 @@ public class CacheClientProxy implements ClientSession {
    */
   @Override
   public String toString() {
-    StringBuffer buffer = new StringBuffer();
-    buffer.append("CacheClientProxy[")
-        .append(this.proxyID)
-        .append("; port=").append(this._socket.getPort()).append("; primary=").append(isPrimary)
-        .append("; version=").append(clientVersion).append("]");
-    return buffer.toString();
+    String buffer = "CacheClientProxy["
+        + this.proxyID
+        + "; port=" + this._socket.getPort() + "; primary=" + isPrimary
+        + "; version=" + clientVersion + "]";
+    return buffer;
   }
 
   public String getState() {

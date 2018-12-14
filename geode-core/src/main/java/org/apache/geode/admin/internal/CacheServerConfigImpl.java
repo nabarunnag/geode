@@ -120,14 +120,13 @@ public class CacheServerConfigImpl extends ManagedEntityConfigImpl
 
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer();
-    sb.append(super.toString());
-    sb.append(" cacheXMLFile=");
-    sb.append(this.getCacheXMLFile());
-    sb.append(" classPath=");
-    sb.append(this.getClassPath());
 
-    return sb.toString();
+    String sb = super.toString()
+        + " cacheXMLFile="
+        + this.getCacheXMLFile()
+        + " classPath="
+        + this.getClassPath();
+    return sb;
   }
 
 }

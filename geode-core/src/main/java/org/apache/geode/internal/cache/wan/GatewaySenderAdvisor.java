@@ -699,10 +699,10 @@ public class GatewaySenderAdvisor extends DistributionAdvisor {
     @Override
     public void fillInToString(StringBuilder sb) {
       super.fillInToString(sb);
-      sb.append("; id=" + this.Id);
-      sb.append("; remoteDSName=" + this.remoteDSId);
-      sb.append("; isRunning=" + this.isRunning);
-      sb.append("; isPrimary=" + this.isPrimary);
+      sb.append("; id=").append(this.Id);
+      sb.append("; remoteDSName=").append(this.remoteDSId);
+      sb.append("; isRunning=").append(this.isRunning);
+      sb.append("; isPrimary=").append(this.isPrimary);
     }
   }
 

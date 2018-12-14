@@ -191,11 +191,10 @@ public class RemoteSizeMessage extends RemoteOperationMessage {
 
     @Override
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append(this.getClass().getName()).append(" processorid=").append(this.processorId)
-          .append(" reply to sender ").append(this.getSender()).append(" returning size=")
-          .append(getSize());
-      return sb.toString();
+      String sb = this.getClass().getName() + " processorid=" + this.processorId
+          + " reply to sender " + this.getSender() + " returning size="
+          + getSize();
+      return sb;
     }
 
     public int getSize() {

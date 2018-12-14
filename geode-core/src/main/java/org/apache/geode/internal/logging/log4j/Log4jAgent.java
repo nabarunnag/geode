@@ -171,8 +171,8 @@ public class Log4jAgent implements ProviderAgent {
 
   @Override
   public String toString() {
-    return new StringBuilder().append(super.toString()).append(": {configuredSecurityAppenders=")
-        .append(configuredSecurityAppenders).append("}").toString();
+    return super.toString() + ": {configuredSecurityAppenders="
+        + configuredSecurityAppenders + "}";
   }
 
   private void updateLogLevel(final LogConfig logConfig,

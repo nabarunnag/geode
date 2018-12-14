@@ -234,10 +234,11 @@ public class LegacyCommandResult implements CommandResult {
         // skip header & footer
       } else {
         Row newRow = rowGroup.newRow();
-        String prefix = "";
+        StringBuilder prefixBuilder = new StringBuilder();
         for (int i = 0; i < depth; i++) {
-          prefix += " . ";
+          prefixBuilder.append(" . ");
         }
+        String prefix = prefixBuilder.toString();
         String[] value = getValuesSeparatedByLines(object);
         if (value.length == 1) {
           newRow.newLeftCol(prefix + key).newLeftCol(value[0]);

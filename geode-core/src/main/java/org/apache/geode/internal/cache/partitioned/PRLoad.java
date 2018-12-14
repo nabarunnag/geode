@@ -119,13 +119,12 @@ public class PRLoad implements DataSerializable {
 
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer("PRLoad@");
-    sb.append(Integer.toHexString(hashCode()));
-    sb.append(", weight: ").append(this.weight);
-    sb.append(", numBuckets: ").append(this.bucketReadLoads.length);
-    sb.append(", bucketReadLoads: ").append(Arrays.toString(this.bucketReadLoads));
-    sb.append(", bucketWriteLoads: ").append(Arrays.toString(this.bucketWriteLoads));
-    return sb.toString();
+    String sb = "PRLoad@" + Integer.toHexString(hashCode())
+        + ", weight: " + this.weight
+        + ", numBuckets: " + this.bucketReadLoads.length
+        + ", bucketReadLoads: " + Arrays.toString(this.bucketReadLoads)
+        + ", bucketWriteLoads: " + Arrays.toString(this.bucketWriteLoads);
+    return sb;
   }
 
   public void toData(DataOutput out) throws IOException {

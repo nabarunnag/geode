@@ -143,8 +143,8 @@ public class WaitUntilParallelGatewaySenderFlushedCoordinator
 
     @Override
     public String toString() {
-      return new StringBuilder().append(getClass().getSimpleName()).append("[").append("brq=")
-          .append(this.brq.getId()).append("]").toString();
+      return getClass().getSimpleName() + "[" + "brq="
+          + this.brq.getId() + "]";
     }
   }
 

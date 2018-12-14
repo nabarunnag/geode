@@ -77,11 +77,8 @@ public class PlaceHolderDiskRegion extends AbstractDiskRegion
 
   @Override
   public String toString() {
-    StringBuffer sb = new StringBuffer();
-    sb.append("name=").append(this.name).append(" id=").append(getId())
+    return "name=" + this.name + " id=" + getId();
     // .append(" ").append(super.toString())
-    ;
-    return sb.toString();
   }
 
   // DiskRecoveryStore methods

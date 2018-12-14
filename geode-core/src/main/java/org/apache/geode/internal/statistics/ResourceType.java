@@ -58,12 +58,11 @@ public class ResourceType {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder(getClass().getName());
-    sb.append("@").append(System.identityHashCode(this)).append("{");
-    sb.append("id=").append(this.id);
-    sb.append(", statisticDescriptors.length=").append(this.statisticDescriptors.length);
-    sb.append(", statisticsType=").append(this.statisticsType);
-    sb.append("}");
-    return sb.toString();
+    String sb = getClass().getName() + "@" + System.identityHashCode(this) + "{"
+        + "id=" + this.id
+        + ", statisticDescriptors.length=" + this.statisticDescriptors.length
+        + ", statisticsType=" + this.statisticsType
+        + "}";
+    return sb;
   }
 }

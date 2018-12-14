@@ -8442,8 +8442,7 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
 
   /** Does not throw RegionDestroyedException even if destroyed */
   List debugGetSubregionNames() {
-    List names = new ArrayList();
-    names.addAll(this.subregions.keySet());
+    List names = new ArrayList(this.subregions.keySet());
     return names;
   }
 
@@ -8816,9 +8815,9 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
 
     @Override
     public String toString() {
-      return new StringBuilder("NonTXEntry@")
-          .append(Integer.toHexString(System.identityHashCode(this))).append(' ')
-          .append(this.getRegionEntry()).toString();
+      return "NonTXEntry@"
+          + Integer.toHexString(System.identityHashCode(this)) + ' '
+          + this.getRegionEntry();
     }
 
     /**
@@ -10149,9 +10148,7 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
     }
 
     Set successfulKeys = new HashSet(successfulPuts.size());
-    for (Object key : successfulPuts.getKeys()) {
-      successfulKeys.add(key);
-    }
+    successfulKeys.addAll(successfulPuts.getKeys());
 
     for (Iterator it = putAllOp.eventIterator(); it.hasNext();) {
       @Unretained
@@ -10184,9 +10181,7 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
     }
 
     Set successfulKeys = new HashSet(successfulOps.size());
-    for (Object key : successfulOps.getKeys()) {
-      successfulKeys.add(key);
-    }
+    successfulKeys.addAll(successfulOps.getKeys());
 
     for (Iterator it = removeAllOp.eventIterator(); it.hasNext();) {
       @Unretained

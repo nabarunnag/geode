@@ -394,9 +394,7 @@ public class PartitionedIndex extends AbstractIndex {
    * @return string representing all the relevant information.
    */
   public String toString() {
-    StringBuffer st = new StringBuffer();
-    st.append(super.toString()).append("imports : ").append(imports);
-    return st.toString();
+    return super.toString() + "imports : " + imports;
   }
 
   protected InternalIndexStatistics createStats(String indexName) {
@@ -536,14 +534,13 @@ public class PartitionedIndex extends AbstractIndex {
     }
 
     public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("No Keys = ").append(getNumberOfKeys()).append("\n");
-      sb.append("No Map Index Keys = ").append(getNumberOfMapIndexKeys()).append("\n");
-      sb.append("No Values = ").append(getNumberOfValues()).append("\n");
-      sb.append("No Uses = ").append(getTotalUses()).append("\n");
-      sb.append("No Updates = ").append(getNumUpdates()).append("\n");
-      sb.append("Total Update time = ").append(getTotalUpdateTime()).append("\n");
-      return sb.toString();
+      String sb = "No Keys = " + getNumberOfKeys() + "\n"
+          + "No Map Index Keys = " + getNumberOfMapIndexKeys() + "\n"
+          + "No Values = " + getNumberOfValues() + "\n"
+          + "No Uses = " + getTotalUses() + "\n"
+          + "No Updates = " + getNumUpdates() + "\n"
+          + "Total Update time = " + getTotalUpdateTime() + "\n";
+      return sb;
     }
   }
 

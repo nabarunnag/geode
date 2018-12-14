@@ -15,6 +15,7 @@
 package org.apache.geode.management.internal.beans;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -177,9 +178,7 @@ public class DistributedLockServiceBridge {
       while (it.hasNext()) {
         String[] locks = it.next().listHeldLocks();
         if (locks != null && locks.length > 0) {
-          for (String lock : locks) {
-            listHeldLock.add(lock);
-          }
+          listHeldLock.addAll(Arrays.asList(locks));
         }
 
       }

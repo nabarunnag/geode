@@ -116,7 +116,7 @@ public class StructTypeImpl extends ObjectTypeImpl implements StructType {
     for (int i = 0; i < fieldNames.length; i++) {
       if (i > 0)
         sb.append(',');
-      sb.append(fieldNames[i] + ":" + fieldTypes[i]);
+      sb.append(fieldNames[i]).append(":").append(fieldTypes[i]);
     }
     sb.append('>');
     return sb.toString();

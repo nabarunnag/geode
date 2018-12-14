@@ -57,7 +57,6 @@ public class ListRegionCommand extends InternalGfshCommand {
           help = CliStrings.LIST_REGION__MEMBER__HELP) String[] memberNameOrId) {
     Result result = null;
     try {
-      Set<RegionInformation> regionInfoSet = new LinkedHashSet<>();
       ResultCollector<?, ?> rc;
       Set<DistributedMember> targetMembers = findMembers(group, memberNameOrId);
 
@@ -71,10 +70,12 @@ public class ListRegionCommand extends InternalGfshCommand {
 
       if (resultList != null) {
         // Gather all RegionInformation into a flat set.
-        regionInfoSet.addAll(resultList.stream().filter(Objects::nonNull)
-            .filter(Object[].class::isInstance).map(Object[].class::cast).flatMap(Arrays::stream)
-            .filter(RegionInformation.class::isInstance).map(RegionInformation.class::cast)
-            .collect(Collectors.toSet()));
+        Set<RegionInformation> regionInfoSet =
+            new LinkedHashSet<>(resultList.stream().filter(Objects::nonNull)
+                .filter(Object[].class::isInstance).map(Object[].class::cast)
+                .flatMap(Arrays::stream)
+                .filter(RegionInformation.class::isInstance).map(RegionInformation.class::cast)
+                .collect(Collectors.toSet()));
 
         Set<String> regionNames = new TreeSet<>();
 

@@ -120,22 +120,22 @@ public class ColocatedRegionDetails implements DataSerializable {
     StringBuilder result = new StringBuilder();
     result.append("[");
     if (host != null) {
-      result.append("host:" + host.toString());
+      result.append("host:").append(host.toString());
     } else {
       result.append("");
     }
     if (member != null) {
-      result.append(", member:" + member.toString());
+      result.append(", member:").append(member.toString());
     } else {
       result.append(",");
     }
     if (parent != null) {
-      result.append(", parent:" + parent.toString());
+      result.append(", parent:").append(parent.toString());
     } else {
       result.append(",");
     }
     if (child != null) {
-      result.append(", child:" + child.toString());
+      result.append(", child:").append(child.toString());
     } else {
       result.append(",");
     }

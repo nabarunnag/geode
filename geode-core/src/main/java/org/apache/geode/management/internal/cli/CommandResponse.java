@@ -190,10 +190,9 @@ public class CommandResponse {
     }
 
     public String toString() {
-      StringBuilder builder = new StringBuilder();
-      builder.append("Data [header=").append(header).append(", content=").append(content)
-          .append(", footer=").append(footer).append("]");
-      return builder.toString();
+      String builder = "Data [header=" + header + ", content=" + content
+          + ", footer=" + footer + "]";
+      return builder;
     }
   }
 

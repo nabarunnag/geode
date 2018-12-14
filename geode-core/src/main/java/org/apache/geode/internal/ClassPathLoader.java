@@ -195,13 +195,12 @@ public class ClassPathLoader {
 
   @Override
   public String toString() {
-    final StringBuilder sb = new StringBuilder(getClass().getName());
-    sb.append("@").append(System.identityHashCode(this)).append("{");
-    sb.append(", excludeTCCL=").append(this.excludeTCCL);
-    sb.append(", classLoaders=[");
-    sb.append(this.getClassLoaders().stream().map(ClassLoader::toString).collect(joining(", ")));
-    sb.append("]}");
-    return sb.toString();
+    String sb = getClass().getName() + "@" + System.identityHashCode(this) + "{"
+        + ", excludeTCCL=" + this.excludeTCCL
+        + ", classLoaders=["
+        + this.getClassLoaders().stream().map(ClassLoader::toString).collect(joining(", "))
+        + "]}";
+    return sb;
   }
 
   /**

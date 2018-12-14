@@ -118,9 +118,7 @@ public class SerialGatewaySenderEventProcessor extends AbstractGatewaySenderEven
   @Override
   protected void initializeMessageQueue(String id) {
     // Create the region name
-    StringBuffer regionNameBuffer = new StringBuffer();
-    regionNameBuffer.append(id).append("_SERIAL_GATEWAY_SENDER_QUEUE");
-    String regionName = regionNameBuffer.toString();
+    String regionName = id + "_SERIAL_GATEWAY_SENDER_QUEUE";
 
     CacheListener listener = null;
     if (!this.sender.isPrimary()) {
@@ -790,12 +788,11 @@ public class SerialGatewaySenderEventProcessor extends AbstractGatewaySenderEven
 
   @Override
   public String toString() {
-    StringBuffer buffer = new StringBuffer();
-    buffer.append("GatewayEventProcessor[").append("gatewaySenderId=").append(sender.getId())
-        .append(";remoteDSId=").append(getSender().getRemoteDSId()).append(";batchSize=")
-        .append(getSender().getBatchSize());
-    buffer.append("]");
-    return buffer.toString();
+    String buffer = "GatewayEventProcessor[" + "gatewaySenderId=" + sender.getId()
+        + ";remoteDSId=" + getSender().getRemoteDSId() + ";batchSize="
+        + getSender().getBatchSize()
+        + "]";
+    return buffer;
   }
 
   /**
@@ -870,10 +867,11 @@ public class SerialGatewaySenderEventProcessor extends AbstractGatewaySenderEven
   }
 
   private String printEventIdList(Set<EventID> eventIds) {
-    StringBuffer sb = new StringBuffer().append("[").append(
-        eventIds.stream().map(entry -> entry.expensiveToString()).collect(Collectors.joining(", ")))
-        .append("]");
-    return sb.toString();
+    String sb = "["
+        + eventIds.stream().map(entry -> entry.expensiveToString())
+            .collect(Collectors.joining(", "))
+        + "]";
+    return sb;
   }
 
   public String printUnprocessedEvents() {

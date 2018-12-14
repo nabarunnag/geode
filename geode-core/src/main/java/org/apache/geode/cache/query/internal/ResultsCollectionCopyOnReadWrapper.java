@@ -161,11 +161,7 @@ public class ResultsCollectionCopyOnReadWrapper implements SelectResults {
 
   @Override
   public Object[] toArray() {
-    ArrayList arrayList = new ArrayList();
-    Iterator iter = this.iterator();
-    while (iter.hasNext()) {
-      arrayList.add(iter.next());
-    }
+    ArrayList arrayList = new ArrayList(this);
     return arrayList.toArray();
   }
 

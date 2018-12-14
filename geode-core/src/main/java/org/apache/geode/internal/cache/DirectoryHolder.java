@@ -70,11 +70,10 @@ public class DirectoryHolder {
   }
 
   public String toString() {
-    StringBuffer sb = new StringBuffer();
-    sb.append("dir=").append(getDir()).append(" maxSpace=").append(getCapacity())
-        .append(" usedSpace=").append(getUsedSpace()).append(" availableSpace=")
-        .append(getAvailableSpace());
-    return sb.toString();
+    String sb = "dir=" + getDir() + " maxSpace=" + getCapacity()
+        + " usedSpace=" + getUsedSpace() + " availableSpace="
+        + getAvailableSpace();
+    return sb;
   }
 
   public void incrementTotalOplogSize(long incrementSize) {

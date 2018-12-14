@@ -404,12 +404,11 @@ public class DLockGrantor {
 
   @Override
   public String toString() {
-    StringBuffer buffer = new StringBuffer(128);
-    buffer.append('<').append("DLockGrantor").append("@")
-        .append(Integer.toHexString(System.identityHashCode(this))).append(" state=")
-        .append(stateToString(this.state)).append(" name=").append(this.dlock.getName())
-        .append(" version=").append(this.getVersionId()).append('>');
-    return buffer.toString();
+    String buffer = "<" + "DLockGrantor" + "@"
+        + Integer.toHexString(System.identityHashCode(this)) + " state="
+        + stateToString(this.state) + " name=" + this.dlock.getName()
+        + " version=" + this.getVersionId() + '>';
+    return buffer;
   }
 
   /**
@@ -531,7 +530,7 @@ public class DLockGrantor {
           batchList.add(batch);
         }
       }
-      return (DLockBatch[]) batchList.toArray(new DLockBatch[batchList.size()]);
+      return (DLockBatch[]) batchList.toArray(new DLockBatch[0]);
     }
   }
 
@@ -1293,7 +1292,7 @@ public class DLockGrantor {
       StringBuffer sb =
           new StringBuffer("DLockGrantor " + this.dlock.getName() + " initialized with:");
       for (Iterator tokens = grantTokens.values().iterator(); tokens.hasNext();) {
-        sb.append("\n\t" + tokens.next());
+        sb.append("\n\t").append(tokens.next());
       }
       logger.trace(LogMarker.DLS_VERBOSE, sb.toString());
     }
@@ -1867,22 +1866,23 @@ public class DLockGrantor {
     synchronized (this.suspendLock) {
       sb.append(' ');
       sb.append(this.toString());
-      sb.append(" id=" + this.hashCode());
-      sb.append(" rThread=" + rThread);
+      sb.append(" id=").append(this.hashCode());
+      sb.append(" rThread=").append(rThread);
       if (name != null) {
-        sb.append(" name=" + name);
+        sb.append(" name=").append(name);
       }
-      sb.append(" permittedRequests (" + permittedRequests.size() + ")="
-          + permittedRequests.toString() + "");
-      sb.append(" suspendedLockId = " + suspendedLockId);
-      sb.append(" lockingSuspendedBy = " + lockingSuspendedBy);
-      sb.append(" writeLockWaiters = " + writeLockWaiters);
-      sb.append(" totalReadLockCount = " + totalReadLockCount);
-      sb.append("\nsuspendQueue (" + suspendQueue.size() + ")=" + suspendQueue.toString());
+      sb.append(" permittedRequests (").append(permittedRequests.size()).append(")=")
+          .append(permittedRequests.toString());
+      sb.append(" suspendedLockId = ").append(suspendedLockId);
+      sb.append(" lockingSuspendedBy = ").append(lockingSuspendedBy);
+      sb.append(" writeLockWaiters = ").append(writeLockWaiters);
+      sb.append(" totalReadLockCount = ").append(totalReadLockCount);
+      sb.append("\nsuspendQueue (").append(suspendQueue.size()).append(")=")
+          .append(suspendQueue.toString());
       // Kirk said it was ok to not log the list of readLockers to cut
       // down on how much logging is done at fine level.
-      sb.append("\nreadLockers (" + readLockCountMap.size()
-          + ")" /* + "=" + readLockCountMap.toString() */);
+      /* + "=" + readLockCountMap.toString() */
+      sb.append("\nreadLockers (").append(readLockCountMap.size()).append(")");
     }
     return sb.toString();
   }
@@ -1982,11 +1982,10 @@ public class DLockGrantor {
         permittedRequests.add(suspendQueue.removeFirst());
         checkWriteLockWaiters();
       } else {
-        String s = new StringBuilder("\n (readLockCount=").append(readLockCount)
-            .append(", totalReadLockCount=").append(totalReadLockCount)
-            .append(", writeLockWaiters=").append(writeLockWaiters).append(",\nsuspendQueue=")
-            .append(suspendQueue).append(",\npermittedRequests=").append(permittedRequests)
-            .toString();
+        String s = "\n (readLockCount=" + readLockCount
+            + ", totalReadLockCount=" + totalReadLockCount
+            + ", writeLockWaiters=" + writeLockWaiters + ",\nsuspendQueue="
+            + suspendQueue + ",\npermittedRequests=" + permittedRequests;
         logger.warn("Released regular lock with waiting read lock: {}", s);
         Assert.assertTrue(false,
             String.format("Released regular lock with waiting read lock: %s",

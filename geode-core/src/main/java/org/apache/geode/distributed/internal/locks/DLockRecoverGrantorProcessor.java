@@ -151,12 +151,9 @@ public class DLockRecoverGrantorProcessor extends ReplyProcessor21 {
                 reply);
           }
 
-          Set lockSet = new HashSet();
           DLockRemoteToken[] heldLocks = reply.heldLocks;
           if (heldLocks.length > 0) {
-            for (int i = 0; i < heldLocks.length; i++) {
-              lockSet.add(heldLocks[i]);
-            }
+            Set lockSet = new HashSet(Arrays.asList(heldLocks));
             try {
               this.newGrantor.initializeHeldLocks(msg.getSender(), lockSet);
             } catch (InterruptedException e) {
@@ -294,19 +291,18 @@ public class DLockRecoverGrantorProcessor extends ReplyProcessor21 {
 
     @Override
     public String toString() {
-      StringBuffer buff = new StringBuffer();
-      buff.append("DLockRecoverGrantorMessage (service='");
-      buff.append(this.serviceName);
-      buff.append("'; processorId=");
-      buff.append(this.processorId);
-      buff.append("'; grantorVersion=");
-      buff.append(this.grantorVersion);
-      buff.append("'; grantorSerialNumber=");
-      buff.append(this.grantorSerialNumber);
-      buff.append("'; elder=");
-      buff.append(this.elder);
-      buff.append(")");
-      return buff.toString();
+      String buff = "DLockRecoverGrantorMessage (service='"
+          + this.serviceName
+          + "'; processorId="
+          + this.processorId
+          + "'; grantorVersion="
+          + this.grantorVersion
+          + "'; grantorSerialNumber="
+          + this.grantorSerialNumber
+          + "'; elder="
+          + this.elder
+          + ")";
+      return buff;
     }
   }
 
@@ -409,7 +405,7 @@ public class DLockRecoverGrantorProcessor extends ReplyProcessor21 {
             replyCode = DLockRecoverGrantorReplyMessage.GRANTOR_DISPUTE;
           } else {
             heldLocks =
-                (DLockRemoteToken[]) heldLockSet.toArray(new DLockRemoteToken[heldLockSet.size()]);
+                (DLockRemoteToken[]) heldLockSet.toArray(new DLockRemoteToken[0]);
           }
         }
       } catch (RuntimeException e) {
