@@ -40,7 +40,6 @@ import org.apache.geode.distributed.DurableClientAttributes;
 import org.apache.geode.distributed.Role;
 import org.apache.geode.distributed.internal.ClusterDistributionManager;
 import org.apache.geode.distributed.internal.DistributionAdvisor.ProfileId;
-import org.apache.geode.distributed.internal.DistributionConfig;
 import org.apache.geode.distributed.internal.ServerLocation;
 import org.apache.geode.internal.Assert;
 import org.apache.geode.internal.DataSerializableFixedID;
@@ -58,8 +57,8 @@ public class InternalDistributedMember implements DistributedMember, Externaliza
   private static final long serialVersionUID = -2785249969777296507L;
 
   // whether to show NetMember components in toString()
-  private final boolean SHOW_NETMEMBER =
-      Boolean.getBoolean(DistributionConfig.GEMFIRE_PREFIX + "show_netmembers");
+  private final boolean SHOW_NETMEMBER = false;
+  // Boolean.getBoolean(DistributionConfig.GEMFIRE_PREFIX + "show_netmembers");
 
   protected NetMember netMbr; // the underlying member object, e.g. from JGroups
 

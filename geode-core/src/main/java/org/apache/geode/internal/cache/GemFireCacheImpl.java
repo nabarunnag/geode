@@ -549,7 +549,7 @@ public class GemFireCacheImpl implements InternalCache, InternalClientCache, Has
 
   private final PersistentMemberManager persistentMemberManager;
 
-  private ClientMetadataService clientMetadataService = null;
+  private volatile ClientMetadataService clientMetadataService = null;
 
   private final Object clientMetaDatServiceLock = new Object();
 
@@ -2063,13 +2063,18 @@ public class GemFireCacheImpl implements InternalCache, InternalClientCache, Has
 
   @Override
   public ClientMetadataService getClientMetadataService() {
-    synchronized (this.clientMetaDatServiceLock) {
-      this.stopper.checkCancelInProgress(null);
-      if (this.clientMetadataService == null) {
-        this.clientMetadataService = new ClientMetadataService(this);
+    this.stopper.checkCancelInProgress(null);
+    ClientMetadataService localRef = this.clientMetadataService;
+    if (localRef == null) {
+      synchronized (this.clientMetaDatServiceLock) {
+        localRef = this.clientMetadataService;
+        if (localRef == null) {
+          localRef = new ClientMetadataService(this);
+          this.clientMetadataService = localRef;
+        }
       }
-      return this.clientMetadataService;
     }
+    return this.clientMetadataService;
   }
 
   private final boolean DISABLE_DISCONNECT_DS_ON_CACHE_CLOSE = Boolean

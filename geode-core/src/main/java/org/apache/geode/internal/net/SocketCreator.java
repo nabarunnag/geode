@@ -43,7 +43,6 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -52,6 +51,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;
@@ -150,7 +150,7 @@ public class SocketCreator {
       && Boolean.getBoolean("java.net.preferIPv6Addresses");
 
   @MakeNotStatic
-  private static final Map<InetAddress, String> hostNames = new HashMap<>();
+  private static final Map<InetAddress, String> hostNames = new ConcurrentHashMap<>();
 
   /**
    * flag to force always using DNS (regardless of the fact that these lookups can hang)
@@ -300,7 +300,7 @@ public class SocketCreator {
    * returns the host name for the given inet address, using a local cache of names to avoid dns
    * hits and duplicate strings
    */
-  public static synchronized String getHostName(InetAddress addr) {
+  public static String getHostName(InetAddress addr) {
     String result = hostNames.get(addr);
     if (result == null) {
       result = addr.getHostName();
