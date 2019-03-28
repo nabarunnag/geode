@@ -24,6 +24,8 @@ import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 
+import org.apache.geode.security.CacheAuthorization;
+import org.apache.geode.security.CachingSecurityManager;
 import org.apache.geode.security.GemFireSecurityException;
 import org.apache.geode.security.PostProcessor;
 import org.apache.geode.security.SecurityManager;
@@ -65,7 +67,17 @@ public class CallbackInstantiator {
     SecurityManager securityManager =
         getObjectOfTypeFromClassName(securityManagerConfig, SecurityManager.class);
     securityManager.init(properties);
-    return securityManager;
+    if (isCredentialsCachingEnabled(securityManager)) {
+      return new CachingSecurityManager(securityManager);
+    } else {
+      return securityManager;
+    }
+  }
+
+  private static boolean isCredentialsCachingEnabled(SecurityManager securityManager) {
+    Class<SecurityManager> securityManagerAnnotated =
+        (Class<SecurityManager>) securityManager.getClass();
+    return securityManagerAnnotated.isAnnotationPresent(CacheAuthorization.class);
   }
 
   public static PostProcessor getPostProcessor(Properties properties) {

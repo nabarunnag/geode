@@ -228,7 +228,7 @@ dependencies {
   //micrometer is used for micrometer based metrics from geode geode
   api('io.micrometer:micrometer-core')
 
-
+  implementation('com.github.ben-manes.caffeine:caffeine')
   //FastUtil contains optimized collections that are used in multiple places in core
   implementation('it.unimi.dsi:fastutil')
 

@@ -42,6 +42,7 @@ class DependencyConstraints implements Plugin<Project> {
     deps.put("jgroups.version", "3.6.14.Final")
     deps.put("log4j.version", "2.11.1")
     deps.put("micrometer.version", "1.1.3")
+    deps.put("caffeine.version","2.7.0")
     deps.put("shiro.version", "1.4.0")
     deps.put("slf4j-api.version", "1.7.25")
 
@@ -93,6 +94,7 @@ class DependencyConstraints implements Plugin<Project> {
         api(group: 'com.github.davidmoten', name: 'geo', version: '0.7.1')
         api(group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.19.0')
         api(group: 'com.github.stephenc.findbugs', name: 'findbugs-annotations', version: '1.3.9-1')
+        api(group: 'com.github.ben-manes.caffeine', name: 'caffeine', version: get("caffeine.version"))
         api(group: 'com.google.guava', name: 'guava', version: '27.0-jre')
         api(group: 'com.google.protobuf', name: 'protobuf-gradle-plugin', version: get('protobuf-gradle-plugin.version'))
         api(group: 'com.google.protobuf', name: 'protobuf-java', version: get('protobuf-java.version'))
