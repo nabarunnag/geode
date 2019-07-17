@@ -474,7 +474,7 @@ public class RangeJunction extends AbstractGroupOrRangeJunction {
 
     // if it's false and the op in this case will always be AND so return
     // false immediately
-    if (r instanceof Boolean && !((Boolean) r).booleanValue())
+    if (r instanceof Boolean && !(Boolean) r)
       return r;
     if (r == null || r == QueryService.UNDEFINED)
       r = QueryService.UNDEFINED; // keep going to see if we hit a
@@ -486,7 +486,7 @@ public class RangeJunction extends AbstractGroupOrRangeJunction {
     for (int i = 1; i < _operands.length; i++) {
       Object ri = _operands[i].evaluate(context); // UNDEFINED, null, or
       // Boolean
-      if (ri instanceof Boolean && !((Boolean) ri).booleanValue())
+      if (ri instanceof Boolean && !(Boolean) ri)
         return ri;
       if (ri == null || ri == QueryService.UNDEFINED || r == QueryService.UNDEFINED) {
         r = QueryService.UNDEFINED;
@@ -498,7 +498,7 @@ public class RangeJunction extends AbstractGroupOrRangeJunction {
                 + ri.getClass().getName() + "'");
       // now do the actual and
 
-      r = new Boolean(((Boolean) r).booleanValue() && ((Boolean) ri).booleanValue());
+      r = ((Boolean) r) && ((Boolean) ri);
 
     }
     return r;
