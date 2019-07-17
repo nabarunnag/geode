@@ -47,9 +47,7 @@ public class JavaCommandBuilder {
     }
 
     if (jvmOptions != null) {
-      for (final String jvmOption : jvmOptions) {
-        javaCommandLine.add(jvmOption);
-      }
+      javaCommandLine.addAll(jvmOptions);
     }
 
     javaCommandLine.add("-classpath");

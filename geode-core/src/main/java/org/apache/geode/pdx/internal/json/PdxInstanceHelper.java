@@ -16,6 +16,7 @@ package org.apache.geode.pdx.internal.json;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,9 +59,7 @@ public class PdxInstanceHelper implements JSONToPdxMapper {
 
   public void initializeIdentityFields(String... identityFields) {
     this.identityFields = new HashSet<>();
-    for (String identityField : identityFields) {
-      this.identityFields.add(identityField);
-    }
+    this.identityFields.addAll(Arrays.asList(identityFields));
   }
 
   @Override

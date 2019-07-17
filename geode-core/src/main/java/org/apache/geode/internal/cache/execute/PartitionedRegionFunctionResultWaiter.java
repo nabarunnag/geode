@@ -72,9 +72,7 @@ public class PartitionedRegionFunctionResultWaiter extends StreamingFunctionOper
       return this.rc;
     }
     Set<InternalDistributedMember> recipientsSet = new HashSet<InternalDistributedMember>();
-    for (InternalDistributedMember member : recipMap.keySet()) {
-      recipientsSet.add(member);
-    }
+    recipientsSet.addAll(recipMap.keySet());
     this.recipients = recipientsSet;
 
     PRFunctionStreamingResultCollector processor = new PRFunctionStreamingResultCollector(this,

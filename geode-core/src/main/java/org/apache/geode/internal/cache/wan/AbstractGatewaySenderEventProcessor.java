@@ -806,9 +806,7 @@ public abstract class AbstractGatewaySenderEventProcessor extends LoggingThread
       }
 
       // Iterate the map and add the events to the conflated events list
-      for (GatewaySenderEventImpl gei : conflatedEventsMap.values()) {
-        conflatedEvents.add(gei);
-      }
+      conflatedEvents.addAll(conflatedEventsMap.values());
 
       // Increment the events conflated from batches statistic
       this.sender.getStatistics()

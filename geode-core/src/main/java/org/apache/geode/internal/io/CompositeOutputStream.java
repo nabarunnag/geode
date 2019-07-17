@@ -16,6 +16,7 @@ package org.apache.geode.internal.io;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -39,9 +40,7 @@ public class CompositeOutputStream extends OutputStream implements Iterable<Outp
    */
   public CompositeOutputStream(OutputStream... out) {
     final Set<OutputStream> newSet = new HashSet<OutputStream>();
-    for (OutputStream stream : out) {
-      newSet.add(stream);
-    }
+    newSet.addAll(Arrays.asList(out));
     this.streams = newSet;
   }
 

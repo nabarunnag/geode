@@ -121,7 +121,7 @@ public class CommandManager {
     }
 
     for (String source : userCommandSources) {
-      Arrays.stream(source.split(",")).forEach(userCommandPackages::add);
+      userCommandPackages.addAll(Arrays.asList(source.split(",")));
     }
 
     return userCommandPackages;

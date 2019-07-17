@@ -286,14 +286,10 @@ public class OverflowOplogSet implements OplogSet {
   ArrayList<OverflowOplog> testHookGetAllOverflowOplogs() {
     ArrayList<OverflowOplog> result = new ArrayList<>();
     synchronized (this.overflowMap) {
-      for (OverflowOplog oo : this.overflowMap.values()) {
-        result.add(oo);
-      }
+      result.addAll(this.overflowMap.values());
     }
     synchronized (this.compactibleOverflowMap) {
-      for (OverflowOplog oo : this.compactibleOverflowMap.values()) {
-        result.add(oo);
-      }
+      result.addAll(this.compactibleOverflowMap.values());
     }
 
     return result;

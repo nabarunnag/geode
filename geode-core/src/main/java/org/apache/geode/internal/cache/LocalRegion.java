@@ -9511,9 +9511,7 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
     }
 
     Set successfulKeys = new HashSet(successfulPuts.size());
-    for (Object key : successfulPuts.getKeys()) {
-      successfulKeys.add(key);
-    }
+    successfulKeys.addAll(successfulPuts.getKeys());
 
     for (Iterator it = putAllOp.eventIterator(); it.hasNext();) {
       @Unretained
@@ -9546,9 +9544,7 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
     }
 
     Set successfulKeys = new HashSet(successfulOps.size());
-    for (Object key : successfulOps.getKeys()) {
-      successfulKeys.add(key);
-    }
+    successfulKeys.addAll(successfulOps.getKeys());
 
     for (Iterator it = removeAllOp.eventIterator(); it.hasNext();) {
       @Unretained
@@ -11158,9 +11154,7 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
     public Object[] toArray() {
       List temp = new ArrayList(size());
       // do NOT use addAll or this results in stack overflow - must use iterator()
-      for (Object o : this) {
-        temp.add(o);
-      }
+      temp.addAll(this);
       return temp.toArray();
     }
 
@@ -11168,9 +11162,7 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
     public Object[] toArray(Object[] array) {
       List temp = new ArrayList(size());
       // do NOT use addAll or this results in stack overflow - must use iterator()
-      for (Object o : this) {
-        temp.add(o);
-      }
+      temp.addAll(this);
       return temp.toArray(array);
     }
   }

@@ -156,9 +156,7 @@ public class DLockRecoverGrantorProcessor extends ReplyProcessor21 {
           Set lockSet = new HashSet();
           DLockRemoteToken[] heldLocks = reply.heldLocks;
           if (heldLocks.length > 0) {
-            for (int i = 0; i < heldLocks.length; i++) {
-              lockSet.add(heldLocks[i]);
-            }
+            lockSet.addAll(Arrays.asList(heldLocks));
             try {
               this.newGrantor.initializeHeldLocks(msg.getSender(), lockSet);
             } catch (InterruptedException e) {

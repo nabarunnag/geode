@@ -64,16 +64,12 @@ public class ResultsBag extends Bag implements DataSerializableFixedID {
    */
   ResultsBag(Collection c, CachePerfStats stats) {
     this(stats);
-    for (Iterator itr = c.iterator(); itr.hasNext();) {
-      this.add(itr.next());
-    }
+    this.addAll(c);
   }
 
   protected ResultsBag(Collection c, HashingStrategy strategy, CachePerfStats stats) {
     this(strategy, stats);
-    for (Iterator itr = c.iterator(); itr.hasNext();) {
-      this.add(itr.next());
-    }
+    this.addAll(c);
   }
 
   /**

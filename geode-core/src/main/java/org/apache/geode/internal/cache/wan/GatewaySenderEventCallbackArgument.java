@@ -130,9 +130,7 @@ public class GatewaySenderEventCallbackArgument extends WrappedCallbackArgument
    */
   public void initializeReceipientDSIds(List<Integer> originalGatewaysReceivers) {
     this.receipientDSIds = new IntOpenHashSet(2);
-    for (Integer id : originalGatewaysReceivers) {
-      this.receipientDSIds.add(id);
-    }
+    this.receipientDSIds.addAll(originalGatewaysReceivers);
   }
 
   @Override

@@ -556,8 +556,7 @@ public class QCompiler implements OQLLexerTokenTypes {
           && ((CompiledJunction) operand).getOperator() == operator) {
         CompiledJunction junction = (CompiledJunction) operand;
         List jOperands = junction.getOperands();
-        for (int j = 0; j < jOperands.size(); j++)
-          operands.add(jOperands.get(j));
+        operands.addAll(jOperands);
       } else
         operands.add(operand);
     }

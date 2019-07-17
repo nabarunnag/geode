@@ -85,9 +85,7 @@ public abstract class Bag<E> extends AbstractCollection<E> implements CqResults<
    */
   Bag(Collection c, CachePerfStats stats) {
     this(stats);
-    for (Iterator itr = c.iterator(); itr.hasNext();) {
-      this.add(itr.next());
-    }
+    this.addAll(c);
   }
 
   /**

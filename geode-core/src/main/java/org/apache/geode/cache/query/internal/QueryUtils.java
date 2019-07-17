@@ -276,10 +276,7 @@ public class QueryUtils {
       rs = new ResultsBag(large, null);
     }
 
-    for (Iterator itr = small.iterator(); itr.hasNext();) {
-      Object element = itr.next();
-      rs.add(element);
-    }
+    rs.addAll(small);
     return rs;
   }
 

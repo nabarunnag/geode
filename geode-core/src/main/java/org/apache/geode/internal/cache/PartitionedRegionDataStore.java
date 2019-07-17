@@ -2713,9 +2713,7 @@ public class PartitionedRegionDataStore implements HasCachePerfStats {
    */
   public Set<BucketRegion> getAllLocalBucketRegions() {
     Set<BucketRegion> retVal = new HashSet<BucketRegion>();
-    for (BucketRegion br : localBucket2RegionMap.values()) {
-      retVal.add(br);
-    }
+    retVal.addAll(localBucket2RegionMap.values());
     return Collections.unmodifiableSet(retVal);
   }
 

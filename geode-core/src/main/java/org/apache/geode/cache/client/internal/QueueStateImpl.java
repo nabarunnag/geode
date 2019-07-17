@@ -90,9 +90,7 @@ public class QueueStateImpl implements QueueState {
       regions.add(rootRegion);
       try {
         Set subRegions = rootRegion.subregions(true); // throws RDE
-        for (Iterator iter2 = subRegions.iterator(); iter2.hasNext();) {
-          regions.add(iter2.next());
-        }
+        regions.addAll(subRegions);
       } catch (RegionDestroyedException e) {
         continue; // region is gone go to the next one bug 38705
       }
