@@ -5283,6 +5283,6 @@ public interface DistributionConfig extends Config, LogConfig, StatisticsConfig 
       }
     }
     Collections.sort(atts);
-    return atts.toArray(new String[atts.size()]);
+    return atts.toArray(new String[0]);
   }
 }
