@@ -15,6 +15,7 @@
 package org.apache.geode.management.internal.cli.remote;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -179,7 +180,7 @@ public class CommandExecutor {
     } else if (gfshCommand instanceof UpdateAllConfigurationGroupsMarker) {
       groupsToUpdate = ccService.getGroups().stream().collect(Collectors.toList());
     } else {
-      groupsToUpdate = Arrays.asList("cluster");
+      groupsToUpdate = Collections.singletonList("cluster");
     }
 
     for (String group : groupsToUpdate) {
