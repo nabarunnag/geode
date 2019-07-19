@@ -59,9 +59,7 @@ public class PdxInstanceSortedHelper implements JSONToPdxMapper {
 
   public void initializeIdentityFields(String... identityFields) {
     this.identityFields = new HashSet<>();
-    for (String identityField : identityFields) {
-      this.identityFields.add(identityField);
-    }
+    Collections.addAll(this.identityFields, identityFields);
   }
 
   @Override

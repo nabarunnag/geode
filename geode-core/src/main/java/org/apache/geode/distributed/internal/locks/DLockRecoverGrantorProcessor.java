@@ -19,6 +19,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -156,9 +157,7 @@ public class DLockRecoverGrantorProcessor extends ReplyProcessor21 {
           Set lockSet = new HashSet();
           DLockRemoteToken[] heldLocks = reply.heldLocks;
           if (heldLocks.length > 0) {
-            for (int i = 0; i < heldLocks.length; i++) {
-              lockSet.add(heldLocks[i]);
-            }
+            Collections.addAll(lockSet, heldLocks);
             try {
               this.newGrantor.initializeHeldLocks(msg.getSender(), lockSet);
             } catch (InterruptedException e) {

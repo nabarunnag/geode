@@ -970,9 +970,7 @@ public class CompiledJunction extends AbstractCompiledValue implements Negatable
           } else {
             toAddTo = compositeIterOperands;
           }
-          for (int i = 0; i < size; ++i) {
-            toAddTo.add(cv[i]);
-          }
+          toAddTo.addAll(Arrays.asList(cv).subList(0, size));
         } else {
           RuntimeIterator grpIndpndtItr = (RuntimeIterator) entry.getKey();
           AbstractGroupOrRangeJunction gj = createGroupJunctionOrRangeJunction(needsCompacting,

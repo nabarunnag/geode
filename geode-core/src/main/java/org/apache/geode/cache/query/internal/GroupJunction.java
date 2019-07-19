@@ -18,6 +18,7 @@
 package org.apache.geode.cache.query.internal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.geode.cache.query.FunctionDomainException;
@@ -167,9 +168,7 @@ public class GroupJunction extends AbstractGroupOrRangeJunction {
       }
     } else {
       indexCount = _operands.length;
-      for (int i = 0; i < indexCount; i++) {
-        evalOperands.add(_operands[i]);
-      }
+      evalOperands.addAll(Arrays.asList(_operands).subList(0, indexCount));
     }
 
     if (getIterOperands() != null) {
