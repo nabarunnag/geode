@@ -218,7 +218,7 @@ public class Helper {
 
     // add the availability flag
     HelpBlock availability = new HelpBlock(IS_AVAILABLE_NAME);
-    availability.addChild(new HelpBlock(isAvailable + ""));
+    availability.addChild(new HelpBlock(String.valueOf(isAvailable)));
     root.addChild(availability);
 
     // Now add synonyms if any

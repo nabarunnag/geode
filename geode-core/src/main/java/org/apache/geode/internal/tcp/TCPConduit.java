@@ -277,7 +277,7 @@ public class TCPConduit implements Runnable {
   private void parseProperties(Properties p) {
     if (p != null) {
       String s;
-      s = p.getProperty("p2p.tcpBufferSize", "" + tcpBufferSize);
+      s = p.getProperty("p2p.tcpBufferSize", String.valueOf(tcpBufferSize));
       try {
         tcpBufferSize = Integer.parseInt(s);
       } catch (Exception e) {
@@ -288,7 +288,7 @@ public class TCPConduit implements Runnable {
         // enforce minimum
         tcpBufferSize = Connection.SMALL_BUFFER_SIZE;
       }
-      s = p.getProperty("p2p.idleConnectionTimeout", "" + idleConnectionTimeout);
+      s = p.getProperty("p2p.idleConnectionTimeout", String.valueOf(idleConnectionTimeout));
       try {
         idleConnectionTimeout = Integer.parseInt(s);
       } catch (Exception e) {
@@ -939,7 +939,7 @@ public class TCPConduit implements Runnable {
 
   @Override
   public String toString() {
-    return "" + id;
+    return String.valueOf(id);
   }
 
   /**

@@ -100,13 +100,13 @@ public class AlterAsyncEventQueueCommand extends SingleGfshCommand implements
     aeqConfiguration.setId(id);
 
     if (batchSize != null) {
-      aeqConfiguration.setBatchSize(batchSize + "");
+      aeqConfiguration.setBatchSize(batchSize.toString());
     }
     if (batchTimeInterval != null) {
-      aeqConfiguration.setBatchTimeInterval(batchTimeInterval + "");
+      aeqConfiguration.setBatchTimeInterval(batchTimeInterval.toString());
     }
     if (maxQueueMemory != null) {
-      aeqConfiguration.setMaximumQueueMemory(maxQueueMemory + "");
+      aeqConfiguration.setMaximumQueueMemory(maxQueueMemory.toString());
     }
 
     ResultModel result = new ResultModel();

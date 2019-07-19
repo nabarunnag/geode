@@ -353,7 +353,7 @@ public class MergeLogFiles {
       File f = (File) it.next();
       String name = f.getPath();
 
-      String slashdotslash = "" + sep + "." + sep;
+      String slashdotslash = sep + "." + sep;
       int startIdx = name.lastIndexOf(slashdotslash);
 
       // get rid of the parent directories and any /./ in the path
@@ -424,7 +424,7 @@ public class MergeLogFiles {
                   }
                 }
                 Assert.assertTrue(p < pidTableCounter.length);
-                nickNames.add("" + iPID + "-" + pidTableCounter[p]);
+                nickNames.add(iPID + "-" + pidTableCounter[p]);
                 output.println("nickname " + iPID + "-" + pidTableCounter[p] + ": " + name);
               } else {
                 nickNames.add(null);

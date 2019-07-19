@@ -109,7 +109,7 @@ public class StartMemberUtils {
       final String propertyValue = gemfireProperties.getProperty(propertyName);
       if (StringUtils.isNotBlank(propertyValue)) {
         commandLine.add(
-            "-D" + DistributionConfig.GEMFIRE_PREFIX + "" + propertyName + "=" + propertyValue);
+            "-D" + DistributionConfig.GEMFIRE_PREFIX + propertyName + "=" + propertyValue);
       }
     }
   }

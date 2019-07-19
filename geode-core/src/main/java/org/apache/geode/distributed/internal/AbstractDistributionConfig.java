@@ -1007,7 +1007,7 @@ public abstract class AbstractDistributionConfig extends AbstractConfig
 
     // for some reason the default port range is null under some circumstances
     int[] range = DEFAULT_MEMBERSHIP_PORT_RANGE;
-    String srange = range == null ? "not available" : "" + range[0] + "-" + range[1];
+    String srange = range == null ? "not available" : range[0] + "-" + range[1];
     String msg = String.format(
         "Sets the range of datagram socket ports that can be used for membership ID purposes and unicast datagram messaging. Defaults to %s.",
         srange);

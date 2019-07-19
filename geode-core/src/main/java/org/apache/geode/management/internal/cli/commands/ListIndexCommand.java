@@ -68,7 +68,7 @@ public class ListIndexCommand extends GfshCommand {
       }
       indexTable.accumulate("Indexed Expression", indexDetails.getIndexedExpression());
       indexTable.accumulate("From Clause", indexDetails.getFromClause());
-      indexTable.accumulate("Valid Index", indexDetails.getIsValid() + "");
+      indexTable.accumulate("Valid Index", String.valueOf(indexDetails.getIsValid()));
 
       if (showStats) {
         final IndexStatisticsDetailsAdapter adapter =

@@ -1921,7 +1921,7 @@ public class DLockGrantor {
         sb.append(" name=" + name);
       }
       sb.append(" permittedRequests (" + permittedRequests.size() + ")="
-          + permittedRequests.toString() + "");
+          + permittedRequests.toString());
       sb.append(" suspendedLockId = " + suspendedLockId);
       sb.append(" lockingSuspendedBy = " + lockingSuspendedBy);
       sb.append(" writeLockWaiters = " + writeLockWaiters);
@@ -2589,7 +2589,8 @@ public class DLockGrantor {
           synchronized (this) {
             logger.trace(LogMarker.DLS_VERBOSE,
                 "[DLockGrantToken.releaseIfLockedBy] pending requests: {}",
-                (this.pendingRequests == null ? "none" : "" + this.pendingRequests.size()));
+                (this.pendingRequests == null ? "none"
+                    : String.valueOf(this.pendingRequests.size())));
           }
         }
         Assert.assertTrue(rThread != null);
@@ -2715,7 +2716,8 @@ public class DLockGrantor {
                 if (isDebugEnabled_DLS) {
                   logger.trace(LogMarker.DLS_VERBOSE,
                       "[DLockGrantToken.handleDepartureOf] pending requests: {}",
-                      (this.pendingRequests == null ? "none" : "" + this.pendingRequests.size()));
+                      (this.pendingRequests == null ? "none"
+                          : String.valueOf(this.pendingRequests.size())));
                 }
                 Assert.assertTrue(rThread != null);
               }

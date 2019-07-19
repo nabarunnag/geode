@@ -183,7 +183,7 @@ public abstract class AbstractConfig implements Config {
 
     if (name.equalsIgnoreCase(MEMBERSHIP_PORT_RANGE)) {
       int[] value = (int[]) result;
-      return "" + value[0] + "-" + value[1];
+      return value[0] + "-" + value[1];
     }
 
     if (result.getClass().isArray() && name.startsWith("ssl-")) {

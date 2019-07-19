@@ -407,52 +407,52 @@ public class RebalanceCommand extends GfshCommand {
       resultStr.append(newLine);
 
       resultData.accumulate("Rebalanced Stats", CliStrings.REBALANCE__MSG__TOTALBUCKETCREATEBYTES);
-      resultData.accumulate("Value", results.getTotalBucketCreateBytes() + "");
+      resultData.accumulate("Value", String.valueOf(results.getTotalBucketCreateBytes()));
       resultStr.append(CliStrings.REBALANCE__MSG__TOTALBUCKETCREATEBYTES).append(" = ")
           .append(results.getTotalBucketCreateBytes()).append(newLine);
 
       resultData.accumulate("Rebalanced Stats", CliStrings.REBALANCE__MSG__TOTALBUCKETCREATETIM);
-      resultData.accumulate("Value", results.getTotalBucketCreateTime() + "");
+      resultData.accumulate("Value", String.valueOf(results.getTotalBucketCreateTime()));
       resultStr.append(CliStrings.REBALANCE__MSG__TOTALBUCKETCREATETIM).append(" = ")
           .append(results.getTotalBucketCreateTime()).append(newLine);
 
       resultData.accumulate("Rebalanced Stats",
           CliStrings.REBALANCE__MSG__TOTALBUCKETCREATESCOMPLETED);
-      resultData.accumulate("Value", results.getTotalBucketCreatesCompleted() + "");
+      resultData.accumulate("Value", String.valueOf(results.getTotalBucketCreatesCompleted()));
       resultStr.append(CliStrings.REBALANCE__MSG__TOTALBUCKETCREATESCOMPLETED).append(" = ")
           .append(results.getTotalBucketCreatesCompleted()).append(newLine);
 
       resultData.accumulate("Rebalanced Stats",
           CliStrings.REBALANCE__MSG__TOTALBUCKETTRANSFERBYTES);
-      resultData.accumulate("Value", results.getTotalBucketTransferBytes() + "");
+      resultData.accumulate("Value", String.valueOf(results.getTotalBucketTransferBytes()));
       resultStr.append(CliStrings.REBALANCE__MSG__TOTALBUCKETTRANSFERBYTES).append(" = ")
           .append(results.getTotalBucketTransferBytes()).append(newLine);
 
       resultData.accumulate("Rebalanced Stats", CliStrings.REBALANCE__MSG__TOTALBUCKETTRANSFERTIME);
-      resultData.accumulate("Value", results.getTotalBucketTransferTime() + "");
+      resultData.accumulate("Value", String.valueOf(results.getTotalBucketTransferTime()));
       resultStr.append(CliStrings.REBALANCE__MSG__TOTALBUCKETTRANSFERTIME).append(" = ")
           .append(results.getTotalBucketTransferTime()).append(newLine);
 
       resultData.accumulate("Rebalanced Stats",
           CliStrings.REBALANCE__MSG__TOTALBUCKETTRANSFERSCOMPLETED);
-      resultData.accumulate("Value", results.getTotalBucketTransfersCompleted() + "");
+      resultData.accumulate("Value", String.valueOf(results.getTotalBucketTransfersCompleted()));
       resultStr.append(CliStrings.REBALANCE__MSG__TOTALBUCKETTRANSFERSCOMPLETED).append(" = ")
           .append(results.getTotalBucketTransfersCompleted()).append(newLine);
 
       resultData.accumulate("Rebalanced Stats",
           CliStrings.REBALANCE__MSG__TOTALPRIMARYTRANSFERTIME);
-      resultData.accumulate("Value", results.getTotalPrimaryTransferTime() + "");
+      resultData.accumulate("Value", String.valueOf(results.getTotalPrimaryTransferTime()));
       resultStr.append(CliStrings.REBALANCE__MSG__TOTALPRIMARYTRANSFERTIME).append(" = ")
           .append(results.getTotalPrimaryTransferTime()).append(newLine);
 
       resultData.accumulate("Rebalanced Stats",
           CliStrings.REBALANCE__MSG__TOTALPRIMARYTRANSFERSCOMPLETED);
-      resultData.accumulate("Value", results.getTotalPrimaryTransfersCompleted() + "");
+      resultData.accumulate("Value", String.valueOf(results.getTotalPrimaryTransfersCompleted()));
       resultStr.append(CliStrings.REBALANCE__MSG__TOTALPRIMARYTRANSFERSCOMPLETED).append(" = ")
           .append(results.getTotalPrimaryTransfersCompleted()).append(newLine);
 
       resultData.accumulate("Rebalanced Stats", CliStrings.REBALANCE__MSG__TOTALTIME);
-      resultData.accumulate("Value", results.getTotalTime() + "");
+      resultData.accumulate("Value", String.valueOf(results.getTotalTime()));
       resultStr.append(CliStrings.REBALANCE__MSG__TOTALTIME).append(" = ")
           .append(results.getTotalTime()).append(newLine);
 

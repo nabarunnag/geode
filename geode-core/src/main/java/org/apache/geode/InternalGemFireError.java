@@ -54,7 +54,7 @@ public class InternalGemFireError extends Error {
    * @see Throwable#getCause()
    */
   public InternalGemFireError(Object detailMessage) {
-    this("" + detailMessage);
+    this(String.valueOf(detailMessage));
     if (detailMessage instanceof Throwable)
       initCause((Throwable) detailMessage);
   }
@@ -67,7 +67,7 @@ public class InternalGemFireError extends Error {
    * @param detailMessage value to be used in constructing detail message
    */
   public InternalGemFireError(boolean detailMessage) {
-    this("" + detailMessage);
+    this(String.valueOf(detailMessage));
   }
 
   /**
@@ -78,7 +78,7 @@ public class InternalGemFireError extends Error {
    * @param detailMessage value to be used in constructing detail message
    */
   public InternalGemFireError(char detailMessage) {
-    this("" + detailMessage);
+    this(String.valueOf(detailMessage));
   }
 
   /**
@@ -89,7 +89,7 @@ public class InternalGemFireError extends Error {
    * @param detailMessage value to be used in constructing detail message
    */
   public InternalGemFireError(int detailMessage) {
-    this("" + detailMessage);
+    this(String.valueOf(detailMessage));
   }
 
   /**
@@ -100,7 +100,7 @@ public class InternalGemFireError extends Error {
    * @param detailMessage value to be used in constructing detail message
    */
   public InternalGemFireError(long detailMessage) {
-    this("" + detailMessage);
+    this(String.valueOf(detailMessage));
   }
 
   /**
@@ -111,7 +111,7 @@ public class InternalGemFireError extends Error {
    * @param detailMessage value to be used in constructing detail message
    */
   public InternalGemFireError(float detailMessage) {
-    this("" + detailMessage);
+    this(String.valueOf(detailMessage));
   }
 
   /**
@@ -122,7 +122,7 @@ public class InternalGemFireError extends Error {
    * @param detailMessage value to be used in constructing detail message
    */
   public InternalGemFireError(double detailMessage) {
-    this("" + detailMessage);
+    this(String.valueOf(detailMessage));
   }
 
 }

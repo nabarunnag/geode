@@ -676,7 +676,8 @@ public class ShowMetricsCommand extends GfshCommand {
     if (categoriesToDisplay.contains(Category.diskstore)) {
       writeToTableAndCsv(metricsTable, "diskstore", "totalEntriesOnlyOnDisk",
           regionMxBean.getTotalEntriesOnlyOnDisk(), csvBuilder);
-      writeToTableAndCsv(metricsTable, "", "diskReadsRate", "" + regionMxBean.getDiskReadsRate(),
+      writeToTableAndCsv(metricsTable, "", "diskReadsRate",
+          String.valueOf(regionMxBean.getDiskReadsRate()),
           csvBuilder);
       writeToTableAndCsv(metricsTable, "", "diskWritesRate", regionMxBean.getDiskWritesRate(),
           csvBuilder);

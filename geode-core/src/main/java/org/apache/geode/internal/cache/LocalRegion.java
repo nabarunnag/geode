@@ -5151,7 +5151,7 @@ public class LocalRegion extends AbstractRegion implements LoaderHelperFactory,
       } else {
         stopper.checkCancelInProgress(null);
         if (throwEntryExists) {
-          throw new EntryExistsException("" + key, event.getOldValue());
+          throw new EntryExistsException(String.valueOf(key), event.getOldValue());
         }
       }
       return success;

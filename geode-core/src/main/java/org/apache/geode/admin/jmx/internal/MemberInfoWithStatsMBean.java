@@ -694,7 +694,7 @@ public class MemberInfoWithStatsMBean extends AbstractDynamicMBean implements No
           for (ConfigurationParameter configParam : configParams) {
             if (STATISTIC_SAMPLING_ENABLED.equals(configParam.getName())) {
               allDetails.put(MEMBER_STATSAMPLING_ENABLED, configParam.getValue());
-              statSamplingEnabled = Boolean.parseBoolean("" + configParam.getValue());
+              statSamplingEnabled = Boolean.parseBoolean(String.valueOf(configParam.getValue()));
             } else if (ENABLE_TIME_STATISTICS.equals(configParam.getName())) {
               allDetails.put(MEMBER_TIME_STATS_ENABLED, configParam.getValue());
             }

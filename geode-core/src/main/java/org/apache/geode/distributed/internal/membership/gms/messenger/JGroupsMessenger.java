@@ -248,8 +248,9 @@ public class JGroupsMessenger implements Messenger {
           String.valueOf(dc.getMcastSendBufferSize()));
       properties = replaceStrings(properties, "MCAST_RECV_BUFFER_SIZE",
           String.valueOf(dc.getMcastRecvBufferSize()));
-      properties = replaceStrings(properties, "MCAST_RETRANSMIT_INTERVAL", "" + Integer
-          .getInteger(DistributionConfig.GEMFIRE_PREFIX + "mcast-retransmit-interval", 500));
+      properties = replaceStrings(properties, "MCAST_RETRANSMIT_INTERVAL", Integer
+          .getInteger(DistributionConfig.GEMFIRE_PREFIX + "mcast-retransmit-interval", 500)
+          .toString());
       properties = replaceStrings(properties, "RETRANSMIT_LIMIT",
           String.valueOf(dc.getUdpFragmentSize() - 256));
     }
@@ -257,12 +258,14 @@ public class JGroupsMessenger implements Messenger {
     if (transport.isMcastEnabled() || transport.isTcpDisabled()
         || (dc.getUdpRecvBufferSize() != DistributionConfig.DEFAULT_UDP_RECV_BUFFER_SIZE)) {
       properties =
-          replaceStrings(properties, "UDP_RECV_BUFFER_SIZE", "" + dc.getUdpRecvBufferSize());
+          replaceStrings(properties, "UDP_RECV_BUFFER_SIZE",
+              String.valueOf(dc.getUdpRecvBufferSize()));
     } else {
       properties = replaceStrings(properties, "UDP_RECV_BUFFER_SIZE",
           "" + DistributionConfig.DEFAULT_UDP_RECV_BUFFER_SIZE_REDUCED);
     }
-    properties = replaceStrings(properties, "UDP_SEND_BUFFER_SIZE", "" + dc.getUdpSendBufferSize());
+    properties = replaceStrings(properties, "UDP_SEND_BUFFER_SIZE",
+        String.valueOf(dc.getUdpSendBufferSize()));
 
     String str = transport.getBindAddress();
     // JGroups UDP protocol requires a bind address
@@ -277,22 +280,25 @@ public class JGroupsMessenger implements Messenger {
 
     int port = Integer.getInteger(DistributionConfig.GEMFIRE_PREFIX + "jg-bind-port", 0);
     if (port != 0) {
-      properties = replaceStrings(properties, "MEMBERSHIP_PORT_RANGE_START", "" + port);
+      properties = replaceStrings(properties, "MEMBERSHIP_PORT_RANGE_START", String.valueOf(port));
       properties = replaceStrings(properties, "MEMBERSHIP_PORT_RANGE", "" + 0);
     } else {
       int[] ports = dc.getMembershipPortRange();
-      properties = replaceStrings(properties, "MEMBERSHIP_PORT_RANGE_START", "" + ports[0]);
-      properties = replaceStrings(properties, "MEMBERSHIP_PORT_RANGE", "" + (ports[1] - ports[0]));
+      properties =
+          replaceStrings(properties, "MEMBERSHIP_PORT_RANGE_START", String.valueOf(ports[0]));
+      properties = replaceStrings(properties, "MEMBERSHIP_PORT_RANGE",
+          String.valueOf((ports[1] - ports[0])));
     }
 
-    properties = replaceStrings(properties, "UDP_FRAGMENT_SIZE", "" + dc.getUdpFragmentSize());
+    properties =
+        replaceStrings(properties, "UDP_FRAGMENT_SIZE", String.valueOf(dc.getUdpFragmentSize()));
 
     properties = replaceStrings(properties, "FC_MAX_CREDITS",
-        "" + dc.getMcastFlowControl().getByteAllowance());
+        String.valueOf(dc.getMcastFlowControl().getByteAllowance()));
     properties = replaceStrings(properties, "FC_THRESHOLD",
-        "" + dc.getMcastFlowControl().getRechargeThreshold());
+        String.valueOf(dc.getMcastFlowControl().getRechargeThreshold()));
     properties = replaceStrings(properties, "FC_MAX_BLOCK",
-        "" + dc.getMcastFlowControl().getRechargeBlockMs());
+        String.valueOf(dc.getMcastFlowControl().getRechargeBlockMs()));
 
     this.jgStackConfig = properties;
 

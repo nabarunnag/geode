@@ -284,7 +284,7 @@ public class DistributionLocatorImpl implements DistributionLocator, InternalMan
     Enumeration en = props.propertyNames();
     while (en.hasMoreElements()) {
       String pn = (String) en.nextElement();
-      sb.append(" -D" + DistributionConfig.GEMFIRE_PREFIX + "" + pn + "=" + props.getProperty(pn));
+      sb.append(" -D" + DistributionConfig.GEMFIRE_PREFIX + pn + "=" + props.getProperty(pn));
     }
 
     String bindAddress = this.getConfig().getBindAddress();

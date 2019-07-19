@@ -478,7 +478,7 @@ public class DataCommandFunction implements InternalFunction {
           int bucketId = pr.getKeyInfo(keyObject).getBucketId();
           boolean isPrimary = member == primaryMember;
           keyInfo.addLocation(new Object[] {region.getFullPath(), true, getClassAndJson(value)[1],
-              isPrimary, "" + bucketId});
+              isPrimary, String.valueOf(bucketId)});
         } else {
           if (logger.isDebugEnabled()) {
             logger.debug("Key is not present in the region {}", regionPath);

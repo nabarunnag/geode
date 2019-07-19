@@ -309,7 +309,7 @@ public abstract class AbstractJSONFormatter {
       Iterator objects = value.iterator();
       for (int i = 0; i < maxCollectionElements && objects.hasNext(); i++) {
         Object nextObject = objects.next();
-        gen.writeObjectField("" + i, nextObject);
+        gen.writeObjectField(String.valueOf(i), nextObject);
       }
     }
 

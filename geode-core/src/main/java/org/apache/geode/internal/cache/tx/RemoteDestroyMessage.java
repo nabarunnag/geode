@@ -261,7 +261,7 @@ public class RemoteDestroyMessage extends RemoteOperationMessageWithDirectReply
         return true;
 
       } catch (EntryNotFoundException e) {
-        throw new EntryNotFoundException("" + event.getKey());
+        throw new EntryNotFoundException(String.valueOf(event.getKey()));
 
       } catch (TransactionDataNotColocatedException enfe) {
         throw enfe;

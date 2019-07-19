@@ -960,7 +960,7 @@ public class CacheXmlGenerator extends CacheXml implements XMLReader {
       }
 
       if (generateDefaults() || bridge.getTcpNoDelay() != CacheServer.DEFAULT_TCP_NO_DELAY) {
-        atts.addAttribute("", "", TCP_NO_DELAY, "", "" + bridge.getTcpNoDelay());
+        atts.addAttribute("", "", TCP_NO_DELAY, "", String.valueOf(bridge.getTcpNoDelay()));
       }
 
     } finally {
@@ -1684,7 +1684,7 @@ public class CacheXmlGenerator extends CacheXml implements XMLReader {
           indexType = RANGE_INDEX_TYPE;
         }
         atts.addAttribute("", "", KEY_INDEX, "", "false");
-        atts.addAttribute("", "", INDEX_TYPE, "", "" + indexType);
+        atts.addAttribute("", "", INDEX_TYPE, "", indexType);
       }
       atts.addAttribute("", "", FROM_CLAUSE, "", indexData.getIndexFromClause());
       atts.addAttribute("", "", EXPRESSION, "", indexData.getIndexExpression());
@@ -1698,7 +1698,7 @@ public class CacheXmlGenerator extends CacheXml implements XMLReader {
         if (index instanceof HashIndex) {
           indexType = "hash";
         }
-        atts.addAttribute("", "", INDEX_TYPE, "", "" + indexType);
+        atts.addAttribute("", "", INDEX_TYPE, "", indexType);
       }
       atts.addAttribute("", "", FROM_CLAUSE, "", index.getFromClause());
       atts.addAttribute("", "", EXPRESSION, "", index.getIndexedExpression());
@@ -2440,7 +2440,7 @@ public class CacheXmlGenerator extends CacheXml implements XMLReader {
     if (maxOplogSize == DiskWriteAttributesImpl.getDefaultMaxOplogSizeLimit()) {
       maxOplogSizeString = "0";
     } else {
-      maxOplogSizeString = "" + maxOplogSize;
+      maxOplogSizeString = String.valueOf(maxOplogSize);
     }
     {
       AttributesImpl atts = new AttributesImpl();

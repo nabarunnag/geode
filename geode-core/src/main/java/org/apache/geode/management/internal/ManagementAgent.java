@@ -220,15 +220,15 @@ public class ManagementAgent {
         // we need to pass in the sllConfig to pulse because it needs it to make jmx connection
         if (agentUtil.isAnyWarFileAvailable(pulseWar)) {
           System.setProperty(PULSE_EMBEDDED_PROP, "true");
-          System.setProperty(PULSE_HOST_PROP, "" + config.getJmxManagerBindAddress());
-          System.setProperty(PULSE_PORT_PROP, "" + config.getJmxManagerPort());
+          System.setProperty(PULSE_HOST_PROP, config.getJmxManagerBindAddress());
+          System.setProperty(PULSE_PORT_PROP, String.valueOf(config.getJmxManagerPort()));
 
           final SocketCreator jmxSocketCreator =
               SocketCreatorFactory.getSocketCreatorForComponent(SecurableCommunicationChannel.JMX);
           final SocketCreator locatorSocketCreator = SocketCreatorFactory
               .getSocketCreatorForComponent(SecurableCommunicationChannel.LOCATOR);
-          System.setProperty(PULSE_USESSL_MANAGER, jmxSocketCreator.useSSL() + "");
-          System.setProperty(PULSE_USESSL_LOCATOR, locatorSocketCreator.useSSL() + "");
+          System.setProperty(PULSE_USESSL_MANAGER, String.valueOf(jmxSocketCreator.useSSL()));
+          System.setProperty(PULSE_USESSL_LOCATOR, String.valueOf(locatorSocketCreator.useSSL()));
           httpService.addWebApplication("/pulse", pulseWar, securityServiceAttr, sslConfigAttr);
 
           managerBean.setPulseURL("http://".concat(getHost(bindAddress)).concat(":")

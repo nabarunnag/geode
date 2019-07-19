@@ -132,8 +132,8 @@ public class DirectChannel {
         props.setProperty("p2p.idleConnectionTimeout", String.valueOf(dc.getSocketLeaseTime()));
       }
       int[] range = dc.getMembershipPortRange();
-      props.setProperty("membership_port_range_start", "" + range[0]);
-      props.setProperty("membership_port_range_end", "" + range[1]);
+      props.setProperty("membership_port_range_start", String.valueOf(range[0]));
+      props.setProperty("membership_port_range_end", String.valueOf(range[1]));
 
       this.conduit = new TCPConduit(mgr, port, address, isBindAddress, this, props);
       disconnected = false;

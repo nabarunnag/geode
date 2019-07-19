@@ -525,7 +525,7 @@ public class DistributedEventTracker implements EventTracker {
 
   @Override
   public String toString() {
-    return "" + this.name + "(initialized=" + this.initialized + ")";
+    return this.name + "(initialized=" + this.initialized + ")";
   }
 
 }

@@ -50,7 +50,7 @@ public class FlowControlParams implements java.io.Serializable {
   /** return a string representation of this object */
   @Override
   public String toString() {
-    return ("" + byteAllowance + ", " + rechargeThreshold + ", " + rechargeBlockMs);
+    return (byteAllowance + ", " + rechargeThreshold + ", " + rechargeBlockMs);
   }
 
   /** returns the byteAllowance setting */

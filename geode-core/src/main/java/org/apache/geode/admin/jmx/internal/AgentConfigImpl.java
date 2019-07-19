@@ -706,7 +706,7 @@ public class AgentConfigImpl extends DistributedSystemConfigImpl implements Agen
       props.setProperty(MCAST_ADDRESS, toString(MCAST_ADDRESS, getMcastAddress()));
       props.setProperty(LOCATORS, toString(LOCATORS, getLocators()));
       props.setProperty(MEMBERSHIP_PORT_RANGE_NAME, getMembershipPortRange());
-      props.setProperty(TCP_PORT, "" + getTcpPort());
+      props.setProperty(TCP_PORT, String.valueOf(getTcpPort()));
       props.setProperty(BIND_ADDRESS, toString(BIND_ADDRESS, getBindAddress()));
       props.setProperty(REMOTE_COMMAND_NAME, toString(REMOTE_COMMAND_NAME, getRemoteCommand()));
       props.setProperty(LOG_FILE_NAME, toString(LOG_FILE_NAME, getLogFile()));

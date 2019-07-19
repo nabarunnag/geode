@@ -124,13 +124,13 @@ public class ListGatewayCommand extends GfshCommand {
           gatewaySenders.accumulate(CliStrings.RESULT_GATEWAY_SENDER_ID, entry.getKey());
           gatewaySenders.accumulate(CliStrings.RESULT_HOST_MEMBER, memberToBean.getKey());
           gatewaySenders.accumulate(CliStrings.RESULT_REMOTE_CLUSTER,
-              memberToBean.getValue().getRemoteDSId() + "");
+              String.valueOf(memberToBean.getValue().getRemoteDSId()));
           gatewaySenders.accumulate(CliStrings.RESULT_TYPE, memberToBean.getValue().isParallel()
               ? CliStrings.SENDER_PARALLEL : CliStrings.SENDER_SERIAL);
           gatewaySenders.accumulate(CliStrings.RESULT_STATUS, memberToBean.getValue().isRunning()
               ? CliStrings.GATEWAY_RUNNING : CliStrings.GATEWAY_NOT_RUNNING);
           gatewaySenders.accumulate(CliStrings.RESULT_QUEUED_EVENTS,
-              memberToBean.getValue().getEventQueueSize() + "");
+              String.valueOf(memberToBean.getValue().getEventQueueSize()));
           gatewaySenders.accumulate(CliStrings.RESULT_RECEIVER,
               memberToBean.getValue().getGatewayReceiver());
         }
@@ -142,9 +142,10 @@ public class ListGatewayCommand extends GfshCommand {
       gatewaySenders.setHeader(CliStrings.SECTION_GATEWAY_RECEIVER);
       for (Map.Entry<String, GatewayReceiverMXBean> entry : gatewayReceiverBeans.entrySet()) {
         gatewaySenders.accumulate(CliStrings.RESULT_HOST_MEMBER, entry.getKey());
-        gatewaySenders.accumulate(CliStrings.RESULT_PORT, entry.getValue().getPort() + "");
+        gatewaySenders.accumulate(CliStrings.RESULT_PORT,
+            String.valueOf(entry.getValue().getPort()));
         gatewaySenders.accumulate(CliStrings.RESULT_SENDERS_COUNT,
-            entry.getValue().getClientConnectionCount() + "");
+            String.valueOf(entry.getValue().getClientConnectionCount()));
         if (entry.getValue() == null || entry.getValue().getConnectedGatewaySenders() == null) {
           gatewaySenders.accumulate(CliStrings.RESULT_SENDER_CONNECTED, "");
         } else {

@@ -753,7 +753,7 @@ public class GMSMembershipManager implements MembershipManager, Manager {
     // in order to debug startup issues we need to announce the membership
     // ID as soon as we know it
     logger.info("Finished joining (took {}ms).",
-        "" + (System.currentTimeMillis() - startTime));
+        String.valueOf(System.currentTimeMillis() - startTime));
 
   }
 
