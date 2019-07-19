@@ -111,9 +111,7 @@ public class DistributedPutAllOperation extends AbstractUpdateOperation {
   }
 
   public void setPutAllEntryData(PutAllEntryData[] putAllEntryData) {
-    for (int i = 0; i < putAllEntryData.length; i++) {
-      putAllData[i] = putAllEntryData[i];
-    }
+    System.arraycopy(putAllEntryData, 0, putAllData, 0, putAllEntryData.length);
     this.putAllDataSize = putAllEntryData.length;
   }
 

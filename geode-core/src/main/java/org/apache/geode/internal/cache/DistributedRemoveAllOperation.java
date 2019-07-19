@@ -104,9 +104,7 @@ public class DistributedRemoveAllOperation extends AbstractUpdateOperation {
   }
 
   public void setRemoveAllEntryData(RemoveAllEntryData[] removeAllEntryData) {
-    for (int i = 0; i < removeAllEntryData.length; i++) {
-      removeAllData[i] = removeAllEntryData[i];
-    }
+    System.arraycopy(removeAllEntryData, 0, removeAllData, 0, removeAllEntryData.length);
     this.removeAllDataSize = removeAllEntryData.length;
   }
 

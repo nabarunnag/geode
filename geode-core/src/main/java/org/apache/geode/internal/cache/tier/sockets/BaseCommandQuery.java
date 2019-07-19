@@ -434,8 +434,8 @@ public abstract class BaseCommandQuery extends BaseCommand {
         } else {
           newResults = new Object[resultIndex % MAXIMUM_CHUNK_SIZE];
         }
-        for (int i = 0; i < newResults.length; i++) {
-          newResults[i] = results[i];
+        if (newResults.length >= 0) {
+          System.arraycopy(results, 0, newResults, 0, newResults.length);
         }
         results = newResults;
       }
