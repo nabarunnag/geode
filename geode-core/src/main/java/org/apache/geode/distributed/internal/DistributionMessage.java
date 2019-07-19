@@ -251,7 +251,7 @@ public abstract class DistributionMessage implements DataSerializableFixedID, Cl
           "Recipients can only be set once");
     }
     this.recipients = recipients
-        .toArray(new InternalDistributedMember[recipients.size()]);
+        .toArray(new InternalDistributedMember[0]);
   }
 
   public void resetRecipients() {
