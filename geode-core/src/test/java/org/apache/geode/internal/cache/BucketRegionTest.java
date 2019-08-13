@@ -50,6 +50,7 @@ import org.apache.geode.internal.cache.tier.sockets.CacheClientNotifier;
 import org.apache.geode.internal.cache.tier.sockets.CacheClientProxy;
 import org.apache.geode.internal.cache.tier.sockets.CacheServerStats;
 import org.apache.geode.internal.cache.tier.sockets.ClientProxyMembershipID;
+import org.apache.geode.internal.cache.tier.sockets.ClientRegistrationEventQueueManager;
 import org.apache.geode.internal.cache.tier.sockets.ConnectionListener;
 import org.apache.geode.internal.statistics.StatisticsClock;
 import org.apache.geode.test.fake.Fakes;
@@ -345,7 +346,8 @@ public class BucketRegionTest {
 
     CacheClientNotifier ccn =
         CacheClientNotifier.getInstance(cache, mock(StatisticsClock.class),
-            mock(CacheServerStats.class), 10, 10, mock(ConnectionListener.class), null, true);
+            mock(CacheServerStats.class), 10, 10, mock(ConnectionListener.class), null, true,
+            new ClientRegistrationEventQueueManager());
 
     bucketRegion.notifyClientsOfTombstoneGC(regionGCVersions, keysRemoved, eventID, routing);
     verify(bucketRegion, never()).getFilterProfile();
@@ -368,7 +370,8 @@ public class BucketRegionTest {
 
     CacheClientNotifier ccn =
         CacheClientNotifier.getInstance(cache, mock(StatisticsClock.class),
-            mock(CacheServerStats.class), 10, 10, mock(ConnectionListener.class), null, true);
+            mock(CacheServerStats.class), 10, 10, mock(ConnectionListener.class), null, true,
+            new ClientRegistrationEventQueueManager());
 
     doReturn(mock(ClientProxyMembershipID.class)).when(proxy).getProxyID();
     ccn.addClientProxyToMap(proxy);

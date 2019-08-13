@@ -111,7 +111,8 @@ public class ClientRegistrationEventQueueManagerTest {
 
     CompletableFuture<Void> drainEventsFromQueueTask = CompletableFuture.runAsync(() -> {
       // In thread two, we drain the event from the queue
-      clientRegistrationEventQueueManager.drain(clientProxyMembershipID, cacheClientNotifier);
+      clientRegistrationEventQueueManager.postProcessClientRegistrationQueue(clientProxyMembershipID, cacheClientNotifier,
+          true);
     });
 
     CompletableFuture.allOf(addEventsToQueueTask, drainEventsFromQueueTask).get();
@@ -196,7 +197,8 @@ public class ClientRegistrationEventQueueManagerTest {
 
     CompletableFuture<Void> drainEventsFromQueueTask = CompletableFuture.runAsync(() -> {
       // In thread two, we drain events from the queue
-      clientRegistrationEventQueueManager.drain(clientProxyMembershipID, cacheClientNotifier);
+      clientRegistrationEventQueueManager.postProcessClientRegistrationQueue(clientProxyMembershipID, cacheClientNotifier,
+          true);
     });
 
     CompletableFuture.allOf(addEventsToQueueTask, drainEventsFromQueueTask).get();
@@ -231,7 +233,8 @@ public class ClientRegistrationEventQueueManagerTest {
               .add(internalCacheEvent, conflatable, filterClientIDs, cacheClientNotifier);
         }
         // In thread two, we drain events from the queue
-        clientRegistrationEventQueueManager.drain(clientProxyMembershipID, cacheClientNotifier);
+        clientRegistrationEventQueueManager.postProcessClientRegistrationQueue(clientProxyMembershipID, cacheClientNotifier,
+            true);
       };
 
       CompletableFuture<Void> registrationFutureOne =

@@ -37,7 +37,7 @@ import org.apache.geode.internal.logging.LogService;
  * client is completely registered (filter info retrieved and GII complete), we will drain the
  * client's queued events and deliver them to the cache client proxy if necessary.
  */
-class ClientRegistrationEventQueueManager {
+public class ClientRegistrationEventQueueManager {
   private static final Logger logger = LogService.getLogger();
   private final Map<ClientProxyMembershipID, ClientRegistrationEventQueue> registeringProxyEventQueues =
       new ConcurrentHashMap<>();
@@ -113,8 +113,9 @@ class ClientRegistrationEventQueueManager {
     }
   }
 
-  void drain(final ClientProxyMembershipID clientProxyMembershipID,
-      final CacheClientNotifier cacheClientNotifier) {
+  void postProcessClientRegistrationQueue(final ClientProxyMembershipID clientProxyMembershipID,
+                                          final CacheClientNotifier cacheClientNotifier,
+                                          boolean shouldDrain) {
     ClientRegistrationEventQueue registrationEventQueue =
         registeringProxyEventQueues.get(clientProxyMembershipID);
 
@@ -127,36 +128,41 @@ class ClientRegistrationEventQueueManager {
         // See if the queue is still available after acquiring the lock as it may have
         // been removed from registeringProxyEventQueues by the previous thread
         if (registeringProxyEventQueues.containsKey(clientProxyMembershipID)) {
-          // As an optimization, we drain as many events from the queue as we can
-          // before taking out a lock to drain the remaining events. When we lock for draining,
-          // it prevents additional events from being added to the queue while the queue is drained
-          // and removed.
-          if (logger.isDebugEnabled()) {
-            logger.debug("Draining events from registration queue for client proxy "
-                + clientProxyMembershipID
-                + " without synchronization");
-          }
-
-          drainEventsReceivedWhileRegisteringClient(clientProxyMembershipID, registrationEventQueue,
-              cacheClientNotifier);
-
-          // Prevents additional events from being added to the queue while we process and remove it
-          registrationEventQueue.lockForDraining();
-          try {
+            // As an optimization, we drain as many events from the queue as we can
+            // before taking out a lock to drain the remaining events. When we lock for draining,
+            // it prevents additional events from being added to the queue while the queue is drained
+            // and removed.
             if (logger.isDebugEnabled()) {
-              logger.debug("Draining remaining events from registration queue for client proxy "
-                  + clientProxyMembershipID + " with synchronization");
+              logger.debug("Draining events from registration queue for client proxy "
+                  + clientProxyMembershipID
+                  + " without synchronization");
             }
 
-            drainEventsReceivedWhileRegisteringClient(clientProxyMembershipID,
-                registrationEventQueue,
-                cacheClientNotifier);
+            if (shouldDrain) {
+              drainEventsReceivedWhileRegisteringClient(clientProxyMembershipID,
+                  registrationEventQueue,
+                  cacheClientNotifier);
+            }
 
-            registeringProxyEventQueues.remove(clientProxyMembershipID);
-          } finally {
-            registrationEventQueue.unlockForDraining();
+            // Prevents additional events from being added to the queue while we process and remove it
+            registrationEventQueue.lockForDraining();
+            try {
+              if (logger.isDebugEnabled()) {
+                logger.debug("Draining remaining events from registration queue for client proxy "
+                    + clientProxyMembershipID + " with synchronization");
+              }
+              if (shouldDrain) {
+                drainEventsReceivedWhileRegisteringClient(clientProxyMembershipID,
+                    registrationEventQueue,
+                    cacheClientNotifier);
+              }
+            } finally {
+              if (registrationEventQueue.removeRegistrationInProgress()) {
+                registeringProxyEventQueues.remove(clientProxyMembershipID);
+              }
+              registrationEventQueue.unlockForDraining();
+            }
           }
-        }
       } finally {
         registrationEventQueue.unlockForSingleDrainer();
       }
@@ -180,11 +186,19 @@ class ClientRegistrationEventQueueManager {
       final Queue<ClientRegistrationEvent> eventQueue,
       final ReadWriteLock eventAddDrainLock,
       final ReentrantLock singleDrainerLock) {
-    final ClientRegistrationEventQueue clientRegistrationEventQueue =
+    ClientRegistrationEventQueue clientRegistrationEventQueue =
         new ClientRegistrationEventQueue(eventQueue,
             eventAddDrainLock, singleDrainerLock);
-    registeringProxyEventQueues.putIfAbsent(clientProxyMembershipID,
-        clientRegistrationEventQueue);
+
+    ClientRegistrationEventQueue existingClientRegistrationEventQueue =
+        registeringProxyEventQueues.putIfAbsent(clientProxyMembershipID,
+            clientRegistrationEventQueue);
+
+    if (existingClientRegistrationEventQueue != null) {
+      existingClientRegistrationEventQueue.addRegistrationInProgress();
+      return existingClientRegistrationEventQueue;
+    }
+
     return clientRegistrationEventQueue;
   }
 
@@ -192,6 +206,7 @@ class ClientRegistrationEventQueueManager {
     private final Queue<ClientRegistrationEvent> eventQueue;
     private final ReadWriteLock eventAddDrainLock;
     private final ReentrantLock singleDrainerLock;
+    private int registrationsInProgress;
 
     ClientRegistrationEventQueue(
         final Queue<ClientRegistrationEvent> eventQueue,
@@ -204,6 +219,14 @@ class ClientRegistrationEventQueueManager {
 
     boolean isEmpty() {
       return eventQueue.isEmpty();
+    }
+
+    void addRegistrationInProgress() {
+      ++registrationsInProgress;
+    }
+
+    boolean removeRegistrationInProgress() {
+      return --registrationsInProgress == 0;
     }
 
     private void add(final ClientRegistrationEvent clientRegistrationEvent) {
