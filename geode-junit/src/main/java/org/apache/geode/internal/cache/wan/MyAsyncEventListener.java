@@ -42,7 +42,7 @@ public class MyAsyncEventListener implements AsyncEventListener, Declarable {
       }
       eventsMap.put(event.getKey(), event.getDeserializedValue());
 
-      logger.debug("Received an event --> {}", event.getKey());
+      logger.info("Received an event --> {}", event.getKey());
     }
     return true;
   }

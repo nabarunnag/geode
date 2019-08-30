@@ -68,6 +68,9 @@ public class AlterAsyncEventQueueCommand extends SingleGfshCommand implements
   static final String BATCH_TIME_INTERVAL_HELP = CREATE_ASYNC_EVENT_QUEUE__BATCHTIMEINTERVAL__HELP;
   static final String MAXIMUM_QUEUE_MEMORY_HELP =
       CREATE_ASYNC_EVENT_QUEUE__MAXIMUM_QUEUE_MEMORY__HELP;
+  static final String DISPATCHING_PAUSED = "pause-event-processing";
+  static final String DISPATCHING_PAUSED_HELP =
+      "Change th";
 
   @CliCommand(value = COMMAND_NAME, help = COMMAND_HELP)
   @CliMetaData(
@@ -80,7 +83,10 @@ public class AlterAsyncEventQueueCommand extends SingleGfshCommand implements
           help = BATCH_TIME_INTERVAL_HELP) Integer batchTimeInterval,
       @CliOption(key = MAX_QUEUE_MEMORY, help = MAXIMUM_QUEUE_MEMORY_HELP) Integer maxQueueMemory,
       @CliOption(key = IFEXISTS, help = IFEXISTS_HELP, specifiedDefaultValue = "true",
-          unspecifiedDefaultValue = "false") boolean ifExists)
+          unspecifiedDefaultValue = "false") boolean ifExists,
+      @CliOption(key = DISPATCHING_PAUSED, help = DISPATCHING_PAUSED_HELP,
+          specifiedDefaultValue = "true",
+          unspecifiedDefaultValue = "false") boolean dispatchingPaused)
       throws IOException, SAXException, ParserConfigurationException, TransformerException,
       EntityNotFoundException {
 
@@ -98,7 +104,9 @@ public class AlterAsyncEventQueueCommand extends SingleGfshCommand implements
 
     CacheConfig.AsyncEventQueue aeqConfiguration = new CacheConfig.AsyncEventQueue();
     aeqConfiguration.setId(id);
-
+    if (dispatchingPaused) {
+      aeqConfiguration.setPauseEventProcessing(true);
+    }
     if (batchSize != null) {
       aeqConfiguration.setBatchSize(batchSize + "");
     }
