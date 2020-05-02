@@ -307,7 +307,7 @@ public abstract class OrderByPartitionedJUnitTestBase extends OrderByTestImpleme
       // Add numNullValues null values.
       if (i <= numNullValues) {
         pf.pkid = null;
-        pf.status = "a" + i;
+        pf.login = "a" + i;
       }
       r1.put(i + "", pf);
     }

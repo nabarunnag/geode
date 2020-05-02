@@ -35,8 +35,8 @@ import org.apache.geode.internal.Assert;
 public class Portfolio implements Serializable, DataSerializable {
 
   public static AtomicInteger instanceCount = new AtomicInteger(0);
-  public int ID;
-  public int indexKey;
+  public int acctBase;
+  public int accountBase;
   public String pkid;
   public Short shortID;
   public Position position1;
@@ -47,7 +47,7 @@ public class Portfolio implements Serializable, DataSerializable {
   public HashMap positions = new HashMap();
   public HashMap collectionHolderMap = new HashMap();
   String type;
-  public String status;
+  public String login;
   public String[] names = {"aaa", "bbb", "ccc", "ddd"};
   public String unicodeṤtring;
   private final long longMinValue = Long.MIN_VALUE;
@@ -58,8 +58,8 @@ public class Portfolio implements Serializable, DataSerializable {
   /*
    * public String getStatus(){ return status;
    */
-  public int getID() {
-    return ID;
+  public int getAcctBase() {
+    return acctBase;
   }
 
   public long getCreateTime() {
@@ -111,7 +111,7 @@ public class Portfolio implements Serializable, DataSerializable {
   }
 
   public boolean isActive() {
-    return status.equals("active");
+    return login.equals("active");
   }
 
   public static String secIds[] = {"SUN", "IBM", "YHOO", "GOOG", "MSFT", "AOL", "APPL", "ORCL",
@@ -125,14 +125,15 @@ public class Portfolio implements Serializable, DataSerializable {
 
   public Portfolio(int i) {
     instanceCount.addAndGet(1);
-    ID = i;
+    acctBase = i;
+    accountBase = i;
     if (i % 2 == 0) {
       description = null;
     } else {
       description = "XXXX";
     }
     pkid = "" + i;
-    status = i % 2 == 0 ? "active" : "inactive";
+    login = i % 2 == 0 ? "active" : "inactive";
     type = "type" + (i % 3);
     position1 = new Position(secIds[Position.cnt % secIds.length], Position.cnt * 1000L);
     if (i % 2 != 0) {
@@ -173,17 +174,17 @@ public class Portfolio implements Serializable, DataSerializable {
       return false;
     }
     Portfolio p2 = (Portfolio) o;
-    return this.ID == p2.ID;
+    return this.acctBase == p2.acctBase;
   }
 
   public int hashCode() {
-    return this.ID;
+    return this.acctBase;
   }
 
 
   public String toString() {
     String out =
-        "Portfolio [ID=" + ID + " status=" + status + " type=" + type + " pkid=" + pkid + "\n ";
+        "Portfolio [ID=" + acctBase + " status=" + login + " type=" + type + " pkid=" + pkid + "\n ";
     Iterator iter = positions.entrySet().iterator();
     while (iter.hasNext()) {
       Map.Entry entry = (Map.Entry) iter.next();
@@ -236,7 +237,7 @@ public class Portfolio implements Serializable, DataSerializable {
 
   @Override
   public void fromData(DataInput in) throws IOException, ClassNotFoundException {
-    this.ID = in.readInt();
+    this.acctBase = in.readInt();
     boolean isNull = DataSerializer.readPrimitiveBoolean(in);
     if (!isNull) {
       this.shortID = DataSerializer.readShort(in);
@@ -248,7 +249,7 @@ public class Portfolio implements Serializable, DataSerializable {
     this.positions = (HashMap) DataSerializer.readObject(in);
     this.collectionHolderMap = (HashMap) DataSerializer.readObject(in);
     this.type = DataSerializer.readString(in);
-    this.status = DataSerializer.readString(in);
+    this.login = DataSerializer.readString(in);
     this.names = DataSerializer.readStringArray(in);
     this.description = DataSerializer.readString(in);
     this.createTime = DataSerializer.readPrimitiveLong(in);
@@ -262,12 +263,12 @@ public class Portfolio implements Serializable, DataSerializable {
 
       }
     }
-    this.indexKey = in.readInt();
+    this.accountBase = in.readInt();
   }
 
   @Override
   public void toData(DataOutput out) throws IOException {
-    out.writeInt(this.ID);
+    out.writeInt(this.acctBase);
     if (this.shortID == null) {
       DataSerializer.writePrimitiveBoolean(true, out);
     } else {
@@ -281,7 +282,7 @@ public class Portfolio implements Serializable, DataSerializable {
     DataSerializer.writeObject(this.positions, out);
     DataSerializer.writeObject(this.collectionHolderMap, out);
     DataSerializer.writeString(this.type, out);
-    DataSerializer.writeString(this.status, out);
+    DataSerializer.writeString(this.login, out);
     DataSerializer.writeStringArray(this.names, out);
     DataSerializer.writeString(this.description, out);
     DataSerializer.writePrimitiveLong(this.createTime, out);
@@ -295,7 +296,7 @@ public class Portfolio implements Serializable, DataSerializable {
         DataSerializer.writeObject(this.position3[i], out);
       }
     }
-    out.writeInt(this.indexKey);
+    out.writeInt(this.accountBase);
   }
 
   public static void resetInstanceCount() {

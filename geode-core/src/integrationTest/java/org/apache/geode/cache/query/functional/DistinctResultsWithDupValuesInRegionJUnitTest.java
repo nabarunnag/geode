@@ -434,7 +434,7 @@ public class DistinctResultsWithDupValuesInRegionJUnitTest {
       Portfolio obj = new Portfolio(i);
       region.put(i, obj);
       if (i % (numElem / 5) == 0)
-        obj.status = null;
+        obj.login = null;
       region.put(i + numElem, obj);
       CacheUtils.log(obj);
     }
@@ -452,7 +452,7 @@ public class DistinctResultsWithDupValuesInRegionJUnitTest {
       Portfolio obj = new Portfolio(i);
       region.put(i, obj);
       if (i % (numElem / 5) == 0)
-        obj.status = null;
+        obj.login = null;
       region.put(i + numElem, obj);
       CacheUtils.log(obj);
     }

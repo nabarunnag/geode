@@ -416,7 +416,7 @@ public class NestedQueryJUnitTest {
     int numIds = 100;
     for (int i = 0; i < numEntries; i++) {
       Portfolio p = new Portfolio(i % (numIds));
-      p.shortID = (short) p.ID;
+      p.shortID = (short) p.acctBase;
       region1.put("" + i, p);
     }
 
@@ -437,7 +437,7 @@ public class NestedQueryJUnitTest {
     int numIds = 100;
     for (int i = 0; i < numEntries; i++) {
       Portfolio p = new Portfolio(i % (numIds));
-      p.shortID = (short) p.ID;
+      p.shortID = (short) p.acctBase;
       region1.put("" + i, p);
     }
 

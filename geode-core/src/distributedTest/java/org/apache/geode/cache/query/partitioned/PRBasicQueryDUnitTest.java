@@ -387,7 +387,7 @@ public class PRBasicQueryDUnitTest extends CacheTestCase {
         int expectedValue = i;
         for (Object o : results) {
           Portfolio p = (Portfolio) o;
-          assertEquals(expectedValue++, p.getID());
+          assertEquals(expectedValue++, p.getAcctBase());
         }
       }
     });

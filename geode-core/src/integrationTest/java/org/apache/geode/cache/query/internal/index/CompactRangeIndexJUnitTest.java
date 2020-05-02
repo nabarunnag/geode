@@ -92,7 +92,7 @@ public class CompactRangeIndexJUnitTest {
     int numObjects = 10;
     for (int i = 1; i <= numObjects; i++) {
       Portfolio p = new Portfolio(i);
-      p.status = null;
+      p.login = null;
       region.put("KEY-" + i, p);
     }
     // execute query and check result size
@@ -114,7 +114,7 @@ public class CompactRangeIndexJUnitTest {
     int numObjects = 10;
     for (int i = 1; i <= numObjects; i++) {
       Portfolio p = new Portfolio(i);
-      p.status = null;
+      p.login = null;
       p.getPositions().put(null, "something");
       region.put("KEY-" + i, p);
     }
@@ -136,7 +136,7 @@ public class CompactRangeIndexJUnitTest {
     int numObjects = 10;
     for (int i = 1; i <= numObjects; i++) {
       Portfolio p = new Portfolio(i);
-      p.status = null;
+      p.login = null;
       p.getPositions().put(null, "something");
       region.put("KEY-" + i, p);
     }
@@ -159,9 +159,9 @@ public class CompactRangeIndexJUnitTest {
       index = utils.createIndex("compact range index", "p.status", "/exampleRegion p");
       final Region r = utils.getCache().getRegion("/exampleRegion");
       Portfolio p0 = new Portfolio(0);
-      p0.status = "active";
+      p0.login = "active";
       final Portfolio p1 = new Portfolio(1);
-      p1.status = "active";
+      p1.login = "active";
       r.put("0", p0);
 
       DefaultQuery.testHook = new MemoryIndexStoreREToIndexElemTestHook();
@@ -222,13 +222,13 @@ public class CompactRangeIndexJUnitTest {
       index = utils.createIndex("compact range index", "p.status", "/exampleRegion p");
       final Region r = utils.getCache().getRegion("/exampleRegion");
       Portfolio p0 = new Portfolio(0);
-      p0.status = "active";
+      p0.login = "active";
       Portfolio p1 = new Portfolio(1);
-      p1.status = "active";
+      p1.login = "active";
       final Portfolio p2 = new Portfolio(2);
-      p2.status = "active";
+      p2.login = "active";
       Portfolio p3 = new Portfolio(3);
-      p3.status = "active";
+      p3.login = "active";
       r.put("0", p0);
       r.put("1", p1);
       r.put("3", p3);
@@ -320,7 +320,7 @@ public class CompactRangeIndexJUnitTest {
       int numObjects = 10;
       for (int i = 1; i <= numObjects; i++) {
         Portfolio p = new Portfolio(i);
-        p.status = null;
+        p.login = null;
         region.put("KEY-" + i, p);
       }
       // execute query and check result size
@@ -530,8 +530,8 @@ public class CompactRangeIndexJUnitTest {
         List expectedIds = new ArrayList(Arrays.asList(10, 9, 8, 7, 6, 5, 4, 3, 2));
         for (Object e : collection) {
           if (e instanceof Portfolio) {
-            assertTrue(expectedIds.contains(((Portfolio) e).getID()));
-            expectedIds.remove((Integer) ((Portfolio) e).getID());
+            assertTrue(expectedIds.contains(((Portfolio) e).getAcctBase()));
+            expectedIds.remove((Integer) ((Portfolio) e).getAcctBase());
           }
         }
       }
@@ -550,8 +550,8 @@ public class CompactRangeIndexJUnitTest {
         List expectedIds = new ArrayList(Arrays.asList(10, 9, 8, 7, 6, 5, 4, 3, 3));
         for (Object e : collection) {
           if (e instanceof Portfolio) {
-            assertTrue(expectedIds.contains(((Portfolio) e).getID()));
-            expectedIds.remove((Integer) ((Portfolio) e).getID());
+            assertTrue(expectedIds.contains(((Portfolio) e).getAcctBase()));
+            expectedIds.remove((Integer) ((Portfolio) e).getAcctBase());
           }
         }
       }

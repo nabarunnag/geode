@@ -364,7 +364,7 @@ public class QueryServiceRegressionTest {
     // object containing null status & the second condition does not contain the
     // 4th portfolio object
     Portfolio pf = new Portfolio(4);
-    pf.status = null;
+    pf.login = null;
     rgn.put(new Integer(4), pf);
     String queryStr = "select  * from /pos pf where pf.status != 'active' and pf.status != null";
 

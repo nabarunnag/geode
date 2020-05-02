@@ -202,7 +202,7 @@ public class IumMultConditionJUnitTest {
       if (((Portfolio) stc2.get(strg2[0])).isActive() != ((Portfolio) stc1.get(strg1[0]))
           .isActive())
         fail("FAILED: Status of the Portfolios found are different");
-      if (((Portfolio) stc2.get(strg2[0])).getID() != ((Portfolio) stc1.get(strg1[0])).getID())
+      if (((Portfolio) stc2.get(strg2[0])).getAcctBase() != ((Portfolio) stc1.get(strg1[0])).getAcctBase())
         fail("FAILED: IDs of the Portfolios found are different");
     }
     CacheUtils.compareResultsOfWithAndWithoutIndex(sr, this);

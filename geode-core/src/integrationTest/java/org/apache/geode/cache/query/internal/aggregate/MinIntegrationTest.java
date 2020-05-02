@@ -64,49 +64,49 @@ public class MinIntegrationTest extends AggregateFunctionQueryBaseIntegrationTes
 
     // Simple Queries
     queries.put("SELECT MIN(ID) FROM /" + firstRegionName,
-        supplierOne.get().mapToInt(Portfolio::getID).min().orElse(-1));
+        supplierOne.get().mapToInt(Portfolio::getAcctBase).min().orElse(-1));
     queries.put("SELECT MIN(ID) FROM /" + firstRegionName + " WHERE ID > 0",
-        supplierOne.get().filter(p -> p.getID() > 0).mapToInt(Portfolio::getID).min().orElse(-1));
+        supplierOne.get().filter(p -> p.getAcctBase() > 0).mapToInt(Portfolio::getAcctBase).min().orElse(-1));
     queries.put("SELECT MIN(ID) FROM /" + firstRegionName + " WHERE ID > 0 LIMIT 50",
-        supplierOne.get().filter(p -> p.getID() > 0).mapToInt(Portfolio::getID).min().orElse(-1));
+        supplierOne.get().filter(p -> p.getAcctBase() > 0).mapToInt(Portfolio::getAcctBase).min().orElse(-1));
     queries.put("SELECT MIN(p.getType()) FROM /" + firstRegionName
         + " p WHERE p.ID > 0 OR p.status='active'",
-        supplierOne.get().filter(p -> p.getID() > 0 || p.isActive())
+        supplierOne.get().filter(p -> p.getAcctBase() > 0 || p.isActive())
             .min(Comparator.comparing(Portfolio::getType)).map(Portfolio::getType).orElse(""));
     queries.put("SELECT MIN(p.getType()) FROM /" + firstRegionName
         + " p WHERE p.ID > 0 OR p.status LIKE 'ina%'",
-        supplierOne.get().filter(p -> p.getID() > 0 || p.status.startsWith("ina"))
+        supplierOne.get().filter(p -> p.getAcctBase() > 0 || p.login.startsWith("ina"))
             .min(Comparator.comparing(Portfolio::getType)).map(Portfolio::getType).orElse(""));
     queries.put(
         "SELECT MIN(p.shortID) FROM /" + firstRegionName + " p WHERE p.ID IN SET(1, 2, 3, 4, 5)",
-        supplierOne.get().filter(p -> Arrays.asList(1, 2, 3, 4, 5).contains(p.getID()))
+        supplierOne.get().filter(p -> Arrays.asList(1, 2, 3, 4, 5).contains(p.getAcctBase()))
             .min(Comparator.comparing(p -> p.shortID)).map(p -> p.shortID).orElse((short) -1));
     queries.put("SELECT MIN(p.shortID) FROM /" + firstRegionName + " p WHERE NOT (p.ID > 5)",
-        supplierOne.get().filter(p -> p.getID() <= 5).min(Comparator.comparing(p -> p.shortID))
+        supplierOne.get().filter(p -> p.getAcctBase() <= 5).min(Comparator.comparing(p -> p.shortID))
             .map(p -> p.shortID).orElse((short) -1));
 
     // StructSet queries.
     queries.put("SELECT MIN(p.ID) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID > 0 AND pos.secId = 'IBM'",
-        supplierOne.get().filter(p -> p.getID() > 0 && p.getPositions().containsKey("IBM"))
-            .mapToInt(Portfolio::getID).min().orElse(-1));
+        supplierOne.get().filter(p -> p.getAcctBase() > 0 && p.getPositions().containsKey("IBM"))
+            .mapToInt(Portfolio::getAcctBase).min().orElse(-1));
     queries.put("SELECT MIN(p.getType()) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID > 0 AND pos.secId = 'IBM' LIMIT 5",
-        supplierOne.get().filter(p -> p.getID() > 0 && p.getPositions().containsKey("IBM"))
+        supplierOne.get().filter(p -> p.getAcctBase() > 0 && p.getPositions().containsKey("IBM"))
             .min(Comparator.comparing(Portfolio::getType)).map(Portfolio::getType).orElse(""));
     queries.put("SELECT MIN(p.status) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID > 0 AND pos.secId = 'IBM'",
-        supplierOne.get().filter(p -> p.getID() > 0 && p.getPositions().containsKey("IBM"))
-            .min(Comparator.comparing(p -> p.status)).map(p -> p.status).orElse(""));
+        supplierOne.get().filter(p -> p.getAcctBase() > 0 && p.getPositions().containsKey("IBM"))
+            .min(Comparator.comparing(p -> p.login)).map(p -> p.login).orElse(""));
     queries.put("SELECT MIN(p.shortID) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID > 0 AND p.status = 'active' AND pos.secId = 'IBM'",
         supplierOne.get()
-            .filter(p -> p.getID() > 0 && p.isActive() && p.getPositions().containsKey("IBM"))
+            .filter(p -> p.getAcctBase() > 0 && p.isActive() && p.getPositions().containsKey("IBM"))
             .min(Comparator.comparing(p -> p.shortID)).map(p -> p.shortID).orElse((short) -1));
     queries.put("SELECT MIN(p.shortID) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID > 0 OR p.status IN SET ('active', 'inactive') OR pos.secId = 'IBM' LIMIT 50",
         supplierOne.get()
-            .filter(p -> p.getID() > 0 || p.isActive() || !p.isActive()
+            .filter(p -> p.getAcctBase() > 0 || p.isActive() || !p.isActive()
                 || p.getPositions().containsKey("IBM"))
             .min(Comparator.comparing(p -> p.shortID)).map(p -> p.shortID).orElse((short) -1));
 
@@ -114,32 +114,32 @@ public class MinIntegrationTest extends AggregateFunctionQueryBaseIntegrationTes
     queries.put("SELECT MIN(p.shortID) FROM /" + firstRegionName
         + " p WHERE p.ID IN (SELECT MIN(o.ID) FROM /" + firstRegionName + " o)",
         supplierOne.get()
-            .filter(p -> p.getID() == supplierOne.get().mapToInt(Portfolio::getID).min().orElse(-1))
+            .filter(p -> p.getAcctBase() == supplierOne.get().mapToInt(Portfolio::getAcctBase).min().orElse(-1))
             .min(Comparator.comparing(p -> p.shortID)).map(p -> p.shortID).orElse((short) -1));
     queries.put("SELECT MIN(p.shortID) FROM /" + firstRegionName
         + " p WHERE p.ID = ELEMENT(SELECT MAX(o.ID) FROM /" + firstRegionName + " o)",
         supplierOne.get()
-            .filter(p -> p.getID() == supplierOne.get().mapToInt(Portfolio::getID).max().orElse(-1))
+            .filter(p -> p.getAcctBase() == supplierOne.get().mapToInt(Portfolio::getAcctBase).max().orElse(-1))
             .min(Comparator.comparing(p -> p.shortID)).map(p -> p.shortID).orElse((short) -1));
 
     // Equi Join Queries
     equiJoinQueries.put("SELECT MIN(p.shortID) from /" + firstRegionName + " p, /"
         + secondRegionName + " e WHERE p.ID = e.ID AND p.ID > 0",
-        supplierOne.get().filter(p -> regionTwoLocalCopy.containsKey(p.getID()))
-            .filter(p -> p.getID() > 0).min(Comparator.comparing(p -> p.shortID))
+        supplierOne.get().filter(p -> regionTwoLocalCopy.containsKey(p.getAcctBase()))
+            .filter(p -> p.getAcctBase() > 0).min(Comparator.comparing(p -> p.shortID))
             .map(p -> p.shortID).orElse((short) -1));
     equiJoinQueries.put("SELECT MIN(p.shortID) from /" + firstRegionName + " p, /"
         + secondRegionName + " e WHERE p.ID = e.ID AND p.ID > 20 AND e.ID > 40",
         supplierOne.get()
-            .filter(p -> supplierTwo.get().filter(e -> e.getID() > 40)
-                .collect(Collectors.toMap(Portfolio::getID, Function.identity()))
-                .containsKey(p.getID()))
-            .filter(p -> p.getID() > 20).min(Comparator.comparing(p -> p.shortID))
+            .filter(p -> supplierTwo.get().filter(e -> e.getAcctBase() > 40)
+                .collect(Collectors.toMap(Portfolio::getAcctBase, Function.identity()))
+                .containsKey(p.getAcctBase()))
+            .filter(p -> p.getAcctBase() > 20).min(Comparator.comparing(p -> p.shortID))
             .map(p -> p.shortID).orElse((short) -1));
     equiJoinQueries.put("SELECT MIN(p.shortID) from /" + firstRegionName + " p, /"
         + secondRegionName + " e WHERE p.ID = e.ID AND p.ID > 0 AND p.status = 'active'",
-        supplierOne.get().filter(p -> regionTwoLocalCopy.containsKey(p.getID()))
-            .filter(p -> p.getID() > 0 && p.isActive()).min(Comparator.comparing(p -> p.shortID))
+        supplierOne.get().filter(p -> regionTwoLocalCopy.containsKey(p.getAcctBase()))
+            .filter(p -> p.getAcctBase() > 0 && p.isActive()).min(Comparator.comparing(p -> p.shortID))
             .map(p -> p.shortID).orElse((short) -1));
   }
 

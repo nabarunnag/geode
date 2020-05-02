@@ -324,19 +324,19 @@ public class DurableClientCommandsDUnitTest {
       Region region = cache.getRegion(regionName);
 
       Portfolio p1 = new Portfolio();
-      p1.ID = 1;
+      p1.acctBase = 1;
       p1.names = new String[] {"AAPL", "VMW"};
 
       Portfolio p2 = new Portfolio();
-      p2.ID = 2;
+      p2.acctBase = 2;
       p2.names = new String[] {"EMC", "IBM"};
 
       Portfolio p3 = new Portfolio();
-      p3.ID = 5;
+      p3.acctBase = 5;
       p3.names = new String[] {"DOW", "TON"};
 
       Portfolio p4 = new Portfolio();
-      p4.ID = 5;
+      p4.acctBase = 5;
       p4.names = new String[] {"ABC", "EBAY"};
 
       region.put("p1", p1);

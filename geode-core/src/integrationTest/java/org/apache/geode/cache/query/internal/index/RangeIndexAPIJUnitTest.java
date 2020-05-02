@@ -64,7 +64,7 @@ public class RangeIndexAPIJUnitTest {
       // make status of 10 and 11 as null
       Portfolio pf = new Portfolio(i);
       if (i == 10 || i == 11) {
-        pf.status = null;
+        pf.login = null;
       }
       region.put(new Integer(i), pf);
     }

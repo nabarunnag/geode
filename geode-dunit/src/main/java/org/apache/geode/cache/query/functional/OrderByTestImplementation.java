@@ -182,7 +182,7 @@ public abstract class OrderByTestImplementation {
     for (int i = 1; i < 200; ++i) {
       Portfolio pf = new Portfolio(i);
       pf.shortID = (short) ((short) i / 5);
-      pf.status = "active";
+      pf.login = "active";
       region.put("" + i, pf);
     }
     String queryStr =
@@ -212,7 +212,7 @@ public abstract class OrderByTestImplementation {
     for (int i = 0; i < 200; ++i) {
       Portfolio pf = new Portfolio(i);
       pf.shortID = (short) ((short) i / 5);
-      pf.status = "active";
+      pf.login = "active";
       region.put("" + i, pf);
     }
     String queryStr =
@@ -824,7 +824,7 @@ public abstract class OrderByTestImplementation {
       // Add numNullValues null values.
       if (i <= numNullValues) {
         pf.pkid = null;
-        pf.status = "a" + i;
+        pf.login = "a" + i;
       }
       r1.put(i + "", pf);
     }

@@ -73,7 +73,7 @@ public class MiscJUnitTest {
         "SELECT DISTINCT * FROM (SELECT DISTINCT * FROM /Portfolios where status = 'active') p  where p.ID = 0");
     Collection result = (Collection) query.execute();
     Portfolio p = (Portfolio) (result.iterator().next());
-    if (!p.status.equals("active") || p.getID() != 0) {
+    if (!p.login.equals("active") || p.getAcctBase() != 0) {
       fail(query.getQueryString());
     }
   }
@@ -512,13 +512,13 @@ public class MiscJUnitTest {
     SelectResults result = (SelectResults) q.execute();
     assertEquals(result.size(), 1);
     Portfolio pf = (Portfolio) result.iterator().next();
-    assertEquals(pf.getID(), Integer.MIN_VALUE);
+    assertEquals(pf.getAcctBase(), Integer.MIN_VALUE);
     qStr = "Select distinct * from /portfolios pf where pf.getID() = -1";
     q = qs.newQuery(qStr);
     result = (SelectResults) q.execute();
     assertEquals(result.size(), 1);
     pf = (Portfolio) result.iterator().next();
-    assertEquals(pf.getID(), -1);
+    assertEquals(pf.getAcctBase(), -1);
 
     qStr = "Select distinct * from /portfolios pf where pf.getID() = 3 and pf.getLongMinValue() = "
         + Long.MIN_VALUE + 'l';
@@ -526,7 +526,7 @@ public class MiscJUnitTest {
     result = (SelectResults) q.execute();
     assertEquals(result.size(), 1);
     pf = (Portfolio) result.iterator().next();
-    assertEquals(pf.getID(), 3);
+    assertEquals(pf.getAcctBase(), 3);
 
     qStr = "Select distinct * from /portfolios pf where pf.getID() = 3 and pf.getFloatMinValue() = "
         + Float.MIN_VALUE + 'f';
@@ -534,7 +534,7 @@ public class MiscJUnitTest {
     result = (SelectResults) q.execute();
     assertEquals(result.size(), 1);
     pf = (Portfolio) result.iterator().next();
-    assertEquals(pf.getID(), 3);
+    assertEquals(pf.getAcctBase(), 3);
 
     qStr =
         "Select distinct * from /portfolios pf where pf.getID() = 3 and pf.getDoubleMinValue() = "
@@ -543,7 +543,7 @@ public class MiscJUnitTest {
     result = (SelectResults) q.execute();
     assertEquals(result.size(), 1);
     pf = (Portfolio) result.iterator().next();
-    assertEquals(pf.getID(), 3);
+    assertEquals(pf.getAcctBase(), 3);
   }
 
   private static class HasShort implements Serializable {

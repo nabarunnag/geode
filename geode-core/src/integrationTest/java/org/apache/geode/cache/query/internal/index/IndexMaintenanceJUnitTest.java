@@ -103,10 +103,10 @@ public class IndexMaintenanceJUnitTest {
     idSet.clear();
     Portfolio p = new Portfolio(4);
     region.put("4", p);
-    idSet.add("" + p.getID());
+    idSet.add("" + p.getAcctBase());
     p = new Portfolio(5);
     region.put("5", p);
-    idSet.add("" + p.getID());
+    idSet.add("" + p.getAcctBase());
     region.put("6", 6);
     Index i1 = qs.createIndex("indx1", IndexType.FUNCTIONAL, "pf.getID()", "/portfolio1 pf");
     RangeIndex ri = (RangeIndex) i1;
@@ -119,7 +119,7 @@ public class IndexMaintenanceJUnitTest {
       assertFalse(obj instanceof Collection);
       assertTrue(obj instanceof Portfolio);
       Portfolio pf = (Portfolio) obj;
-      assertTrue(idSet.contains(String.valueOf(pf.getID())));
+      assertTrue(idSet.contains(String.valueOf(pf.getAcctBase())));
     }
     assertEquals(1, ri.undefinedMappedEntries.map.size());
     Map.Entry entry = (Map.Entry) ri.undefinedMappedEntries.map.entrySet().iterator().next();
@@ -151,7 +151,7 @@ public class IndexMaintenanceJUnitTest {
       assertFalse(obj instanceof Collection);
       assertTrue(obj instanceof Portfolio);
       Portfolio pf = (Portfolio) obj;
-      assertTrue(idSet.contains(String.valueOf(pf.getID())));
+      assertTrue(idSet.contains(String.valueOf(pf.getAcctBase())));
     }
     assertEquals(1, ri.undefinedMappedEntries.map.size());
     entry = (Map.Entry) ri.undefinedMappedEntries.map.entrySet().iterator().next();
@@ -1067,7 +1067,7 @@ public class IndexMaintenanceJUnitTest {
       assertFalse(obj instanceof Collection);
       MemoryIndexStoreEntry re = (MemoryIndexStoreEntry) obj;
       Portfolio pf = (Portfolio) re.getRegionEntry().getValueInVM((LocalRegion) ri.getRegion());
-      assertTrue(idSet.contains(String.valueOf(pf.getID())));
+      assertTrue(idSet.contains(String.valueOf(pf.getAcctBase())));
     }
   }
 

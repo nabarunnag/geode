@@ -140,7 +140,7 @@ public class QueryIndexDUnitTest extends JUnit4CacheTestCase {
       for (int i = 0; i <= 4; i++) {
 
         p = (Portfolio) region.get("" + i);
-        p.status = "active";
+        p.login = "active";
         region.put("" + i, p);
       }
     } catch (Exception e) {
@@ -1022,7 +1022,7 @@ public class QueryIndexDUnitTest extends JUnit4CacheTestCase {
       for (int i = 0; i <= 4; i++) {
 
         p = (Portfolio) region.get("" + i);
-        p.status = null;
+        p.login = null;
         region.put("" + i, p);
       }
     } catch (Exception e) {
@@ -1042,7 +1042,7 @@ public class QueryIndexDUnitTest extends JUnit4CacheTestCase {
     try {
       for (int i = 0; i <= 4; i++) {
         Portfolio p = new Portfolio(i);
-        p.status = null;
+        p.login = null;
         region.put("" + i, p);
       }
     } catch (Exception e) {

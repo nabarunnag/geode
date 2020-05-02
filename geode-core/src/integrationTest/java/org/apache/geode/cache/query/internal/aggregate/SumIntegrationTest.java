@@ -64,82 +64,82 @@ public class SumIntegrationTest extends AggregateFunctionQueryBaseIntegrationTes
 
     // Simple Queries
     queries.put("SELECT SUM(p.ID) FROM /" + firstRegionName + " p",
-        downCast(supplierOne.get().mapToInt(Portfolio::getID).sum()));
+        downCast(supplierOne.get().mapToInt(Portfolio::getAcctBase).sum()));
     queries.put("SELECT SUM(p.ID) FROM /" + firstRegionName + " p WHERE p.ID > 0",
-        downCast(supplierOne.get().filter(p -> p.getID() > 0).mapToInt(Portfolio::getID).sum()));
+        downCast(supplierOne.get().filter(p -> p.getAcctBase() > 0).mapToInt(Portfolio::getAcctBase).sum()));
     queries.put("SELECT SUM(p.ID) FROM /" + firstRegionName + " p WHERE p.ID > 0 OR p.ID <= 100",
-        downCast(supplierOne.get().filter(p -> p.getID() > 0 || p.getID() <= 100)
-            .mapToInt(Portfolio::getID).sum()));
+        downCast(supplierOne.get().filter(p -> p.getAcctBase() > 0 || p.getAcctBase() <= 100)
+            .mapToInt(Portfolio::getAcctBase).sum()));
     queries.put(
         "SELECT SUM(p.ID) FROM /" + firstRegionName + " p WHERE p.ID > 0 OR p.status='active'",
-        downCast(supplierOne.get().filter(p -> p.getID() > 0 || p.isActive())
-            .mapToInt(Portfolio::getID).sum()));
+        downCast(supplierOne.get().filter(p -> p.getAcctBase() > 0 || p.isActive())
+            .mapToInt(Portfolio::getAcctBase).sum()));
     queries.put(
         "SELECT SUM(p.ID) FROM /" + firstRegionName + " p WHERE p.ID > 0 OR p.status LIKE 'ina%'",
-        downCast(supplierOne.get().filter(p -> p.getID() > 0 || p.status.startsWith("ina"))
-            .mapToInt(Portfolio::getID).sum()));
+        downCast(supplierOne.get().filter(p -> p.getAcctBase() > 0 || p.login.startsWith("ina"))
+            .mapToInt(Portfolio::getAcctBase).sum()));
     queries.put("SELECT SUM(p.ID) FROM /" + firstRegionName + " p WHERE p.ID IN SET(1, 2, 3, 4, 5)",
-        downCast(supplierOne.get().filter(p -> Arrays.asList(1, 2, 3, 4, 5).contains(p.getID()))
-            .mapToInt(Portfolio::getID).sum()));
+        downCast(supplierOne.get().filter(p -> Arrays.asList(1, 2, 3, 4, 5).contains(p.getAcctBase()))
+            .mapToInt(Portfolio::getAcctBase).sum()));
     queries.put("SELECT SUM(p.ID) FROM /" + firstRegionName + " p WHERE NOT (p.ID > 5)",
-        downCast(supplierOne.get().filter(p -> p.getID() <= 5).mapToInt(Portfolio::getID).sum()));
+        downCast(supplierOne.get().filter(p -> p.getAcctBase() <= 5).mapToInt(Portfolio::getAcctBase).sum()));
 
     // Distinct Queries
     queries.put("SELECT SUM(DISTINCT p.ID) FROM /" + firstRegionName + " p WHERE p.ID > 0",
-        downCast(supplierOne.get().filter(p -> p.getID() > 0)
-            .filter(distinctByKey(Portfolio::getID)).mapToInt(Portfolio::getID).sum()));
+        downCast(supplierOne.get().filter(p -> p.getAcctBase() > 0)
+            .filter(distinctByKey(Portfolio::getAcctBase)).mapToInt(Portfolio::getAcctBase).sum()));
     queries.put("SELECT SUM(DISTINCT p.shortID) FROM /" + firstRegionName + " p WHERE p.ID > 0",
-        downCast(supplierOne.get().filter(p -> p.getID() > 0).filter(distinctByKey(p -> p.shortID))
+        downCast(supplierOne.get().filter(p -> p.getAcctBase() > 0).filter(distinctByKey(p -> p.shortID))
             .mapToInt(p -> p.shortID).sum()));
 
     // StructSet queries.
     queries.put("SELECT SUM(p.ID) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID > 0 AND pos.secId = 'IBM'",
-        downCast(supplierOne.get().filter(p -> p.getID() > 0 && p.getPositions().containsKey("IBM"))
-            .mapToInt(Portfolio::getID).sum()));
+        downCast(supplierOne.get().filter(p -> p.getAcctBase() > 0 && p.getPositions().containsKey("IBM"))
+            .mapToInt(Portfolio::getAcctBase).sum()));
     queries.put("SELECT SUM(p.ID) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID < 100 AND pos.secId = 'IBM'",
         downCast(
-            supplierOne.get().filter(p -> p.getID() < 100 && p.getPositions().containsKey("IBM"))
-                .mapToInt(Portfolio::getID).sum()));
+            supplierOne.get().filter(p -> p.getAcctBase() < 100 && p.getPositions().containsKey("IBM"))
+                .mapToInt(Portfolio::getAcctBase).sum()));
     queries.put("SELECT DISTINCT SUM(p.ID) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID > 0 AND pos.secId = 'IBM'",
-        downCast(supplierOne.get().filter(p -> p.getID() > 0 && p.getPositions().containsKey("IBM"))
-            .distinct().mapToInt(Portfolio::getID).sum()));
+        downCast(supplierOne.get().filter(p -> p.getAcctBase() > 0 && p.getPositions().containsKey("IBM"))
+            .distinct().mapToInt(Portfolio::getAcctBase).sum()));
     queries.put("SELECT SUM(p.ID) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID > 0 AND p.status = 'active' AND pos.secId = 'IBM'",
         downCast(supplierOne.get()
-            .filter(p -> p.getID() > 0 && p.isActive() && p.getPositions().containsKey("IBM"))
-            .mapToInt(Portfolio::getID).sum()));
+            .filter(p -> p.getAcctBase() > 0 && p.isActive() && p.getPositions().containsKey("IBM"))
+            .mapToInt(Portfolio::getAcctBase).sum()));
 
     // Aggregate used as as WHERE condition within inner query.
     queries.put("SELECT SUM(p.ID) FROM /" + firstRegionName
         + " p WHERE p.ID IN (SELECT MIN(o.ID) FROM /" + firstRegionName + " o)",
         downCast(supplierOne.get()
-            .filter(p -> p.getID() == supplierOne.get().mapToInt(Portfolio::getID).min().orElse(-1))
-            .mapToInt(Portfolio::getID).sum()));
+            .filter(p -> p.getAcctBase() == supplierOne.get().mapToInt(Portfolio::getAcctBase).min().orElse(-1))
+            .mapToInt(Portfolio::getAcctBase).sum()));
     queries.put("SELECT SUM(p.ID) FROM /" + firstRegionName
         + " p WHERE p.ID = ELEMENT(SELECT MAX(o.ID) FROM /" + firstRegionName + " o)",
         downCast(supplierOne.get()
-            .filter(p -> p.getID() == supplierOne.get().mapToInt(Portfolio::getID).max().orElse(-1))
-            .mapToInt(Portfolio::getID).sum()));
+            .filter(p -> p.getAcctBase() == supplierOne.get().mapToInt(Portfolio::getAcctBase).max().orElse(-1))
+            .mapToInt(Portfolio::getAcctBase).sum()));
 
     // Equi Join Queries
     equiJoinQueries.put("SELECT SUM(p.ID) from /" + firstRegionName + " p, /" + secondRegionName
         + " e WHERE p.ID = e.ID AND p.ID > 0",
-        downCast(supplierOne.get().filter(p -> regionTwoLocalCopy.containsKey(p.getID()))
-            .filter(p -> p.getID() > 0).mapToInt(Portfolio::getID).sum()));
+        downCast(supplierOne.get().filter(p -> regionTwoLocalCopy.containsKey(p.getAcctBase()))
+            .filter(p -> p.getAcctBase() > 0).mapToInt(Portfolio::getAcctBase).sum()));
     equiJoinQueries.put("SELECT SUM(p.ID) from /" + firstRegionName + " p, /" + secondRegionName
         + " e WHERE p.ID = e.ID AND p.ID > 20 AND e.ID > 40",
         downCast(supplierOne.get()
-            .filter(p -> supplierTwo.get().filter(e -> e.getID() > 40)
-                .collect(Collectors.toMap(Portfolio::getID, Function.identity()))
-                .containsKey(p.getID()))
-            .filter(p -> p.getID() > 20).mapToInt(Portfolio::getID).sum()));
+            .filter(p -> supplierTwo.get().filter(e -> e.getAcctBase() > 40)
+                .collect(Collectors.toMap(Portfolio::getAcctBase, Function.identity()))
+                .containsKey(p.getAcctBase()))
+            .filter(p -> p.getAcctBase() > 20).mapToInt(Portfolio::getAcctBase).sum()));
     equiJoinQueries.put("SELECT SUM(p.ID) from /" + firstRegionName + " p, /" + secondRegionName
         + " e WHERE p.ID = e.ID AND p.ID > 0 AND p.status = 'active'",
-        downCast(supplierOne.get().filter(p -> regionTwoLocalCopy.containsKey(p.getID()))
-            .filter(p -> p.getID() > 0 && p.isActive()).mapToInt(Portfolio::getID).sum()));
+        downCast(supplierOne.get().filter(p -> regionTwoLocalCopy.containsKey(p.getAcctBase()))
+            .filter(p -> p.getAcctBase() > 0 && p.isActive()).mapToInt(Portfolio::getAcctBase).sum()));
   }
 
   private void prepareStructuresWithPdx() {

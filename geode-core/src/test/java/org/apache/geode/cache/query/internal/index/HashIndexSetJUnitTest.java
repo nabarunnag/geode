@@ -81,8 +81,8 @@ public class HashIndexSetJUnitTest {
     Map<Integer, Portfolio> portfoliosMap = new HashMap<>();
     IntStream.range(0, numToCreate).forEach(e -> {
       Portfolio p = new Portfolio(e + startID);
-      p.indexKey = e;
-      portfoliosMap.put(p.indexKey, p);
+      p.accountBase = e;
+      portfoliosMap.put(p.accountBase, p);
     });
     return portfoliosMap;
   }
@@ -196,7 +196,7 @@ public class HashIndexSetJUnitTest {
     while (iterator.hasNext()) {
       numIterated++;
       // verify that the returned values match what we lookedup
-      assertEquals(keyToLookup, ((Portfolio) iterator.next()).indexKey);
+      assertEquals(keyToLookup, ((Portfolio) iterator.next()).accountBase);
     }
     assertEquals(2, numIterated);
   }
@@ -222,7 +222,7 @@ public class HashIndexSetJUnitTest {
     while (iterator.hasNext()) {
       numIterated++;
       // verify that the returned values match what we lookedup
-      assertEquals(keyToLookup, ((Portfolio) iterator.next()).indexKey);
+      assertEquals(keyToLookup, ((Portfolio) iterator.next()).accountBase);
     }
     assertEquals(3, numIterated);
 
@@ -234,7 +234,7 @@ public class HashIndexSetJUnitTest {
     while (iterator.hasNext()) {
       numIterated++;
       // verify that the returned values match what we lookedup
-      assertEquals(keyToLookup, ((Portfolio) iterator.next()).indexKey);
+      assertEquals(keyToLookup, ((Portfolio) iterator.next()).accountBase);
     }
     assertEquals(2, numIterated);
 
@@ -245,7 +245,7 @@ public class HashIndexSetJUnitTest {
     while (iterator.hasNext()) {
       numIterated++;
       // verify that the returned values match what we lookedup
-      assertEquals(keyToLookup, ((Portfolio) iterator.next()).indexKey);
+      assertEquals(keyToLookup, ((Portfolio) iterator.next()).accountBase);
     }
     assertEquals(3, numIterated);
 
@@ -270,7 +270,7 @@ public class HashIndexSetJUnitTest {
     int numIterated = 0;
     while (iterator.hasNext()) {
       numIterated++;
-      int idFound = ((Portfolio) iterator.next()).indexKey;
+      int idFound = ((Portfolio) iterator.next()).accountBase;
       assertTrue(idFound != 3 && idFound != 4);
     }
     // Make sure we iterated all the entries minus the entries that we decided not to match
@@ -417,7 +417,7 @@ public class HashIndexSetJUnitTest {
     setupHashIndexSet(numEntries);
     Set subset = new HashSet();
     portfolioSet.forEach(e -> {
-      if (e.indexKey % 2 == 0) {
+      if (e.accountBase % 2 == 0) {
         subset.add(e);
       }
     });
@@ -497,7 +497,7 @@ public class HashIndexSetJUnitTest {
       Object evalOn = invocation.getArgument(0);
       if (evalOn instanceof Portfolio) {
         Portfolio p = (Portfolio) evalOn;
-        return p.indexKey;
+        return p.accountBase;
       }
       return null;
     }

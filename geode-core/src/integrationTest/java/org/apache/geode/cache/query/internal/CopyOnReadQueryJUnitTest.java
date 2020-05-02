@@ -71,8 +71,8 @@ public class CopyOnReadQueryJUnitTest {
       for (int j = 0; j < objectsAndResultsMultiplier; j++) {
         int regionKey = i * objectsAndResultsMultiplier + j;
         Portfolio p = new Portfolio(regionKey);
-        p.indexKey = i;
-        p.status = "testStatus";
+        p.accountBase = i;
+        p.login = "testStatus";
         p.positions = new HashMap();
         p.positions.put("" + 1, new Position("" + i, i));
         region.put("key-" + regionKey, p);
@@ -286,11 +286,11 @@ public class CopyOnReadQueryJUnitTest {
     for (Object o : results) {
       if (o instanceof Portfolio) {
         Portfolio p = (Portfolio) o;
-        p.status = "discardStatus";
+        p.login = "discardStatus";
       } else {
         Struct struct = (Struct) o;
         Portfolio p = (Portfolio) struct.getFieldValues()[0];
-        p.status = "discardStatus";
+        p.login = "discardStatus";
       }
     }
 
@@ -314,11 +314,11 @@ public class CopyOnReadQueryJUnitTest {
     for (Object o : results) {
       if (o instanceof Portfolio) {
         Portfolio p = (Portfolio) o;
-        assertEquals("status should not have been changed", "testStatus", p.status);
+        assertEquals("status should not have been changed", "testStatus", p.login);
       } else {
         Struct struct = (Struct) o;
         Portfolio p = (Portfolio) struct.getFieldValues()[0];
-        assertEquals("status should not have been changed", "testStatus", p.status);
+        assertEquals("status should not have been changed", "testStatus", p.login);
       }
     }
     if (!hasIndex && isPR) {
@@ -358,11 +358,11 @@ public class CopyOnReadQueryJUnitTest {
     for (Object o : results) {
       if (o instanceof Portfolio) {
         Portfolio p = (Portfolio) o;
-        p.status = "discardStatus";
+        p.login = "discardStatus";
       } else {
         Struct struct = (Struct) o;
         Portfolio p = (Portfolio) struct.getFieldValues()[0];
-        p.status = "discardStatus";
+        p.login = "discardStatus";
       }
     }
     if (!hasIndex && isPR) {
@@ -380,11 +380,11 @@ public class CopyOnReadQueryJUnitTest {
     for (Object o : results) {
       if (o instanceof Portfolio) {
         Portfolio p = (Portfolio) o;
-        assertEquals("status should have been changed", "discardStatus", p.status);
+        assertEquals("status should have been changed", "discardStatus", p.login);
       } else {
         Struct struct = (Struct) o;
         Portfolio p = (Portfolio) struct.getFieldValues()[0];
-        assertEquals("status should have been changed", "discardStatus", p.status);
+        assertEquals("status should have been changed", "discardStatus", p.login);
       }
     }
 

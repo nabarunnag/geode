@@ -130,7 +130,7 @@ public class QueryDataInconsistencyDUnitTest implements Serializable {
       assertTrue(resultSet instanceof SelectResults);
       assertEquals(1, ((SelectResults) resultSet).size());
       Portfolio p1 = (Portfolio) ((SelectResults) resultSet).asList().get(0);
-      if (p1.getID() != 1) {
+      if (p1.getAcctBase() != 1) {
         fail("Query thread did not verify index results even when RE is under update");
         IndexManager.testHook = null;
       }
@@ -154,7 +154,7 @@ public class QueryDataInconsistencyDUnitTest implements Serializable {
       assertTrue(resultSet instanceof SelectResults);
       if (((SelectResults) resultSet).size() > 0) {
         Portfolio p1 = (Portfolio) ((SelectResults) resultSet).iterator().next();
-        if (p1.getID() != 1) {
+        if (p1.getAcctBase() != 1) {
           fail("Query thread did not verify index results even when RE is under update and "
               + "RegionEntry value has been modified before releasing the lock");
           IndexManager.testHook = null;

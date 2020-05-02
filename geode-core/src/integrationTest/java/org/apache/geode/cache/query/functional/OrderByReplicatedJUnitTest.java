@@ -100,7 +100,7 @@ public class OrderByReplicatedJUnitTest extends OrderByTestImplementation {
       // Add numNullValues null values.
       if (i <= numNullValues) {
         pf.pkid = null;
-        pf.status = "a" + i;
+        pf.login = "a" + i;
       }
       r1.put(i + "", pf);
     }

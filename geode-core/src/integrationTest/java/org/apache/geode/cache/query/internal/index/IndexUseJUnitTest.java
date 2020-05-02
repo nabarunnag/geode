@@ -502,10 +502,10 @@ public class IndexUseJUnitTest {
         Portfolio p = (Portfolio) results.get(0);
         CacheUtils.getLogger().info("p: " + p);
         if (i == 0) {
-          assertEquals(p.getID(), 10);
+          assertEquals(p.getAcctBase(), 10);
           assertEquals(p.pkid, "" + (numObjects - 10));
         } else if (i == 1) {
-          assertEquals(p.getID(), 0);
+          assertEquals(p.getAcctBase(), 0);
           assertEquals(p.pkid, "" + numObjects);
         }
       }
@@ -527,10 +527,10 @@ public class IndexUseJUnitTest {
         Portfolio p = (Portfolio) results.get(0);
         CacheUtils.getLogger().info("index p: " + p);
         if (i == 0) {
-          assertEquals(p.getID(), 10);
+          assertEquals(p.getAcctBase(), 10);
           assertEquals(p.pkid, "" + (numObjects - 10));
         } else if (i == 1) {
-          assertEquals(p.getID(), 0);
+          assertEquals(p.getAcctBase(), 0);
           assertEquals(p.pkid, "" + numObjects);
         }
       }
@@ -584,10 +584,10 @@ public class IndexUseJUnitTest {
         Portfolio p = (Portfolio) results.get(0);
         CacheUtils.getLogger().info("index p: " + p);
         if (i == 0) {
-          assertEquals(p.getID(), 0);
+          assertEquals(p.getAcctBase(), 0);
 
         } else if (i == 1) {
-          assertEquals(p.getID(), 10);
+          assertEquals(p.getAcctBase(), 10);
 
         }
       }

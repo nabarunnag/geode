@@ -154,7 +154,7 @@ public class AggregateFunctionsQueryDUnitTest implements Serializable {
   private ToIntFunction<Object> toPortfolioID(boolean usePdx) {
     return value -> {
       if (!usePdx) {
-        return ((Portfolio) value).getID();
+        return ((Portfolio) value).getAcctBase();
       } else {
         return ((PortfolioPdx) value).getID();
       }

@@ -89,7 +89,7 @@ public class LikePredicateJUnitTest {
     String base = "abc";
     for (int i = 1; i < 6; ++i) {
       Portfolio pf = new Portfolio(i);
-      pf.status = base + ch;
+      pf.login = base + ch;
       ch += 1;
       region.put(i, pf);
     }
@@ -98,7 +98,7 @@ public class LikePredicateJUnitTest {
     ch = 'd';
     for (int i = 6; i < 11; ++i) {
       Portfolio pf = new Portfolio(i);
-      pf.status = base + ch;
+      pf.login = base + ch;
       ch += 1;
       region.put(i, pf);
     }
@@ -180,7 +180,7 @@ public class LikePredicateJUnitTest {
     String base = "abc";
     for (int i = 1; i < 6; ++i) {
       Portfolio pf = new Portfolio(i);
-      pf.status = base + ch;
+      pf.login = base + ch;
       ch += 1;
       region.put(i, pf);
     }
@@ -189,7 +189,7 @@ public class LikePredicateJUnitTest {
     ch = 'd';
     for (int i = 6; i < 11; ++i) {
       Portfolio pf = new Portfolio(i);
-      pf.status = base + ch;
+      pf.login = base + ch;
       ch += 1;
       region.put(i, pf);
     }
@@ -271,7 +271,7 @@ public class LikePredicateJUnitTest {
     String base = "abc";
     for (int i = 1; i < 6; ++i) {
       Portfolio pf = new Portfolio(i);
-      pf.status = base + ch;
+      pf.login = base + ch;
       ch += 1;
       region.put(i, pf);
     }
@@ -280,7 +280,7 @@ public class LikePredicateJUnitTest {
     ch = 'd';
     for (int i = 6; i < 11; ++i) {
       Portfolio pf = new Portfolio(i);
-      pf.status = base + ch;
+      pf.login = base + ch;
       ch += 1;
       region.put(i, pf);
     }
@@ -396,7 +396,7 @@ public class LikePredicateJUnitTest {
     for (int i = 1; i < 200; ++i) {
       Portfolio pf = new Portfolio(i);
       pattern += "dc";
-      pf.status = pattern;
+      pf.login = pattern;
       region.put(i, pf);
     }
 
@@ -406,7 +406,7 @@ public class LikePredicateJUnitTest {
     for (int i = 201; i < 400; ++i) {
       Portfolio pf = new Portfolio(i);
       pattern += "dc";
-      pf.status = pattern;
+      pf.login = pattern;
 
       region.put(i, pf);
     }
@@ -519,7 +519,7 @@ public class LikePredicateJUnitTest {
     String base = "abc";
     for (int i = 1; i < 6; ++i) {
       Portfolio pf = new Portfolio(i);
-      pf.status = base + ch;
+      pf.login = base + ch;
       ch += 1;
       region.put(i, pf);
     }
@@ -619,7 +619,7 @@ public class LikePredicateJUnitTest {
     String base = "abc";
     for (int i = 1; i < 6; ++i) {
       Portfolio pf = new Portfolio(i);
-      pf.status = base + ch;
+      pf.login = base + ch;
       ch += 1;
       region.put(i, pf);
     }
@@ -628,7 +628,7 @@ public class LikePredicateJUnitTest {
     ch = 'd';
     for (int i = 6; i < 11; ++i) {
       Portfolio pf = new Portfolio(i);
-      pf.status = base + ch;
+      pf.login = base + ch;
       ch += 1;
       region.put(i, pf);
     }
@@ -710,7 +710,7 @@ public class LikePredicateJUnitTest {
     String base = "abc";
     for (int i = 1; i < 6; ++i) {
       Portfolio pf = new Portfolio(i);
-      pf.status = base + str;
+      pf.login = base + str;
       region.put(i, pf);
     }
 
@@ -718,7 +718,7 @@ public class LikePredicateJUnitTest {
     str = "d%";
     for (int i = 6; i < 11; ++i) {
       Portfolio pf = new Portfolio(i);
-      pf.status = base + str;
+      pf.login = base + str;
       region.put(i, pf);
     }
 
@@ -1031,7 +1031,7 @@ public class LikePredicateJUnitTest {
       Portfolio pf = new Portfolio(i);
       pf.pkid = "1";
       if ((i % 4) == 0) {
-        pf.status = base;
+        pf.login = base;
       } else if ((i <= 2)) {
         pf.pkid = "2";
       }
@@ -1117,7 +1117,7 @@ public class LikePredicateJUnitTest {
       Portfolio pf = new Portfolio(i);
       pf.pkid = "1";
       if ((i % 4) == 0) {
-        pf.status = base;
+        pf.login = base;
       } else if ((i <= 2)) {
         pf.pkid = "2";
       }
@@ -1447,9 +1447,9 @@ public class LikePredicateJUnitTest {
       pf.pkid = "abc";
       if (i % 2 == 0) {
         pf.pkid = null;
-        pf.status = "like";
+        pf.login = "like";
       } else if (i == 3) {
-        pf.status = null;
+        pf.login = null;
       }
       region.put(i, pf);
     }
@@ -1662,7 +1662,7 @@ public class LikePredicateJUnitTest {
       Portfolio pf = new Portfolio(i);
       pf.pkid = "1";
       if ((i % 4) == 0) {
-        pf.status = base;
+        pf.login = base;
       } else if ((i <= 2)) {
         pf.pkid = "2";
       }
@@ -2104,12 +2104,12 @@ public class LikePredicateJUnitTest {
     for (int i = 0; i < 10; i++) {
       Portfolio p = new Portfolio(i);
       if (i % 2 == 0) {
-        p.status = null;
+        p.login = null;
         p.position1 = null;
         p.positions = null;
       } else {
         p.position1 = new Position("IBM", 0);
-        p.status = "ACTIVE";
+        p.login = "ACTIVE";
       }
       region.put("key-" + i, p);
     }

@@ -166,7 +166,7 @@ public class CopyOnReadIndexDUnitTest extends JUnit4CacheTestCase {
         Region region = getCache().getRegion("/portfolios");
         for (int i = 0; i < numPortfoliosPerVM; i++) {
           Portfolio p = new Portfolio(i);
-          p.status = "testStatus";
+          p.login = "testStatus";
           p.positions = new HashMap();
           p.positions.put("" + i, new Position("" + i, 20));
           region.put("key " + i, p);
@@ -195,7 +195,7 @@ public class CopyOnReadIndexDUnitTest extends JUnit4CacheTestCase {
         Region region = getCache().getRegion("/portfolios");
         for (int i = numPortfoliosPerVM; i < numPortfolios; i++) {
           Portfolio p = new Portfolio(i);
-          p.status = "testStatus";
+          p.login = "testStatus";
           p.positions = new HashMap();
           p.positions.put("" + i, new Position("" + i, 20));
           region.put("key " + i, p);
@@ -234,11 +234,11 @@ public class CopyOnReadIndexDUnitTest extends JUnit4CacheTestCase {
         for (Object o : results) {
           if (o instanceof Portfolio) {
             Portfolio p = (Portfolio) o;
-            p.status = "discardStatus";
+            p.login = "discardStatus";
           } else {
             Struct struct = (Struct) o;
             Portfolio p = (Portfolio) struct.getFieldValues()[0];
-            p.status = "discardStatus";
+            p.login = "discardStatus";
           }
         }
         if (hasIndex) {
@@ -295,11 +295,11 @@ public class CopyOnReadIndexDUnitTest extends JUnit4CacheTestCase {
         for (Object o : results) {
           if (o instanceof Portfolio) {
             Portfolio p = (Portfolio) o;
-            assertEquals("status should not have been changed", "testStatus", p.status);
+            assertEquals("status should not have been changed", "testStatus", p.login);
           } else {
             Struct struct = (Struct) o;
             Portfolio p = (Portfolio) struct.getFieldValues()[0];
-            assertEquals("status should not have been changed", "testStatus", p.status);
+            assertEquals("status should not have been changed", "testStatus", p.login);
           }
         }
         if (hasIndex) {
@@ -376,7 +376,7 @@ public class CopyOnReadIndexDUnitTest extends JUnit4CacheTestCase {
         Region region = getCache().getRegion("/portfolios");
         for (int i = 0; i < numPortfolios; i++) {
           Portfolio p = new Portfolio(i);
-          p.status = "testStatus";
+          p.login = "testStatus";
           p.positions = new HashMap();
           p.positions.put("" + i, new Position("" + i, 20));
           region.put("key " + i, p);
@@ -431,11 +431,11 @@ public class CopyOnReadIndexDUnitTest extends JUnit4CacheTestCase {
           for (Object o : results) {
             if (o instanceof Portfolio) {
               Portfolio p = (Portfolio) o;
-              p.status = "discardStatus";
+              p.login = "discardStatus";
             } else {
               Struct struct = (Struct) o;
               Portfolio p = (Portfolio) struct.getFieldValues()[0];
-              p.status = "discardStatus";
+              p.login = "discardStatus";
             }
           }
 
@@ -464,13 +464,13 @@ public class CopyOnReadIndexDUnitTest extends JUnit4CacheTestCase {
         for (Object o : results) {
           if (o instanceof Portfolio) {
             Portfolio p = (Portfolio) o;
-            assertEquals("status should not have been changed", "testStatus", p.status);
-            p.status = "discardStatus";
+            assertEquals("status should not have been changed", "testStatus", p.login);
+            p.login = "discardStatus";
           } else {
             Struct struct = (Struct) o;
             Portfolio p = (Portfolio) struct.getFieldValues()[0];
-            assertEquals("status should not have been changed", "testStatus", p.status);
-            p.status = "discardStatus";
+            assertEquals("status should not have been changed", "testStatus", p.login);
+            p.login = "discardStatus";
           }
         }
         // first it must deserialize the portfolios in the replicated region
@@ -483,11 +483,11 @@ public class CopyOnReadIndexDUnitTest extends JUnit4CacheTestCase {
         for (Object o : results) {
           if (o instanceof Portfolio) {
             Portfolio p = (Portfolio) o;
-            assertEquals("status should not have been changed", "testStatus", p.status);
+            assertEquals("status should not have been changed", "testStatus", p.login);
           } else {
             Struct struct = (Struct) o;
             Portfolio p = (Portfolio) struct.getFieldValues()[0];
-            assertEquals("status should not have been changed", "testStatus", p.status);
+            assertEquals("status should not have been changed", "testStatus", p.login);
           }
         }
 
@@ -511,13 +511,13 @@ public class CopyOnReadIndexDUnitTest extends JUnit4CacheTestCase {
         for (Object o : results) {
           if (o instanceof Portfolio) {
             Portfolio p = (Portfolio) o;
-            assertEquals("status should not have been changed", "testStatus", p.status);
-            p.status = "discardStatus";
+            assertEquals("status should not have been changed", "testStatus", p.login);
+            p.login = "discardStatus";
           } else {
             Struct struct = (Struct) o;
             Portfolio p = (Portfolio) struct.getFieldValues()[0];
-            assertEquals("status should not have been changed", "testStatus", p.status);
-            p.status = "discardStatus";
+            assertEquals("status should not have been changed", "testStatus", p.login);
+            p.login = "discardStatus";
           }
         }
         // with or without index, the values had to have been deserialized at one point
@@ -528,11 +528,11 @@ public class CopyOnReadIndexDUnitTest extends JUnit4CacheTestCase {
         for (Object o : results) {
           if (o instanceof Portfolio) {
             Portfolio p = (Portfolio) o;
-            assertEquals("status should not have been changed", "testStatus", p.status);
+            assertEquals("status should not have been changed", "testStatus", p.login);
           } else {
             Struct struct = (Struct) o;
             Portfolio p = (Portfolio) struct.getFieldValues()[0];
-            assertEquals("status should not have been changed", "testStatus", p.status);
+            assertEquals("status should not have been changed", "testStatus", p.login);
           }
         }
 
@@ -565,11 +565,11 @@ public class CopyOnReadIndexDUnitTest extends JUnit4CacheTestCase {
         for (Object o : results) {
           if (o instanceof Portfolio) {
             Portfolio p = (Portfolio) o;
-            assertEquals("status should not have been changed", "testStatus", p.status);
+            assertEquals("status should not have been changed", "testStatus", p.login);
           } else {
             Struct struct = (Struct) o;
             Portfolio p = (Portfolio) struct.getFieldValues()[0];
-            assertEquals("status should not have been changed", "testStatus", p.status);
+            assertEquals("status should not have been changed", "testStatus", p.login);
           }
         }
 

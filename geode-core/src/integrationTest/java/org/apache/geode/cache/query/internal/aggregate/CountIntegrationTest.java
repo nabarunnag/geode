@@ -69,83 +69,83 @@ public class CountIntegrationTest extends AggregateFunctionQueryBaseIntegrationT
     queries.put("SELECT COUNT(*) FROM /" + firstRegionName + " WHERE ID > 0 LIMIT 50",
         (int) supplierOne.get().limit(50).count());
     queries.put("SELECT COUNT(*) FROM /" + firstRegionName + " WHERE ID > 0 OR status='active'",
-        (int) supplierOne.get().filter(p -> p.getID() > 0 || p.isActive()).count());
+        (int) supplierOne.get().filter(p -> p.getAcctBase() > 0 || p.isActive()).count());
     queries.put("SELECT COUNT(*) FROM /" + firstRegionName + " WHERE ID > 0 OR status LIKE 'ina%'",
-        (int) supplierOne.get().filter(p -> p.getID() > 0 || p.status.startsWith("ina")).count());
+        (int) supplierOne.get().filter(p -> p.getAcctBase() > 0 || p.login.startsWith("ina")).count());
     queries.put("SELECT COUNT(*) FROM /" + firstRegionName + " WHERE ID IN SET(1, 2, 3, 4, 5)",
-        (int) supplierOne.get().filter(p -> Arrays.asList(1, 2, 3, 4, 5).contains(p.getID()))
+        (int) supplierOne.get().filter(p -> Arrays.asList(1, 2, 3, 4, 5).contains(p.getAcctBase()))
             .count());
     queries.put("SELECT COUNT(*) FROM /" + firstRegionName + " WHERE NOT (ID > 5)",
-        (int) supplierOne.get().filter(p -> p.getID() <= 5).count());
+        (int) supplierOne.get().filter(p -> p.getAcctBase() <= 5).count());
 
     // Distinct Queries
     queries.put("SELECT COUNT(DISTINCT p.ID) FROM /" + firstRegionName + " p WHERE p.ID > 0",
-        (int) supplierOne.get().filter(p -> p.getID() > 0).filter(distinctByKey(Portfolio::getID))
+        (int) supplierOne.get().filter(p -> p.getAcctBase() > 0).filter(distinctByKey(Portfolio::getAcctBase))
             .count());
     queries.put("SELECT COUNT(DISTINCT p.status) FROM /" + firstRegionName + " p WHERE p.ID > 0",
-        (int) supplierOne.get().filter(p -> p.getID() > 0).filter(distinctByKey(p -> p.status))
+        (int) supplierOne.get().filter(p -> p.getAcctBase() > 0).filter(distinctByKey(p -> p.login))
             .count());
     queries.put("SELECT COUNT(DISTINCT p.getType()) FROM /" + firstRegionName + " p WHERE p.ID > 0",
-        (int) supplierOne.get().filter(p -> p.getID() > 0).filter(distinctByKey(Portfolio::getType))
+        (int) supplierOne.get().filter(p -> p.getAcctBase() > 0).filter(distinctByKey(Portfolio::getType))
             .count());
     queries.put("SELECT COUNT(DISTINCT p.position1) FROM /" + firstRegionName + " p WHERE p.ID > 0",
-        (int) supplierOne.get().filter(p -> p.getID() > 0).filter(distinctByKey(p -> p.position1))
+        (int) supplierOne.get().filter(p -> p.getAcctBase() > 0).filter(distinctByKey(p -> p.position1))
             .count());
     queries.put("SELECT COUNT(DISTINCT p.shortID) FROM /" + firstRegionName + " p WHERE p.ID > 0",
-        (int) supplierOne.get().filter(p -> p.getID() > 0).filter(distinctByKey(p -> p.shortID))
+        (int) supplierOne.get().filter(p -> p.getAcctBase() > 0).filter(distinctByKey(p -> p.shortID))
             .count());
 
     // StructSet queries.
     queries.put("SELECT COUNT(*) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID > 0 AND pos.secId = 'IBM'",
-        (int) supplierOne.get().filter(p -> p.getID() > 0 && p.getPositions().containsKey("IBM"))
+        (int) supplierOne.get().filter(p -> p.getAcctBase() > 0 && p.getPositions().containsKey("IBM"))
             .count());
     queries.put("SELECT COUNT(*) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID > 0 AND pos.secId = 'IBM' LIMIT 5",
-        (int) supplierOne.get().filter(p -> p.getID() > 0 && p.getPositions().containsKey("IBM"))
+        (int) supplierOne.get().filter(p -> p.getAcctBase() > 0 && p.getPositions().containsKey("IBM"))
             .limit(5).count());
     queries.put("SELECT DISTINCT COUNT(*) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID > 0 AND pos.secId = 'IBM' ORDER BY p.ID",
-        (int) supplierOne.get().filter(p -> p.getID() > 0 && p.getPositions().containsKey("IBM"))
+        (int) supplierOne.get().filter(p -> p.getAcctBase() > 0 && p.getPositions().containsKey("IBM"))
             .distinct().count());
     queries.put("SELECT COUNT(*) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID > 0 AND p.status = 'active' AND pos.secId = 'IBM'",
         (int) supplierOne.get()
-            .filter(p -> p.getID() > 0 && p.isActive() && p.getPositions().containsKey("IBM"))
+            .filter(p -> p.getAcctBase() > 0 && p.isActive() && p.getPositions().containsKey("IBM"))
             .count());
     queries.put("SELECT COUNT(*) FROM /" + firstRegionName
         + " p, p.positions.values pos WHERE p.ID > 0 OR p.status IN SET ('active', 'inactive') OR pos.secId = 'IBM' LIMIT 50",
-        (int) supplierOne.get().filter(p -> p.getID() > 0 || p.isActive() || !p.isActive()
+        (int) supplierOne.get().filter(p -> p.getAcctBase() > 0 || p.isActive() || !p.isActive()
             || p.getPositions().containsKey("IBM")).limit(50).count());
 
     // Aggregate used as as WHERE condition within inner query.
     queries.put("SELECT COUNT(*) FROM /" + firstRegionName
         + " p WHERE p.ID IN (SELECT MIN(o.ID) FROM /" + firstRegionName + " o)",
         (int) supplierOne.get()
-            .filter(p -> p.getID() == supplierOne.get().mapToInt(Portfolio::getID).min().orElse(-1))
-            .mapToInt(Portfolio::getID).count());
+            .filter(p -> p.getAcctBase() == supplierOne.get().mapToInt(Portfolio::getAcctBase).min().orElse(-1))
+            .mapToInt(Portfolio::getAcctBase).count());
     queries.put("SELECT COUNT(*) FROM /" + firstRegionName
         + " p WHERE p.ID = ELEMENT(SELECT MAX(o.ID) FROM /" + firstRegionName + " o)",
         (int) supplierOne.get()
-            .filter(p -> p.getID() == supplierOne.get().mapToInt(Portfolio::getID).max().orElse(-1))
-            .mapToInt(Portfolio::getID).count());
+            .filter(p -> p.getAcctBase() == supplierOne.get().mapToInt(Portfolio::getAcctBase).max().orElse(-1))
+            .mapToInt(Portfolio::getAcctBase).count());
 
     // Equi Join Queries
     equiJoinQueries.put("SELECT COUNT(*) from /" + firstRegionName + " p, /" + secondRegionName
         + " e WHERE p.ID = e.ID AND p.ID > 0",
-        (int) supplierOne.get().filter(p -> regionTwoLocalCopy.containsKey(p.getID()))
-            .filter(p -> p.getID() > 0).count());
+        (int) supplierOne.get().filter(p -> regionTwoLocalCopy.containsKey(p.getAcctBase()))
+            .filter(p -> p.getAcctBase() > 0).count());
     equiJoinQueries.put("SELECT COUNT(*) from /" + firstRegionName + " p, /" + secondRegionName
         + " e WHERE p.ID = e.ID AND p.ID > 20 AND e.ID > 40",
         (int) supplierOne.get()
-            .filter(p -> supplierTwo.get().filter(e -> e.getID() > 40)
-                .collect(Collectors.toMap(Portfolio::getID, Function.identity()))
-                .containsKey(p.getID()))
-            .filter(p -> p.getID() > 20).count());
+            .filter(p -> supplierTwo.get().filter(e -> e.getAcctBase() > 40)
+                .collect(Collectors.toMap(Portfolio::getAcctBase, Function.identity()))
+                .containsKey(p.getAcctBase()))
+            .filter(p -> p.getAcctBase() > 20).count());
     equiJoinQueries.put("SELECT COUNT(*) from /" + firstRegionName + " p, /" + secondRegionName
         + " e WHERE p.ID = e.ID AND p.ID > 0 AND p.status = 'active'",
-        (int) supplierOne.get().filter(p -> regionTwoLocalCopy.containsKey(p.getID()))
-            .filter(p -> p.getID() > 0 && p.isActive()).count());
+        (int) supplierOne.get().filter(p -> regionTwoLocalCopy.containsKey(p.getAcctBase()))
+            .filter(p -> p.getAcctBase() > 0 && p.isActive()).count());
   }
 
   private void prepareStructuresWithPdx() {

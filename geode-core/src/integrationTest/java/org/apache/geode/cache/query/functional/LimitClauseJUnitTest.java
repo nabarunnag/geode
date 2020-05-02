@@ -971,7 +971,7 @@ public class LimitClauseJUnitTest {
       for (int i = 1; i < 100; i++) {
         Portfolio p = new Portfolio(i);
         if (i < 50)
-          p.status = "active";
+          p.login = "active";
         region.put(Integer.toString(i), p);
       }
 
@@ -1003,7 +1003,7 @@ public class LimitClauseJUnitTest {
       for (int i = 1; i < 100; i++) {
         Portfolio p = new Portfolio(i);
         if (i < 50)
-          p.status = "active";
+          p.login = "active";
         region.put(Integer.toString(i), p);
       }
 
@@ -1042,7 +1042,7 @@ public class LimitClauseJUnitTest {
       for (int i = 1; i < 100; i++) {
         Portfolio p = new Portfolio(i);
         if (i < 50)
-          p.status = "active";
+          p.login = "active";
         region.put(Integer.toString(i), p);
       }
 
@@ -1079,7 +1079,7 @@ public class LimitClauseJUnitTest {
       for (int i = 1; i < 100; i++) {
         Portfolio p = new Portfolio(i);
         if (i < 50)
-          p.status = "active";
+          p.login = "active";
         region.put(Integer.toString(i), p);
       }
 
@@ -1116,7 +1116,7 @@ public class LimitClauseJUnitTest {
       for (int i = 1; i < 100; i++) {
         Portfolio p = new Portfolio(i);
         if (i < 50)
-          p.status = "active";
+          p.login = "active";
         region.put(Integer.toString(i), p);
       }
 

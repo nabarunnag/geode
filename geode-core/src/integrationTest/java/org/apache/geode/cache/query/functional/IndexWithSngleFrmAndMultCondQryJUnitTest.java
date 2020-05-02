@@ -200,7 +200,7 @@ public class IndexWithSngleFrmAndMultCondQryJUnitTest {
       if (((Portfolio) stc2.get(strg2[0])).isActive() != ((Portfolio) stc1.get(strg1[0]))
           .isActive())
         fail("FAILED: Status of the Portfolios found are different");
-      if (((Portfolio) stc2.get(strg2[0])).getID() != ((Portfolio) stc1.get(strg1[0])).getID())
+      if (((Portfolio) stc2.get(strg2[0])).getAcctBase() != ((Portfolio) stc1.get(strg1[0])).getAcctBase())
         fail("FAILED: IDs of the Portfolios found are different");
     }
     CacheUtils.compareResultsOfWithAndWithoutIndex(sr, this);
@@ -316,7 +316,7 @@ public class IndexWithSngleFrmAndMultCondQryJUnitTest {
       if (((Portfolio) stc2.get(strg2[0])).isActive() != ((Portfolio) stc1.get(strg1[0]))
           .isActive())
         fail("FAILED: Status of the Portfolios found are different");
-      if (((Portfolio) stc2.get(strg2[0])).getID() != ((Portfolio) stc1.get(strg1[0])).getID())
+      if (((Portfolio) stc2.get(strg2[0])).getAcctBase() != ((Portfolio) stc1.get(strg1[0])).getAcctBase())
         fail("FAILED: IDs of the Portfolios found are different");
     }
     CacheUtils.compareResultsOfWithAndWithoutIndex(sr, this);
@@ -588,7 +588,7 @@ public class IndexWithSngleFrmAndMultCondQryJUnitTest {
       }
       if (((Portfolio) pos2).isActive() != ((Portfolio) pos1).isActive())
         fail("FAILED: Status of the Portfolios found are different");
-      if (((Portfolio) pos2).getID() != ((Portfolio) pos1).getID())
+      if (((Portfolio) pos2).getAcctBase() != ((Portfolio) pos1).getAcctBase())
         fail("FAILED: IDs of the Portfolios found are different");
     }
     CacheUtils.compareResultsOfWithAndWithoutIndex(sr, this);
@@ -757,7 +757,7 @@ public class IndexWithSngleFrmAndMultCondQryJUnitTest {
        */
       if (((Portfolio) pos2).isActive() != ((Portfolio) pos1).isActive())
         fail("FAILED: Status of the Portfolios found are different");
-      if (((Portfolio) pos2).getID() != ((Portfolio) pos1).getID())
+      if (((Portfolio) pos2).getAcctBase() != ((Portfolio) pos1).getAcctBase())
         fail("FAILED: IDs of the Portfolios found are different");
     }
     CacheUtils.compareResultsOfWithAndWithoutIndex(sr, this);
@@ -970,7 +970,7 @@ public class IndexWithSngleFrmAndMultCondQryJUnitTest {
       }
       if (((Portfolio) pos2).isActive() != ((Portfolio) pos1).isActive())
         fail("FAILED: Status of the Portfolios found are different");
-      if (((Portfolio) pos2).getID() != ((Portfolio) pos1).getID())
+      if (((Portfolio) pos2).getAcctBase() != ((Portfolio) pos1).getAcctBase())
         fail("FAILED: IDs of the Portfolios found are different");
     }
     CacheUtils.compareResultsOfWithAndWithoutIndex(sr, this);
@@ -1179,7 +1179,7 @@ public class IndexWithSngleFrmAndMultCondQryJUnitTest {
       }
       if (((Portfolio) pos2).isActive() != ((Portfolio) pos1).isActive())
         fail("FAILED: Status of the Portfolios found are different");
-      if (((Portfolio) pos2).getID() != ((Portfolio) pos1).getID())
+      if (((Portfolio) pos2).getAcctBase() != ((Portfolio) pos1).getAcctBase())
         fail("FAILED: IDs of the Portfolios found are different");
     }
     CacheUtils.compareResultsOfWithAndWithoutIndex(sr, this);
@@ -1198,7 +1198,7 @@ public class IndexWithSngleFrmAndMultCondQryJUnitTest {
     for (int i = 10; i < 20; i++) {
       Portfolio p = new Portfolio(i);
       if (i % 2 == 0) {
-        p.status = null;
+        p.login = null;
       }
       region.put("" + i, p);
     }
@@ -1256,13 +1256,13 @@ public class IndexWithSngleFrmAndMultCondQryJUnitTest {
           Object[] values = ((Struct) obj).getFieldValues();
           Portfolio port = (Portfolio) values[0];
           Position pos = (Position) values[1];
-          if (!(port.getID() > 0 || port.status.equals("active") || pos.secId.equals("IBM"))) {
+          if (!(port.getAcctBase() > 0 || port.login.equals("active") || pos.secId.equals("IBM"))) {
             fail("Result object" + obj
                 + " failed to satisfy all OR conditions of where clause of query " + queries[i]);
           }
         } else {
           Portfolio port = (Portfolio) obj;
-          if (!(port.getID() > 0 || port.status.equals("active"))) {
+          if (!(port.getAcctBase() > 0 || port.login.equals("active"))) {
             fail("Result object" + port
                 + " failed to satisfy all OR conditions of where clause of query " + queries[i]);
           }
@@ -1287,7 +1287,7 @@ public class IndexWithSngleFrmAndMultCondQryJUnitTest {
     for (int i = 10; i < 20; i++) {
       Portfolio p = new Portfolio(i);
       if (i % 2 == 0) {
-        p.status = null;
+        p.login = null;
       }
       region.put("" + i, p);
     }

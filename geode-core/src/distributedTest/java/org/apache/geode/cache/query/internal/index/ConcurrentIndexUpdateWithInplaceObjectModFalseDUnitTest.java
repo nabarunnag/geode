@@ -458,7 +458,7 @@ public class ConcurrentIndexUpdateWithInplaceObjectModFalseDUnitTest
             // Ignore invalid values.
             if (value != Token.INVALID && value != Token.TOMBSTONE) {
               LogWriterUtils.getLogWriter().info("Portfolio: " + ((Portfolio) value));
-              Integer ID = ((Portfolio) value).getID();
+              Integer ID = ((Portfolio) value).getAcctBase();
 
               assertTrue(
                   "Did not find index key for REgionEntry [key: " + internalEntry.getKey()
@@ -654,7 +654,7 @@ public class ConcurrentIndexUpdateWithInplaceObjectModFalseDUnitTest
               // Ignore invalid values.
               if (value != Token.INVALID && value != Token.TOMBSTONE) {
                 LogWriterUtils.getLogWriter().info("Portfolio: " + ((Portfolio) value));
-                Integer ID = ((Portfolio) value).getID();
+                Integer ID = ((Portfolio) value).getAcctBase();
 
                 assertTrue(
                     "Did not find index key for REgionEntry [key: " + internalEntry.getKey()

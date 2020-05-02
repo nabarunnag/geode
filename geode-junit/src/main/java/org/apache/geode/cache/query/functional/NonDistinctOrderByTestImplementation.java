@@ -824,7 +824,7 @@ public abstract class NonDistinctOrderByTestImplementation {
       // Add numNullValues null values.
       if (i <= numNullValues) {
         pf.pkid = null;
-        pf.status = "a" + i;
+        pf.login = "a" + i;
       }
       r1.put(i + "", pf);
     }
@@ -1152,7 +1152,7 @@ public abstract class NonDistinctOrderByTestImplementation {
       // Add numNullValues null values.
       if (i <= numNullValues) {
         pf.pkid = null;
-        pf.status = "a" + i;
+        pf.login = "a" + i;
       }
       r1.put(i + "", pf);
     }

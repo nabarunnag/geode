@@ -70,7 +70,7 @@ public class QRegionInterfaceJUnitTest {
         .newQuery("select distinct * from /Portfolios.values where ID = 1");
     Collection result = (Collection) query.execute();
     Portfolio p = (Portfolio) result.iterator().next();
-    if (p.getID() != 1)
+    if (p.getAcctBase() != 1)
       fail(query.getQueryString());
   }
 
@@ -80,7 +80,7 @@ public class QRegionInterfaceJUnitTest {
         .newQuery("select distinct * from /Portfolios.entries where value.ID = 1 and key = '1'");
     Collection result = (Collection) query.execute();
     Region.Entry entry = (Region.Entry) result.iterator().next();
-    if (!entry.getKey().equals("1") || ((Portfolio) entry.getValue()).getID() != 1)
+    if (!entry.getKey().equals("1") || ((Portfolio) entry.getValue()).getAcctBase() != 1)
       fail(query.getQueryString());
   }
 

@@ -117,8 +117,8 @@ public class QueryTestUtilsJUnitTest {
         List expectedIds = new ArrayList(Arrays.asList(10, 9, 8, 7, 6, 5, 4, 3, 3));
         for (Object e : collection) {
           if (e instanceof Portfolio) {
-            assertTrue(expectedIds.contains(((Portfolio) e).getID()));
-            expectedIds.remove((Integer) ((Portfolio) e).getID());
+            assertTrue(expectedIds.contains(((Portfolio) e).getAcctBase()));
+            expectedIds.remove((Integer) ((Portfolio) e).getAcctBase());
           }
         }
       }
@@ -138,8 +138,8 @@ public class QueryTestUtilsJUnitTest {
         List expectedIds = new ArrayList(Arrays.asList(10, 9, 8, 7, 6, 5, 4, 3, 2));
         for (Object e : collection) {
           if (e instanceof Portfolio) {
-            assertTrue(expectedIds.contains(((Portfolio) e).getID()));
-            expectedIds.remove((Integer) ((Portfolio) e).getID());
+            assertTrue(expectedIds.contains(((Portfolio) e).getAcctBase()));
+            expectedIds.remove((Integer) ((Portfolio) e).getAcctBase());
           }
         }
       }

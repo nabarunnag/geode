@@ -154,7 +154,7 @@ public class HashIndexQueryIntegrationTest {
       int id = i % numIds;
       Portfolio p = new Portfolio(id);
       if (id % 2 == 0) {
-        p.status = null;
+        p.login = null;
       }
       region.put("" + i, p);
     }
@@ -571,7 +571,7 @@ public class HashIndexQueryIntegrationTest {
     }
     Portfolio p2 = new Portfolio(10000);
     region.put("2", p2);
-    p2.ID = 1000;
+    p2.acctBase = 1000;
     region.put("2", p2);
     SelectResults noIndexResult =
         (SelectResults) qs.newQuery("Select * FROM /portfolios p where p.ID = 2").execute();
@@ -585,7 +585,7 @@ public class HashIndexQueryIntegrationTest {
     }
     p2 = new Portfolio(10000);
     region.put("2", p2);
-    p2.ID = 1000;
+    p2.acctBase = 1000;
     region.put("2", p2);
 
     SelectResults results =
@@ -784,7 +784,7 @@ public class HashIndexQueryIntegrationTest {
     int countUp = 1;
     for (Object o : results) {
       Portfolio p = (Portfolio) o;
-      assertEquals(countUp++, p.getID());
+      assertEquals(countUp++, p.getAcctBase());
     }
   }
 
@@ -905,7 +905,7 @@ public class HashIndexQueryIntegrationTest {
     int countDown = 199;
     for (Object o : results) {
       Portfolio p = (Portfolio) o;
-      assertEquals(countDown--, p.getID());
+      assertEquals(countDown--, p.getAcctBase());
     }
   }
 

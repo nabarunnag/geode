@@ -80,25 +80,25 @@ public class ComparisonOperatorsJUnitTest {
           Portfolio p = (Portfolio) iter.next();
           switch (i) {
             case 0:
-              isPassed = (p.getID() == value);
+              isPassed = (p.getAcctBase() == value);
               break;
             case 1:
-              isPassed = (p.getID() != value);
+              isPassed = (p.getAcctBase() != value);
               break;
             case 2:
-              isPassed = (p.getID() != value);
+              isPassed = (p.getAcctBase() != value);
               break;
             case 3:
-              isPassed = (p.getID() < value);
+              isPassed = (p.getAcctBase() < value);
               break;
             case 4:
-              isPassed = (p.getID() <= value);
+              isPassed = (p.getAcctBase() <= value);
               break;
             case 5:
-              isPassed = (p.getID() > value);
+              isPassed = (p.getAcctBase() > value);
               break;
             case 6:
-              isPassed = (p.getID() >= value);
+              isPassed = (p.getAcctBase() >= value);
               break;
           }
           if (!isPassed)
