@@ -26,9 +26,13 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import org.apache.geode.distributed.internal.DistributionConfig;
+import org.apache.geode.internal.cache.InternalCache;
+import org.apache.geode.logging.internal.spi.LogWriterLevel;
 import org.apache.geode.test.dunit.rules.ClusterStartupRule;
 import org.apache.geode.test.dunit.rules.MemberVM;
 import org.apache.geode.test.junit.rules.GfshCommandRule;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class ChangeLogLevelCommandDistributedTestBase {
 
@@ -40,6 +44,8 @@ public class ChangeLogLevelCommandDistributedTestBase {
   private static final String GROUP2 = "Group2";
 
   protected static MemberVM locator;
+  protected static MemberVM server1;
+  protected static MemberVM server2;
 
   @ClassRule
   public static ClusterStartupRule clusterStartupRule = new ClusterStartupRule();
@@ -58,12 +64,12 @@ public class ChangeLogLevelCommandDistributedTestBase {
     Properties server1Props = new Properties();
     server1Props.setProperty(NAME, SERVER1_NAME);
     server1Props.setProperty(GROUPS, GROUP1);
-    clusterStartupRule.startServerVM(1, server1Props, locator.getPort());
+    server1 = clusterStartupRule.startServerVM(1, server1Props, locator.getPort());
 
     Properties server2Props = new Properties();
     server2Props.setProperty(NAME, SERVER2_NAME);
     server2Props.setProperty(GROUPS, GROUP2);
-    clusterStartupRule.startServerVM(2, server2Props, locator.getPort());
+    server2 = clusterStartupRule.startServerVM(2, server2Props, locator.getPort());
   }
 
   @Before
@@ -74,6 +80,22 @@ public class ChangeLogLevelCommandDistributedTestBase {
   @After
   public void after() throws Exception {
     gfsh.disconnect();
+  }
+
+  @Test
+  public void whenChangeLogLevelExecutedWithNoParamsThenItIsChangedInAllMembers() {
+    gfsh.executeAndAssertThat("change loglevel --loglevel=fine").statusIsSuccess();
+    verifyLogLevel(locator,server1,server2, LogWriterLevel.FINE.intLevel());
+  }
+
+  private void verifyLogLevel(MemberVM locator, MemberVM server1, MemberVM server2, int logLevel) {
+    for (MemberVM member : new MemberVM[] {locator, server1, server2}) {
+      member.invoke(() -> {
+        InternalCache cache = ClusterStartupRule.getCache();
+        DistributionConfig config = cache.getInternalDistributedSystem().getConfig();
+        assertThat(config.getLogLevel()).isEqualTo(logLevel);
+      });
+    }
   }
 
   @Test

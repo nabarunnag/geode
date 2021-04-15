@@ -15,6 +15,7 @@
 
 package org.apache.geode.management.internal.cli.commands;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -57,25 +58,26 @@ public class ChangeLogLevelCommand extends GfshCommand {
           help = CliStrings.CHANGE_LOGLEVEL__LOGLEVEL__HELP) String logLevel,
       @CliOption(key = {CliStrings.MEMBER, CliStrings.MEMBERS},
           help = CliStrings.CHANGE_LOGLEVEL__MEMBER__HELP) String[] memberIds,
-      @CliOption(key = {CliStrings.GROUP, CliStrings.GROUPS}, unspecifiedDefaultValue = "",
+      @CliOption(key = {CliStrings.GROUP, CliStrings.GROUPS},/* unspecifiedDefaultValue = "",*/
           help = CliStrings.CHANGE_LOGLEVEL__GROUPS__HELP) String[] grps) {
 
-    if ((memberIds == null || memberIds.length == 0) && (grps == null || grps.length == 0)) {
-      return ResultModel.createError(CliStrings.CHANGE_LOGLEVEL__MSG__SPECIFY_GRP_OR_MEMBER);
-    }
-
+    ChangeLogLevelFunction logFunction = new ChangeLogLevelFunction();
+    FunctionService.registerFunction(logFunction);
+    Object[] functionArgs = new Object[1];
+    functionArgs[0] = logLevel;
     Cache cache = getCache();
-
+    ResultModel result = new ResultModel();
     Set<DistributedMember> dsMembers = new HashSet<>();
     Set<DistributedMember> ds = getAllMembers();
 
-    if (grps != null && grps.length > 0) {
+    if ((memberIds == null || memberIds.length == 0) && ((grps == null) || grps.length == 0)) {
+      dsMembers = ds;
+    }if (grps != null && grps.length > 0) {
       for (String grp : grps) {
         dsMembers.addAll(cache.getDistributedSystem().getGroupMembers(grp));
       }
-    }
-
-    if (memberIds != null && memberIds.length > 0) {
+    }if(memberIds != null && memberIds.length > 0) {
+      System.out.println("NABA :: 1");
       for (String member : memberIds) {
         for (DistributedMember mem : ds) {
           if (mem.getName() != null
@@ -88,16 +90,10 @@ public class ChangeLogLevelCommand extends GfshCommand {
     }
 
     if (dsMembers.size() == 0) {
+      System.out.println("NABA:::");
       return ResultModel.createError(
           "No members were found matching the given member IDs or groups.");
     }
-
-    ChangeLogLevelFunction logFunction = new ChangeLogLevelFunction();
-    FunctionService.registerFunction(logFunction);
-    Object[] functionArgs = new Object[1];
-    functionArgs[0] = logLevel;
-
-    ResultModel result = new ResultModel();
 
     @SuppressWarnings("unchecked")
     Execution<?, ?, ?> execution = FunctionService.onMembers(dsMembers).setArguments(functionArgs);
