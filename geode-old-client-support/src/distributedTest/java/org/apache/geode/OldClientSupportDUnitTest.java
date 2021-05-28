@@ -16,25 +16,23 @@ package org.apache.geode;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static org.apache.geode.distributed.ConfigurationProperties.SERIALIZABLE_OBJECT_FILTER;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
 import org.apache.geode.cache.Cache;
-import org.apache.geode.distributed.ConfigurationProperties;
-import org.apache.geode.distributed.internal.DistributionConfig;
-import org.apache.geode.distributed.internal.DistributionConfigImpl;
 import org.apache.geode.internal.HeapDataOutputStream;
 import org.apache.geode.internal.InternalDataSerializer;
 import org.apache.geode.internal.cache.InternalCache;
@@ -43,14 +41,14 @@ import org.apache.geode.internal.serialization.ByteArrayDataInput;
 import org.apache.geode.internal.serialization.KnownVersion;
 import org.apache.geode.internal.serialization.VersionedDataInputStream;
 import org.apache.geode.internal.serialization.VersionedDataOutputStream;
-import org.apache.geode.test.dunit.cache.internal.JUnit4CacheTestCase;
+import org.apache.geode.test.dunit.rules.ClusterStartupRule;
+import org.apache.geode.test.dunit.rules.MemberVM;
 import org.apache.geode.test.junit.categories.SerializationTest;
 
 import com.gemstone.gemfire.OldClientSupportProvider;
 
 @Category({SerializationTest.class})
-@SuppressWarnings("deprecation")
-public class OldClientSupportDUnitTest extends JUnit4CacheTestCase {
+public class OldClientSupportDUnitTest implements Serializable {
 
   private static final List<String> allGeodeThrowableClasses =
       singletonList("org.apache.geode.cache.execute.EmptyRegionFunctionException");
@@ -65,17 +63,32 @@ public class OldClientSupportDUnitTest extends JUnit4CacheTestCase {
   private static final List<String> allNonconformingArrayClassNames = asList(
       "[Lmypackage.org.apache.geode.class2", "[[Lmypackage.org.apache.geode.class2");
 
-  private Cache myCache;
+  @Rule
+  public ClusterStartupRule clusterStartupRule = new ClusterStartupRule();
 
-  @Override
-  public void postSetUp() throws Exception {
-    super.postSetUp();
-    myCache = getCache();
+
+  MemberVM server;
+
+  public void startUp() {
+    int locatorPort = clusterStartupRule.startLocatorVM(0).getPort();
+    server = clusterStartupRule.startServerVM(1, s -> s.withConnectionToLocator(locatorPort));
+  }
+
+  public void startUpWithClassFilter(String className) {
+    int locatorPort = clusterStartupRule.startLocatorVM(0).getPort();
+    server =
+        clusterStartupRule.startServerVM(1, s -> s.withConnectionToLocator(locatorPort)
+            .withProperty(SERIALIZABLE_OBJECT_FILTER, className));
   }
 
   @Test
   public void cacheInstallsOldClientSupportServiceProvider() {
-    Assert.assertNotNull(((InternalCache) myCache).getService(OldClientSupportService.class));
+    startUp();
+    server.invoke(() -> {
+      InternalCache cache = ClusterStartupRule.getCache();
+      Assert.assertNotNull((cache).getService(OldClientSupportService.class));
+    });
+
   }
 
   /**
@@ -85,58 +98,68 @@ public class OldClientSupportDUnitTest extends JUnit4CacheTestCase {
    */
   @Test
   public void testConversionOfThrowablesForOldClients() {
-    List<Throwable> problems = new LinkedList<>();
+    startUp();
+    server.invoke(() -> {
+      List<Throwable> problems = new LinkedList<>();
 
-    for (String geodeClassName : allGeodeThrowableClasses) {
-      try {
-        convertThrowable(geodeClassName);
-      } catch (Exception e) {
-        System.out.println("-- failed");
-        Exception failure =
-            new Exception("Failed processing " + geodeClassName + ": " + e.toString(), e);
-        problems.add(failure);
+      for (String geodeClassName : allGeodeThrowableClasses) {
+        try {
+          convertThrowable(geodeClassName);
+        } catch (Exception e) {
+          System.out.println("-- failed");
+          Exception failure =
+              new Exception("Failed processing " + geodeClassName + ": " + e.toString(), e);
+          problems.add(failure);
+        }
       }
-    }
 
-    if (!problems.isEmpty()) {
-      Assert.fail(problems.toString());
-    }
+      if (!problems.isEmpty()) {
+        Assert.fail(problems.toString());
+      }
+    });
   }
 
   @Test
   public void testConversionOfArrayTypes() {
-    OldClientSupportService oldClientSupport = OldClientSupportProvider.getService(myCache);
+    startUp();
+    server.invoke(() -> {
+      Cache cache = ClusterStartupRule.getCache();
+      OldClientSupportService oldClientSupport = OldClientSupportProvider.getService(cache);
 
-    KnownVersion oldClientVersion = KnownVersion.GFE_81;
-    VersionedDataOutputStream dout = new VersionedDataOutputStream(
-        new HeapDataOutputStream(10, oldClientVersion), oldClientVersion);
+      KnownVersion oldClientVersion = KnownVersion.GFE_81;
+      VersionedDataOutputStream dout = new VersionedDataOutputStream(
+          new HeapDataOutputStream(10, oldClientVersion), oldClientVersion);
 
-    for (String geodeClassName : newArrayClassNames) {
-      String newName = oldClientSupport.processOutgoingClassName(geodeClassName, dout);
-      Assert.assertNotEquals(geodeClassName, newName);
-    }
+      for (String geodeClassName : newArrayClassNames) {
+        String newName = oldClientSupport.processOutgoingClassName(geodeClassName, dout);
+        Assert.assertNotEquals(geodeClassName, newName);
+      }
 
-    for (String className : allNonconformingArrayClassNames) {
-      String newName = oldClientSupport.processOutgoingClassName(className, dout);
-      Assert.assertEquals(className, newName);
-    }
+      for (String className : allNonconformingArrayClassNames) {
+        String newName = oldClientSupport.processOutgoingClassName(className, dout);
+        Assert.assertEquals(className, newName);
+      }
 
-    VersionedDataInputStream din = new VersionedDataInputStream(
-        new DataInputStream(new ByteArrayInputStream(new byte[10])), oldClientVersion);
+      VersionedDataInputStream din = new VersionedDataInputStream(
+          new DataInputStream(new ByteArrayInputStream(new byte[10])), oldClientVersion);
 
-    for (String oldClassName : oldArrayClassNames) {
-      String newName = oldClientSupport.processIncomingClassName(oldClassName, din);
-      Assert.assertNotEquals(oldClassName, newName);
-    }
+      for (String oldClassName : oldArrayClassNames) {
+        String newName = oldClientSupport.processIncomingClassName(oldClassName, din);
+        Assert.assertNotEquals(oldClassName, newName);
+      }
+
+    });
 
   }
 
   private void convertThrowable(String geodeClassName) throws Exception {
+
+    Cache cache = ClusterStartupRule.getCache();
     KnownVersion oldClientVersion = KnownVersion.GFE_81;
     final String comGemstoneGemFire = "com.gemstone.gemfire";
     final int comGemstoneGemFireLength = comGemstoneGemFire.length();
 
-    OldClientSupportService oldClientSupport = OldClientSupportProvider.getService(myCache);
+    OldClientSupportService oldClientSupport = OldClientSupportProvider.getService(cache);
 
     System.out.println("checking " + geodeClassName);
     Class<?> geodeClass = Class.forName(geodeClassName);
@@ -150,6 +173,8 @@ public class OldClientSupportDUnitTest extends JUnit4CacheTestCase {
           comGemstoneGemFire,
           gemfireThrowable.getClass().getName().substring(0, comGemstoneGemFireLength));
     }
+
+
   }
 
   private Object instantiate(Class<?> aClass) throws Exception {
@@ -179,31 +204,29 @@ public class OldClientSupportDUnitTest extends JUnit4CacheTestCase {
    */
   @Test
   public void oldClientObjectTranslatesToGeodeObject_javaSerialization() throws Exception {
-    Properties properties = new Properties();
-    properties.put(ConfigurationProperties.SERIALIZABLE_OBJECT_FILTER,
-        "org.apache.geode.ClientSerializableObjec");
-    DistributionConfig config = new DistributionConfigImpl(properties);
-    InternalDataSerializer.initialize(config, new ArrayList<>());
+    startUpWithClassFilter("org.apache.geode.ClientSerializableObject");
+    server.invoke(() -> {
+      com.gemstone.gemfire.ClientSerializableObject gemfireObject =
+          new com.gemstone.gemfire.ClientSerializableObject();
+      com.gemstone.gemfire.ClientSerializableObject subObject =
+          new com.gemstone.gemfire.ClientSerializableObject();
+      gemfireObject.setSubObject(subObject);
 
-    com.gemstone.gemfire.ClientSerializableObject gemfireObject =
-        new com.gemstone.gemfire.ClientSerializableObject();
-    com.gemstone.gemfire.ClientSerializableObject subObject =
-        new com.gemstone.gemfire.ClientSerializableObject();
-    gemfireObject.setSubObject(subObject);
+      ByteArrayOutputStream byteStream = new ByteArrayOutputStream(500);
+      DataOutputStream dataOut = new DataOutputStream(byteStream);
+      DataSerializer.writeObject(gemfireObject, dataOut);
+      dataOut.flush();
+      byte[] serializedForm = byteStream.toByteArray();
 
-    ByteArrayOutputStream byteStream = new ByteArrayOutputStream(500);
-    DataOutputStream dataOut = new DataOutputStream(byteStream);
-    DataSerializer.writeObject(gemfireObject, dataOut);
-    dataOut.flush();
-    byte[] serializedForm = byteStream.toByteArray();
-
-    ByteArrayDataInput byteDataInput = new ByteArrayDataInput();
-    byteDataInput.initialize(serializedForm, KnownVersion.GFE_81);
-    ClientSerializableObject result = DataSerializer.readObject(byteDataInput);
-    Assert.assertEquals("Expected an org.apache.geode exception but found " + result,
-        result.getClass().getName().substring(0, "org.apache.geode".length()), "org.apache.geode");
-    ClientSerializableObject newSubObject = result.getSubObject();
-    Assert.assertNotNull(newSubObject);
+      ByteArrayDataInput byteDataInput = new ByteArrayDataInput();
+      byteDataInput.initialize(serializedForm, KnownVersion.GFE_81);
+      ClientSerializableObject result = DataSerializer.readObject(byteDataInput);
+      Assert.assertEquals("Expected an org.apache.geode exception but found " + result,
+          result.getClass().getName().substring(0, "org.apache.geode".length()),
+          "org.apache.geode");
+      ClientSerializableObject newSubObject = result.getSubObject();
+      Assert.assertNotNull(newSubObject);
+    });
   }
 
 
@@ -213,22 +236,27 @@ public class OldClientSupportDUnitTest extends JUnit4CacheTestCase {
    * this is happening correctly for data-serialized objects
    */
   @Test
-  public void oldClientObjectTranslatesToGeodeObject_dataSerialization() throws Exception {
-    com.gemstone.gemfire.ClientDataSerializableObject gemfireObject =
-        new com.gemstone.gemfire.ClientDataSerializableObject();
+  public void oldClientObjectTranslatesToGeodeObject_dataSerialization() {
+    startUp();
+    server.invoke(() -> {
+      com.gemstone.gemfire.ClientDataSerializableObject gemfireObject =
+          new com.gemstone.gemfire.ClientDataSerializableObject();
 
-    ByteArrayOutputStream byteStream = new ByteArrayOutputStream(500);
-    DataOutputStream dataOut = new DataOutputStream(byteStream);
-    // use an internal API to ensure that java serialization isn't used
-    InternalDataSerializer.writeObject(gemfireObject, dataOut, false);
-    dataOut.flush();
-    byte[] serializedForm = byteStream.toByteArray();
+      ByteArrayOutputStream byteStream = new ByteArrayOutputStream(500);
+      DataOutputStream dataOut = new DataOutputStream(byteStream);
+      // use an internal API to ensure that java serialization isn't used
+      InternalDataSerializer.writeObject(gemfireObject, dataOut, false);
+      dataOut.flush();
+      byte[] serializedForm = byteStream.toByteArray();
 
-    ByteArrayDataInput byteDataInput = new ByteArrayDataInput();
-    byteDataInput.initialize(serializedForm, KnownVersion.GFE_81);
-    Object result = DataSerializer.readObject(byteDataInput);
-    Assert.assertEquals("Expected an org.apache.geode object but found " + result,
-        result.getClass().getName().substring(0, "org.apache.geode".length()), "org.apache.geode");
+      ByteArrayDataInput byteDataInput = new ByteArrayDataInput();
+      byteDataInput.initialize(serializedForm, KnownVersion.GFE_81);
+      Object result = DataSerializer.readObject(byteDataInput);
+      Assert.assertEquals("Expected an org.apache.geode object but found " + result,
+          result.getClass().getName().substring(0, "org.apache.geode".length()),
+          "org.apache.geode");
+    });
+
   }
 
   /**
@@ -237,21 +265,25 @@ public class OldClientSupportDUnitTest extends JUnit4CacheTestCase {
    * this is happening correctly for PDX-serialized objects
    */
   @Test
-  public void oldClientObjectTranslatesToGeodeObject_pdxSerialization() throws Exception {
-    com.gemstone.gemfire.ClientPDXSerializableObject gemfireObject =
-        new com.gemstone.gemfire.ClientPDXSerializableObject();
+  public void oldClientObjectTranslatesToGeodeObject_pdxSerialization() {
+    startUp();
+    server.invoke(() -> {
+      com.gemstone.gemfire.ClientPDXSerializableObject gemfireObject =
+          new com.gemstone.gemfire.ClientPDXSerializableObject();
 
-    ByteArrayOutputStream byteStream = new ByteArrayOutputStream(500);
-    DataOutputStream dataOut = new DataOutputStream(byteStream);
-    // use an internal API to ensure that java serialization isn't used
-    InternalDataSerializer.writeObject(gemfireObject, dataOut, false);
-    dataOut.flush();
-    byte[] serializedForm = byteStream.toByteArray();
+      ByteArrayOutputStream byteStream = new ByteArrayOutputStream(500);
+      DataOutputStream dataOut = new DataOutputStream(byteStream);
+      // use an internal API to ensure that java serialization isn't used
+      InternalDataSerializer.writeObject(gemfireObject, dataOut, false);
+      dataOut.flush();
+      byte[] serializedForm = byteStream.toByteArray();
 
-    ByteArrayDataInput byteDataInput = new ByteArrayDataInput();
-    byteDataInput.initialize(serializedForm, KnownVersion.GFE_81);
-    Object result = DataSerializer.readObject(byteDataInput);
-    Assert.assertEquals("Expected an org.apache.geode object but found " + result,
-        result.getClass().getName().substring(0, "org.apache.geode".length()), "org.apache.geode");
+      ByteArrayDataInput byteDataInput = new ByteArrayDataInput();
+      byteDataInput.initialize(serializedForm, KnownVersion.GFE_81);
+      Object result = DataSerializer.readObject(byteDataInput);
+      Assert.assertEquals("Expected an org.apache.geode object but found " + result,
+          result.getClass().getName().substring(0, "org.apache.geode".length()),
+          "org.apache.geode");
+    });
   }
 }
