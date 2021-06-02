@@ -14,94 +14,144 @@
  */
 package org.apache.geode.cache.wan;
 
+import static org.apache.geode.distributed.ConfigurationProperties.DISTRIBUTED_SYSTEM_ID;
+import static org.apache.geode.distributed.ConfigurationProperties.MCAST_PORT;
+import static org.apache.geode.distributed.ConfigurationProperties.REMOTE_LOCATORS;
 import static org.apache.geode.test.awaitility.GeodeAwaitility.await;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Rule;
 import org.junit.Test;
 
+import org.apache.geode.cache.Region;
 import org.apache.geode.distributed.internal.InternalLocator;
 import org.apache.geode.internal.AvailablePortHelper;
 import org.apache.geode.internal.cache.wan.parallel.ParallelGatewaySenderQueue;
+import org.apache.geode.test.awaitility.GeodeAwaitility;
 import org.apache.geode.test.dunit.DistributedTestUtils;
 import org.apache.geode.test.dunit.Host;
 import org.apache.geode.test.dunit.NetworkUtils;
 import org.apache.geode.test.dunit.VM;
+import org.apache.geode.test.dunit.rules.ClientVM;
+import org.apache.geode.test.dunit.rules.ClusterStartupRule;
+import org.apache.geode.test.dunit.rules.MemberVM;
 
 public class WANRollingUpgradeEventProcessingMixedSiteOneOldSiteTwo
-    extends WANRollingUpgradeDUnitTest {
+    extends WANRollingUpgradeDUnitTest2 {
+
+  @Rule
+  public ClusterStartupRule clusterStartupRule = new ClusterStartupRule();
 
   @Test
-  public void EventProcessingMixedSiteOneOldSiteTwo() {
+  public void EventProcessingMixedSiteOneOldSiteTwo() throws Exception {
     final Host host = Host.getHost(0);
 
-    // Get mixed site members
-    VM site1Locator = host.getVM(oldVersion, 0);
-    VM site1Server1 = host.getVM(oldVersion, 1);
-    VM site1Server2 = host.getVM(oldVersion, 2);
-    VM site1Client = host.getVM(oldVersion, 3);
+    //Start site 1 with old version
+    MemberVM
+        site1Locator1 =
+        clusterStartupRule.startLocatorVM(0, 0, oldVersion,
+            l -> l.withProperty(DISTRIBUTED_SYSTEM_ID, "1").withProperty(MCAST_PORT, "0"));
+    MemberVM
+        site1Locator2 =
+        clusterStartupRule.startLocatorVM(1, 0, oldVersion,
+            l -> l.withProperty(DISTRIBUTED_SYSTEM_ID, "1").withProperty(MCAST_PORT, "0"));
+    int site1Locator1Port = site1Locator1.getPort();
+    int site1Locator2Port = site1Locator2.getPort();
+    MemberVM
+        site1Server1 =
+        clusterStartupRule.startServerVM(2, oldVersion,
+            s -> s.withConnectionToLocator(site1Locator1Port, site1Locator2Port));
+    MemberVM
+        site1Server2 =
+        clusterStartupRule.startServerVM(3, oldVersion,
+            s -> s.withConnectionToLocator(site1Locator1Port, site1Locator2Port));
 
-    // Get old site members
-    VM site2Locator = host.getVM(oldVersion, 4);
-    VM site2Server1 = host.getVM(oldVersion, 5);
-    VM site2Server2 = host.getVM(oldVersion, 6);
+    // Start site 2 with old version
+    MemberVM
+        site2Locator1 =
+        clusterStartupRule.startLocatorVM(5, 0, oldVersion,
+            l -> l.withProperty(DISTRIBUTED_SYSTEM_ID, "2").withProperty(MCAST_PORT, "0")
+                .withProperty(REMOTE_LOCATORS,
+                    "localhost[" + site1Locator1Port + "],localhost[" + site1Locator2Port + "]"));
+
+    int site2Locator1Port = site2Locator1.getPort();
+    MemberVM
+        site2Server1 =
+        clusterStartupRule.startServerVM(6, oldVersion,
+            s -> s.withConnectionToLocator(site2Locator1Port));
+    MemberVM
+        site2Server2 =
+        clusterStartupRule.startServerVM(7, oldVersion,
+            s -> s.withConnectionToLocator(site2Locator1Port));
 
     // Get mixed site locator properties
-    String hostName = NetworkUtils.getServerHostName(host);
-    final int[] availablePorts = AvailablePortHelper.getRandomAvailableTCPPorts(2);
-    final int site1LocatorPort = availablePorts[0];
-    site1Locator.invoke(() -> DistributedTestUtils.deleteLocatorStateFile(site1LocatorPort));
-    final String site1Locators = hostName + "[" + site1LocatorPort + "]";
-    final int site1DistributedSystemId = 0;
-
-    // Get old site locator properties
-    final int site2LocatorPort = availablePorts[1];
-    site2Locator.invoke(() -> DistributedTestUtils.deleteLocatorStateFile(site2LocatorPort));
-    final String site2Locators = hostName + "[" + site2LocatorPort + "]";
-    final int site2DistributedSystemId = 1;
-
-    // Start mixed site locator
-    site1Locator.invoke(() -> startLocator(site1LocatorPort, site1DistributedSystemId,
-        site1Locators, site2Locators));
-
-    // Start old site locator
-    site2Locator.invoke(() -> startLocator(site2LocatorPort, site2DistributedSystemId,
-        site2Locators, site1Locators));
-
-    // Locators before 1.4 handled configuration asynchronously.
-    // We must wait for configuration configuration to be ready, or confirm that it is disabled.
-    site1Locator.invoke(
-        () -> await()
-            .untilAsserted(() -> assertTrue(
-                !InternalLocator.getLocator().getConfig().getEnableClusterConfiguration()
-                    || InternalLocator.getLocator().isSharedConfigurationRunning())));
-    site2Locator.invoke(
-        () -> await()
-            .untilAsserted(() -> assertTrue(
-                !InternalLocator.getLocator().getConfig().getEnableClusterConfiguration()
-                    || InternalLocator.getLocator().isSharedConfigurationRunning())));
-
     // Start and configure mixed site servers
-    String regionName = getName() + "_region";
-    String site1SenderId = getName() + "_gatewaysender_" + site2DistributedSystemId;
-    startAndConfigureServers(site1Server1, site1Server2, site1Locators, site2DistributedSystemId,
-        regionName, site1SenderId, ParallelGatewaySenderQueue.DEFAULT_MESSAGE_SYNC_INTERVAL);
+    String regionName = "region";
+    String site1SenderId = "gatewaysender_to_site2";
+    site1Server1.invoke(() ->{
+      createRegionAndConfigureGatwaysAndReceivers(regionName,site1SenderId,2);
+    });
+    site1Server2.invoke(() ->{
+      createRegionAndConfigureGatwaysAndReceivers(regionName,site1SenderId,2);
+    });
 
     // Roll mixed site locator to current
-    rollLocatorToCurrent(site1Locator, site1LocatorPort, site1DistributedSystemId, site1Locators,
-        site2Locators);
+    clusterStartupRule.stop(0);
+    site1Locator1 =
+        clusterStartupRule.startLocatorVM(0, l -> l.withConnectionToLocator(site1Locator2Port)
+            .withProperty(DISTRIBUTED_SYSTEM_ID, "1").withProperty(MCAST_PORT, "0"));
+    int newSite1Locator1Port = site1Locator1.getPort();
+    clusterStartupRule.stop(1);
+    site1Locator2 =
+        clusterStartupRule.startLocatorVM(1, l -> l.withConnectionToLocator(newSite1Locator1Port)
+            .withProperty(DISTRIBUTED_SYSTEM_ID, "1").withProperty(MCAST_PORT, "0"));
+    int newSite1Locator2Port = site1Locator2.getPort();
 
     // Roll one mixed site server to current
-    rollStartAndConfigureServerToCurrent(site1Server2, site1Locators, site2DistributedSystemId,
-        regionName, site1SenderId, ParallelGatewaySenderQueue.DEFAULT_MESSAGE_SYNC_INTERVAL);
+    clusterStartupRule.stop(2);
+    site1Server1 =
+        clusterStartupRule.startServerVM(2,
+            s -> s.withConnectionToLocator(newSite1Locator1Port, newSite1Locator2Port));
+    site1Server1.invoke(()->{
+      createRegionAndConfigureGatwaysAndReceivers(regionName,site1SenderId,2);
+    });
 
     // Start and configure old site servers
-    String site2SenderId = getName() + "_gatewaysender_" + site1DistributedSystemId;
-    startAndConfigureServers(site2Server1, site2Server2, site2Locators, site1DistributedSystemId,
-        regionName, site2SenderId, ParallelGatewaySenderQueue.DEFAULT_MESSAGE_SYNC_INTERVAL);
+    String site2SenderId = "gatewaysender_to_site1";
+    site2Server1.invoke(()->{
+      createRegionAndConfigureGatwaysAndReceivers(regionName,site2SenderId,1);
+    });
+    site2Server2.invoke(()->{
+      createRegionAndConfigureGatwaysAndReceivers(regionName,site2SenderId,1);
+    });
 
     // Do puts from mixed site client and verify events on old site
     int numPuts = 100;
-    doClientPutsAndVerifyEvents(site1Client, site1Server1, site1Server2, site2Server1, site2Server2,
-        hostName, site1LocatorPort, regionName, numPuts, site1SenderId, false);
+    ClientVM
+        clientVMConnectedToSite1 =
+        clusterStartupRule.startClientVM(4, oldVersion,
+            c -> c.withLocatorConnection(newSite1Locator1Port, newSite1Locator2Port));
+    clientVMConnectedToSite1.invoke(()->{
+      createClientRegionAndDoPuts(regionName, numPuts);
+    });
+
+    //Verify that the remote site received all events
+    site2Server1.invoke(()->{
+      Region region = ClusterStartupRule.getCache().getRegion(regionName);
+      GeodeAwaitility.await()
+          .untilAsserted(() -> assertThat(region.keySet().size()).isEqualTo(numPuts));
+    });
+
+    // Verify that the cache listeners were triggered
+    int numEventsAtRemoteServer1 = site2Server1.invoke(() -> getEventsReceived(regionName));
+    int numEventsAtRemoteServer2 = site2Server2.invoke(() -> getEventsReceived(regionName));
+    assertThat(numEventsAtRemoteServer1 + numEventsAtRemoteServer2).isEqualTo(numPuts);
+
+    // clear the event listener counters
+    site1Server1.invoke(() -> clearEventsReceived(regionName));
+    site1Server2.invoke(() -> clearEventsReceived(regionName));
+    site2Server1.invoke(() -> clearEventsReceived(regionName));
+    site2Server2.invoke(() -> clearEventsReceived(regionName));
   }
 }
